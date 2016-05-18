@@ -1,0 +1,48 @@
+﻿@model viadf.Models.RoutePieceModel
+@using viadflib
+
+@section JavaScript {
+
+    <script type="text/javascript" src="@Url.Content("~/Content/search.js?v=2")"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            var position = new google.maps.LatLng(@Model.RoutePiece.Lat,@Model.RoutePiece.Lng);
+            var myOptions = {
+                center: position,
+                zoom: 16,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                streetViewControl: false,
+                mapTypeControl: false,
+            };
+
+            var routemap = new google.maps.Map(document.getElementById("map"), myOptions);
+            var routemarker = new google.maps.Marker({
+                position: position,
+                map: routemap,
+                title: '@Model.RoutePiece.Route.Type.Name @Model.RoutePiece.Name (@Model.RoutePiece.Route.Name)',
+            });
+        });
+    </script>
+}
+
+@Html.ActionLink("Lista de Rutas", "RouteList", new { type = "" }) >
+@Html.ActionLink(Model.RoutePiece.Route.Type.Name, "RouteList", new { type = Utils.Capitalize(Model.RoutePiece.Route.Type.SeoName) }) >
+@Html.ActionLink(Model.RoutePiece.Route.Name, "Route", new { type = Utils.Capitalize(Model.RoutePiece.Route.Type.SeoName), name = Utils.Capitalize(Model.RoutePiece.Route.SeoName) }) >
+@Model.RoutePiece.Name
+
+<h2>@Model.RoutePiece.Route.Type.Name @Model.RoutePiece.Name (@Model.RoutePiece.Route.Name)</h2>
+
+@Html.Partial("_MobileResponsiveAd")
+
+<div class="row">
+    <div class="col s12 m12 l6">
+        <div id="map" style="height:300px;"></div>
+        <br />
+    </div>
+    <div class="col s12 m12 l6">
+        <b>Conexiones</b>
+        <p class="subtitle">De @Model.RoutePiece.Route.Type.Name @Model.RoutePiece.Name (@Model.RoutePiece.Route.Name) se puede cambiar a las siguientes lineas de transporte.</p>
+        @Html.Partial("_RouteList", Model.ConnectingRoutes)
+    </div>
+</div>

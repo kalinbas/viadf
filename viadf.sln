@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "viadflib", "viadflib\viadflib.csproj", "{F0F895EB-46A3-4122-B3AA-298A84750897}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "viadfweb", "viadfweb\viadfweb.csproj", "{9B62E659-F1A0-420E-925F-EF6A581B77E9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F0F895EB-46A3-4122-B3AA-298A84750897}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0F895EB-46A3-4122-B3AA-298A84750897}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0F895EB-46A3-4122-B3AA-298A84750897}.Debug|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F0F895EB-46A3-4122-B3AA-298A84750897}.Debug|Mixed Platforms.Build.0 = Release|Any CPU
+		{F0F895EB-46A3-4122-B3AA-298A84750897}.Debug|x64.ActiveCfg = Debug|x64
+		{F0F895EB-46A3-4122-B3AA-298A84750897}.Debug|x64.Build.0 = Debug|x64
+		{F0F895EB-46A3-4122-B3AA-298A84750897}.Debug|x86.ActiveCfg = Debug|x86
+		{F0F895EB-46A3-4122-B3AA-298A84750897}.Debug|x86.Build.0 = Debug|x86
+		{F0F895EB-46A3-4122-B3AA-298A84750897}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0F895EB-46A3-4122-B3AA-298A84750897}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0F895EB-46A3-4122-B3AA-298A84750897}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F0F895EB-46A3-4122-B3AA-298A84750897}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{F0F895EB-46A3-4122-B3AA-298A84750897}.Release|x64.ActiveCfg = Release|x86
+		{F0F895EB-46A3-4122-B3AA-298A84750897}.Release|x64.Build.0 = Release|x86
+		{F0F895EB-46A3-4122-B3AA-298A84750897}.Release|x86.ActiveCfg = Release|x86
+		{F0F895EB-46A3-4122-B3AA-298A84750897}.Release|x86.Build.0 = Release|x86
+		{9B62E659-F1A0-420E-925F-EF6A581B77E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B62E659-F1A0-420E-925F-EF6A581B77E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B62E659-F1A0-420E-925F-EF6A581B77E9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9B62E659-F1A0-420E-925F-EF6A581B77E9}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9B62E659-F1A0-420E-925F-EF6A581B77E9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9B62E659-F1A0-420E-925F-EF6A581B77E9}.Debug|x64.Build.0 = Debug|Any CPU
+		{9B62E659-F1A0-420E-925F-EF6A581B77E9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9B62E659-F1A0-420E-925F-EF6A581B77E9}.Debug|x86.Build.0 = Debug|Any CPU
+		{9B62E659-F1A0-420E-925F-EF6A581B77E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B62E659-F1A0-420E-925F-EF6A581B77E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B62E659-F1A0-420E-925F-EF6A581B77E9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9B62E659-F1A0-420E-925F-EF6A581B77E9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{9B62E659-F1A0-420E-925F-EF6A581B77E9}.Release|x64.ActiveCfg = Release|Any CPU
+		{9B62E659-F1A0-420E-925F-EF6A581B77E9}.Release|x64.Build.0 = Release|Any CPU
+		{9B62E659-F1A0-420E-925F-EF6A581B77E9}.Release|x86.ActiveCfg = Release|Any CPU
+		{9B62E659-F1A0-420E-925F-EF6A581B77E9}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = viadf.vsmdi
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,60 @@
+﻿@using viadflib
+@model List<viadflib.Route>
+
+<h2>Lista de rutas</h2>
+
+@Html.ActionLink("Crear ruta", "CrearRuta")
+
+<table>
+    <tr>
+        <td>@Html.ActionLink(StatusEnum.New.ToString(), "Routes", new { status = StatusEnum.New })</td>
+        <td>@Html.ActionLink(StatusEnum.Active.ToString(), "Routes", new { status = StatusEnum.Active })</td>
+        <td>@Html.ActionLink(StatusEnum.ActiveAndIndexed.ToString(), "Routes", new { status = StatusEnum.ActiveAndIndexed })</td>
+    </tr>
+</table>
+
+<table>
+    @foreach (var route in Model)
+    {
+        <tr>
+            <td>
+                @route.ID
+            </td>
+            <td>
+                @route.Name
+            </td>
+            <td>
+                @if (route.ParentRouteID.HasValue)
+                {
+                    @Html.ActionLink(route.ParentRouteID + "", "CrearRuta", new { id = @route.ParentRouteID.Value })
+                }
+            </td>
+            <td>
+                @if (route.Status != (int)StatusEnum.ActiveAndIndexed)
+                {
+                    if (route.Status == (int)StatusEnum.Active)
+                    {
+                        @Html.ActionLink("Activar (only index)", "ActivateRoute", new { id = @route.ID })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Activar", "ActivateRoute", new { id = @route.ID })
+                    }
+                }
+                else
+                {
+                    @Html.ActionLink("Deactivar", "DeactivateRoute", new { id = @route.ID })
+                }
+            </td>
+            <td>
+                @Html.ActionLink("Editar", "CrearRuta", new { id = @route.ID })
+            </td>
+            <td>
+                @Html.ActionLink("Duplicar", "DuplicateRoute", new { id = @route.ID }, new { onclick = "return confirm('Duplicar la ruta?');" })
+            </td>
+            <td>
+                @Html.ActionLink("Borrar", "DeleteRoute", new { id = @route.ID }, new { onclick = "return confirm('Borrar la ruta?');" })
+            </td>
+        </tr>
+    }
+</table>

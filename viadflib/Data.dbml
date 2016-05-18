@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="viadf" Class="DataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=localhost;Initial Catalog=viadf;Integrated Security=True;Pooling=False" SettingsObjectName="viadflib.Properties.Settings" SettingsPropertyName="viadfConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Colonia" Member="Colonias">
+    <Type Name="Colonia">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="SourceID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DelegacionID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SeoName" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="Colonia_Street" Member="Streets" ThisKey="ID" OtherKey="ColoniaID" Type="Street" />
+      <Association Name="Delegacion_Colonia" Member="Delegacion" ThisKey="DelegacionID" OtherKey="ID" Type="Delegacion" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Delegacion" Member="Delegacions">
+    <Type Name="Delegacion">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="SourceID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="EstadoID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SeoName" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="Delegacion_Colonia" Member="Colonias" ThisKey="ID" OtherKey="DelegacionID" Type="Colonia" />
+      <Association Name="Estado_Delegacion" Member="Estado" ThisKey="EstadoID" OtherKey="ID" Type="Estado" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Mail" Member="Mails">
+    <Type Name="Mail">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Subject" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="Email" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="Message" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.POI" Member="POIs">
+    <Type Name="POI">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Lat" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Lng" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="StreetCrossingID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="StreetCrossing_POI" Member="StreetCrossing" ThisKey="StreetCrossingID" OtherKey="ID" Type="StreetCrossing" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RoutePiece" Member="RoutePieces">
+    <Type Name="RoutePiece">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="Lat" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Lng" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="RouteID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="StreetCrossingID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SeoName" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Association Name="StreetCrossing_RoutePiece" Member="StreetCrossing" ThisKey="StreetCrossingID" OtherKey="ID" Type="StreetCrossing" IsForeignKey="true" />
+      <Association Name="Route_RoutePiece" Member="Route" ThisKey="RouteID" OtherKey="ID" Type="Route" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SearchHistory" Member="SearchHistories">
+    <Type Name="SearchHistory">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="IpAdress" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="FromName" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="FromLat" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="FromLng" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="ToName" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="ToLat" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="ToLng" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SearchIndex" Member="SearchIndexes">
+    <Type Name="SearchIndex">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="RoutePieceID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RoutePiece2ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Cost" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Street" Member="Streets">
+    <Type Name="Street">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="SourceID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ColoniaID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FullName" Type="System.String" DbType="VarChar(120) NOT NULL" CanBeNull="false" />
+      <Association Name="Street_StreetCrossing" Member="StreetCrossings" ThisKey="ID" OtherKey="StreetID" Type="StreetCrossing" />
+      <Association Name="Street_StreetCrossing1" Member="StreetCrossings1" ThisKey="ID" OtherKey="Street2ID" Type="StreetCrossing" />
+      <Association Name="Colonia_Street" Member="Colonia" ThisKey="ColoniaID" OtherKey="ID" Type="Colonia" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.StreetCrossing" Member="StreetCrossings">
+    <Type Name="StreetCrossing">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="SourceID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="StreetID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Street2ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Lat" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Lng" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Association Name="StreetCrossing_POI" Member="POIs" ThisKey="ID" OtherKey="StreetCrossingID" Type="POI" />
+      <Association Name="StreetCrossing_RoutePiece" Member="RoutePieces" ThisKey="ID" OtherKey="StreetCrossingID" Type="RoutePiece" />
+      <Association Name="Street_StreetCrossing" Member="Street" ThisKey="StreetID" OtherKey="ID" Type="Street" IsForeignKey="true" />
+      <Association Name="Street_StreetCrossing1" Member="Street1" ThisKey="Street2ID" OtherKey="ID" Type="Street" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Estado" Member="Estados">
+    <Type Name="Estado">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SourceID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SeoName" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="Estado_Delegacion" Member="Delegacions" ThisKey="ID" OtherKey="EstadoID" Type="Delegacion" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Type" Member="Types">
+    <Type Name="Type">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="AverageSpeed" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="HasNamedStationList" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="ShowInWeb" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="PriceTypeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PriceDefinition" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Frequency" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="IsWalkingType" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="SeoName" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Type_Route" Member="Routes" ThisKey="ID" OtherKey="TypeID" Type="Route" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SystemException" Member="SystemExceptions">
+    <Type Name="SystemException">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="StackTrace" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="IpAdress" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Route" Member="Routes">
+    <Type Name="Route">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SplitRoutePieceID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FromName" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="ToName" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="TypeID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="Email" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="AverageSpeed" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="PriceTypeID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PriceDefinition" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Frequency" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="SeoName" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="ParentRouteID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Route_RoutePiece" Member="RoutePieces" ThisKey="ID" OtherKey="RouteID" Type="RoutePiece" />
+      <Association Name="Type_Route" Member="Type" ThisKey="TypeID" OtherKey="ID" Type="Type" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

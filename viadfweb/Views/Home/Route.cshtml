@@ -1,0 +1,139 @@
+﻿@model viadf.Models.RouteModel
+@using viadflib
+@using System.Linq
+
+@section JavaScript {
+
+    <script type="text/javascript">
+        $(function () {
+            var routeCoords = [
+              @foreach (var item in Model.RoutePieces1)
+                {
+                    @:new google.maps.LatLng(@item.Lat, @item.Lng),
+                }
+            ];
+            var routeCoords2 = [
+                @if (Model.RoutePieces2 != null) {
+                    @:
+                    foreach (var item in Model.RoutePieces2)
+                    {
+                        @:new google.maps.LatLng(@item.Lat, @item.Lng),
+                    }
+                  }
+            ];
+
+            var myOptions = {
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                streetViewControl: false,
+                mapTypeControl: false,
+            };
+
+            var map = new google.maps.Map(document.getElementById("map"), myOptions);
+
+            var bounds = new google.maps.LatLngBounds();
+            for (i = 0; i < routeCoords.length; i++) {
+                bounds.extend(routeCoords[i]);
+            }
+            for (i = 0; i < routeCoords2.length; i++) {
+                bounds.extend(routeCoords2[i]);
+            }
+            map.fitBounds( bounds );
+
+            var path = new google.maps.Polyline({
+                path: routeCoords,
+                strokeColor: "#FF0000",
+                strokeOpacity: 0.6,
+                strokeWeight: 5
+            });
+            path.setMap(map);
+
+            @if (Model.RoutePieces2 != null) {
+              <text>
+            var path2 = new google.maps.Polyline({
+                path: routeCoords2,
+                strokeColor: "#0000FF",
+                strokeOpacity: 0.6,
+                strokeWeight: 5
+            });
+            path2.setMap(map);
+            </text>
+              }
+
+        });
+
+        function markRoute(id) {
+            var r = confirm("Esta seguro que la ruta no existe?");
+            if (r) {
+                $.post("/Admin/MarcarRuta?id="+id);
+                $('#markButton').remove();
+            }
+        }
+    </script>
+}
+
+@Html.ActionLink("Lista de Rutas", "RouteList", new { type = "" }) > @Html.ActionLink(Model.Route.Type.Name, "RouteList", new { type = Utils.Capitalize(Model.Route.Type.SeoName) }) > @Model.Route.Name
+
+@Html.Partial("_MobileResponsiveAd")
+
+<h2>@Model.Route.FromName - @Model.Route.ToName (@Model.Route.Type.Name: @Model.Route.Name)</h2>
+
+<div class="row">
+    <div class="col s12 m12 l6">
+        <div id="map" style="height:300px;"></div>        
+        <div class="right-align">
+            <a class="btn btn-flat waves-effect waves-teal" href="/Admin/CrearRuta/@(Model.Route.ID)" rel="nofollow" target="_blank">Editar ruta</a>
+            <a id="markButton" class="btn btn-flat waves-effect waves-teal" onclick="markRoute(@(Model.Route.ID));">Ya no existe</a>
+        </div>
+    </div>    
+    <div class="col s6 m6 l3">
+        <table style="width:100%">
+            <tr align="left">
+                <th>
+                    @(Model.Route.Type.HasNamedStationList ? "Estaciones" : "Calles principales")
+                </th>
+            </tr>
+            @if (Model.Route.Type.HasNamedStationList)
+            {
+                foreach (var item in Model.RoutePieces)
+                {
+                    <tr>
+                        <td>
+                            @Html.ActionLink(item.Name, "RoutePiece", new { type = Utils.Capitalize(item.Route.Type.SeoName), route = Utils.Capitalize(item.Route.SeoName), name = Utils.Capitalize(item.SeoName) })
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                foreach (var item in Model.RouteStreets)
+                {
+                    <tr>
+                        <td>
+                            @Utils.Capitalize(item)
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>    
+    @if (!Model.Route.Type.HasNamedStationList)
+    {
+        <div class="col s6 m6 l3">
+            <table style="width:100%">
+                <tr align="left">
+                    <th>
+                        Colonias
+                    </th>
+                </tr>
+                @foreach (var item in Model.RouteColonias)
+                {
+                    <tr>
+                        <td>
+                            @Html.ActionLink(Utils.Capitalize(item.Name) + " (" + Utils.Capitalize(item.Delegacion.Name) + ")", "Colonia", new { delegacion = Utils.Capitalize(item.Delegacion.SeoName), name = Utils.Capitalize(item.SeoName) })
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
+</div>

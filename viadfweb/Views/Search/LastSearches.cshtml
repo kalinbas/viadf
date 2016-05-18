@@ -1,0 +1,15 @@
+﻿@model List<viadflib.SearchHistory>
+@using viadflib
+@{
+    Layout = null;
+}
+
+<ul class="collection z-depth-1">
+    <li class="collection-item collection-header"><b>Últimas búsquedas</b></li>
+    @foreach (var item in Model)
+    {
+        <li class="collection-item">
+            <a href="@Url.Action("Search", new { de = Utils.FormatCoordinates(item.FromLat, item.FromLng), a = Utils.FormatCoordinates(item.ToLat, item.ToLng) })">@item.FromName a @item.ToName</a>           
+        </li>
+    }   
+</ul>

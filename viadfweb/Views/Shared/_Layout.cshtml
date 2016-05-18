@@ -1,0 +1,144 @@
+﻿
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>@ViewBag.Title</title>
+    @if (!string.IsNullOrEmpty(@ViewBag.Description))
+    {
+        <meta name="description" content="@ViewBag.Description" />
+    }
+    @if (!string.IsNullOrEmpty(@ViewBag.Keywords))
+    {
+        <meta name="keywords" content="@ViewBag.Keywords" />
+    }
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="@Url.Content("~/Content/css/materialize.min.css")" type="text/css" rel="stylesheet" media="screen,projection" />
+    <link href="@Url.Content("~/Content/css/style.css")" type="text/css" rel="stylesheet" media="screen,projection" />
+
+    @RenderSection("Head", false)
+    @Html.Partial("_GoogleAnalytics")
+</head>
+<body>
+    <div class="navbar-fixed">
+        <nav class="light-blue lighten-1" style="background-image:url('http://viadf.com.mx/Content/img/b5.jpg');" role="navigation">
+            <div class="nav-wrapper container">
+                <a id="logo-container" href="/" class="brand-logo">ViaDF<i class="material-icons" style="display: inline;top: 4px;position: relative;left: 6px;">&#xE530;</i></a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a href="/Directorio">Lista de rutas</a></li>
+                    @*<li><a href="/AgregarRuta">Agregar ruta</a></li>*@
+                    <li><a href="/OpenData">Datos abiertos</a></li>
+                    <li><a href="/WebService">Servicio Web</a></li>
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li><a href="/Account/LogOff">Logout</a></li>
+                    }
+                </ul>
+                <ul id="nav-mobile" class="side-nav">
+                    <li style="color: black;"><b>ViaDF</b></li>
+                    <li><a href="/">Inicio</a></li>
+                    <li><a href="/Directorio">Lista de rutas</a></li>
+                    @*<li><a href="/AgregarRuta">Agregar ruta</a></li>*@
+                    <li><a href="/OpenData">Datos abiertos</a></li>
+                    <li><a href="/WebService">Servicio Web</a></li>
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li><a href="/Account/LogOff">Logout</a></li>
+                    }
+                </ul>
+                <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+            </div>
+        </nav>
+    </div>
+
+    <div class="main section no-pad-bot" id="index-banner">
+        <div class="container">
+            <div class="row inapp-hide hide-on-large-only center-align">
+                <a target="_blank" href="https://play.google.com/store/apps/details?id=io.gonative.android.zkjxe">
+                    <img style="width:200px" alt="Descargar gratuito en Google Play" src="http://viadf.com.mx/Content/img/google-play-badge.png" />
+                </a>
+            </div>
+            <div class="row">
+
+                @if (!(bool)(ViewData["DisableAds"] ?? false))
+                {
+                    <div class="col l3 hide-on-med-and-down" style="overflow:hidden;">  
+                        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                        <!-- Responsive Big -->
+                        <ins class="adsbygoogle"
+                             style="display:block"
+                             data-ad-client="ca-pub-2461827238480440"
+                             data-ad-slot="8069522056"
+                             data-ad-format="auto"></ins>
+                        <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+                    </div>
+                    <div class="col s12 m12 l9">
+                        @RenderBody()
+                        <div class="row hide-on-med-and-down inapp-hide right-align">
+                            <a target="_blank" href="https://play.google.com/store/apps/details?id=io.gonative.android.zkjxe">
+                                <img style="width:200px" alt="Descargar gratuito en Google Play" src="http://viadf.com.mx/Content/img/google-play-badge.png" />
+                            </a>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="col s12">
+                        @RenderBody()
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <footer class="page-footer orange inapp-hide">
+        <div class="container">
+            <div class="row">
+                <div class="col m9 s12">
+                    <h5 class="white-text">Acerca de ViaDF</h5>
+                    <p class="grey-text text-lighten-4">ViaDF es un proyecto personal que he hecho en mi tiempo libre. Por eso estoy feliz por todo tipo de comentarios, sugerencias y ayuda. Agradezco mucho su interés en ViaDF.</p>
+
+                </div>
+                <div class="col m3 s12 right-align">
+                    <h5 class="white-text">Contacto</h5>
+                    <a class="white-text" href="mailto:viadf.com.mx@gmail.com"><i class="fa fa-envelope-square fa-2x"></i></a>
+                    <a class="white-text" href="https://www.facebook.com/viadf" target="_blank"><i class="fa fa-facebook-square fa-2x"></i></a>
+                    <a class="white-text" href="https://www.twitter.com/viadf" target="_blank"><i class="fa fa-twitter-square fa-2x"></i></a>
+                    <a class="white-text" href="skype:kalinbas?call"><i class="fa fa-skype fa-2x"></i></a>
+                    @*<a class="white-text" href="https://www.linkedin.com/in/bastiankaelin" target="_blank"><i class="fa fa-linkedin-square fa-2x"></i></a>*@
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col s12 m12 l8">
+                        Hecho con cariño en Mexico y Suiza - @DateTime.Today.Year
+                    </div>
+                    <div class="col l4 right-align hide-on-med-and-down">
+                        <a class="white-text" href="/Condiciones">Condiciones de Uso</a> | <a class="white-text" href="/Privacidad">Privacidad</a>
+                    </div>
+                </div>
+            </div>
+    </footer>
+
+    @RenderSection("Modals", false)
+
+    <!--  Scripts-->
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="@Url.Content("~/Content/js/materialize.min.js")"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
+
+    <script src="@Url.Content("~/Content/js/main.js?v=2")"></script>
+
+    @RenderSection("JavaScript", false)
+</body>
+</html>
+

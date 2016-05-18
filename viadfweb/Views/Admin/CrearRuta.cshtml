@@ -1,0 +1,344 @@
+﻿@using viadflib
+@using viadf.Models
+@using System.Configuration
+
+@model CreateRouteModel
+
+@section Head {
+    <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+}
+
+@section JavaScript {
+    <script type="text/javascript">
+
+        var map;
+        var polyLine1;
+        var polyLine2;
+        var infowindow;
+
+        var mode = 'hand';
+        var nameArray = [];
+        @foreach (var pos in Model.NameDictionary.Keys)
+        {
+            @:nameArray['@pos'] = '@Html.Raw(Model.NameDictionary[pos])';
+                                                                                }
+
+        $(function () {
+
+            if ($("#routename").val() === "") {
+                $("#routename").focus();
+            }
+
+            var myOptions = {
+                zoom: 12,
+                center: new google.maps.LatLng(19.410636, -99.130588),
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                streetViewControl: false,
+                mapTypeControl: false
+            };
+
+            map = new google.maps.Map(document.getElementById('map'), myOptions);
+
+            google.maps.event.addListener(map, "click", mapLeftClick);
+
+            @if (Model.Positions1.Length > 0) {
+
+                <text>
+            polyLine1 = new google.maps.Polyline({
+                path:
+                [
+                @foreach (var pos in Model.Positions1)
+                {
+                    @:new google.maps.LatLng(@pos),
+                }
+                ], strokeColor: "#ff0000"
+            });
+            </text>
+                @:setUpPolyLine(polyLine1);
+                                                                                                                        }
+            @if (Model.Positions2.Length > 0)
+            {
+                <text>
+            polyLine2 = new google.maps.Polyline({
+                path:
+                [
+                @foreach (var pos in Model.Positions2)
+                {
+                    @:new google.maps.LatLng(@pos),
+                }
+                ], strokeColor: "#0000ff"
+            });
+            </text>
+                @:setUpPolyLine(polyLine2);
+                                                                                                                        }
+
+            if (polyLine1 || polyLine2) {
+                var bounds = new google.maps.LatLngBounds();
+                if (polyLine1) {
+                    polyLine1.getPath().forEach(function (element) {
+                        bounds.extend(element);
+                    })
+                }
+                if (polyLine2) {
+                    polyLine2.getPath().forEach(function (element) {
+                        bounds.extend(element);
+                    })
+                }
+                map.fitBounds(bounds);
+            }
+
+            infowindow = new google.maps.InfoWindow(
+            {
+                size: new google.maps.Size(100, 30)
+            });
+        });
+
+        function setUpPolyLine(polyline) {
+            polyline.setEditable(true);
+            polyline.setMap(map);
+            google.maps.event.addListener(polyline, "click", function (e) {
+                if (mode === 'delete') {
+                    var path = polyline.getPath().removeAt(e.vertex);
+                    //polyline.setPath(path);
+                } else if (mode === 'text') {
+                    if (e.vertex !== undefined) {
+                        var coords = polyline.getPath().getAt(e.vertex);
+                        var name = window.prompt("Nombre de la estación?", nameArray[coords.toUrlValue(10)] !== undefined ? nameArray[coords.toUrlValue(10)] : "");
+                        if (name !== null) {
+                            nameArray[coords.toUrlValue(10)] = name;
+                        }
+                    }
+                }
+            });
+
+            google.maps.event.addListener(polyline, "mouseover", function (e) {
+                if (mode === 'text') {
+                    if (e.vertex !== undefined) {
+                        var coords = polyline.getPath().getAt(e.vertex);
+                        if (nameArray[coords.toUrlValue(10)] !== undefined) {
+                            infowindow.close();
+                            infowindow.setContent(nameArray[coords.toUrlValue(10)]);
+                            infowindow.setPosition(coords);
+                            infowindow.open(map);
+                        }
+                    }
+                }
+            });
+
+            google.maps.event.addListener(polyline, "mouseout", function (e) {
+                infowindow.close();
+            });
+        }
+
+        function setMode(m) {
+            $('#btn' + mode).removeClass('selected').removeClass('btn-large');
+            mode = m;
+            $('#btn' + mode).addClass('selected').addClass('btn-large');
+        }
+
+        function mapLeftClick(e) {
+            if (mode === 'red') {
+                if (polyLine1 == null) {
+                    polyLine1 = new google.maps.Polyline({ path: [e.latLng], strokeColor: "#ff0000" });
+                    setUpPolyLine(polyLine1);
+                } else {
+                    polyLine1.getPath().push(e.latLng);
+                }
+                saveStreetNameFromGoogle(e.latLng);
+            } else if (mode === 'blue') {
+                if (polyLine2 == null) {
+                    polyLine2 = new google.maps.Polyline({ path: [e.latLng], strokeColor: "#0000ff" });
+                    setUpPolyLine(polyLine2);
+                } else {
+                    polyLine2.getPath().push(e.latLng);
+                }
+                saveStreetNameFromGoogle(e.latLng);
+            }
+        }
+
+        function clearLines() {
+            if (polyLine1 != null) {
+                polyLine1.setMap(null);
+                polyLine1 = null;
+            }
+            if (polyLine2 != null) {
+                polyLine2.setMap(null);
+                polyLine2 = null;
+            }
+        }
+
+        function saveMapData() {
+            var textLine = "";
+            var lat = "";
+            var lng = "";
+            if (polyLine1) {
+                polyLine1.getPath().forEach(function (element, index) {
+                    textLine += element.toUrlValue(10) + " ";
+                });
+                $('#mapdata1').val(textLine);
+            }
+
+            textLine = "";
+            if (polyLine2) {
+                polyLine2.getPath().forEach(function (element, index) {
+                    textLine += element.toUrlValue(10) + " ";
+                });
+                $('#mapdata2').val(textLine);
+            }
+
+            textLine = "";
+            for (var index in nameArray) {
+                textLine += index + "_" + nameArray[index] + "|";
+            }
+            $('#mapnames').val(textLine);
+        }
+
+        function searchPlace() {
+            var address = document.getElementById('searchName').value;
+            var geocoder = new google.maps.Geocoder();
+            var geocoderRequest = {
+                address: address + ' distrito federal mexico'
+            }
+            geocoder.geocode(
+                geocoderRequest,
+                function (results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        map.setCenter(results[0].geometry.location);
+                        map.setZoom(16);
+                    }
+                }
+              );
+        }
+
+        function saveStreetNameFromGoogle(latLng) {
+            var geocoder = new google.maps.Geocoder();
+            var geocoderRequest = {
+                location: latLng
+            }
+            geocoder.geocode(
+                geocoderRequest,
+                function (results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        if (results[0] && results[0].address_components && results[0].address_components[0] && results[0].address_components[1] && results[0].types[0] && results[0].types[0] === 'street_address') {
+                            nameArray[latLng.toUrlValue(10)] = results[0].address_components[1].long_name + " " + results[0].address_components[0].long_name;
+                        }
+                    }
+                }
+              );
+        }
+    </script>
+}
+
+
+@if (Model.id.HasValue)
+{
+    <h2>Editar una ruta de ViaDF</h2>
+    <p>
+        En esta página puedes corregir los datos de una ruta de ViaDF. Todas las rutas corregidas pasan por una examinación manual.
+        Si tienes alguna duda nos puedes contactar.
+    </p>
+}
+else
+{
+    <h2>Crea una nueva ruta para ViaDF</h2>
+    <p>
+        En esta página puedes agregar una ruta nueva del transporte público que todavia no está en el
+        sistema de ViaDF. Para que la ruta sea considerada es importante que llenes todos los datos
+        con mucho cuidado. Todas las rutas nuevas pasan por una examinación manual.
+        Si tienes alguna duda nos puedes contactar.
+    </p>
+}
+
+<p class="hide-on-large-only">
+    <strong>Crear y editar rutas no funciona en telefonos o tablets.</strong>
+</p>
+
+<form method="post" class="row hide-on-med-and-down">
+    <div class="col s5">
+        <div class="input-field col s6">
+            <input placeholder="Por ejemplo: Ruta 65A" id="routename" name="routename" type="text" value="@Model.routename">
+            <label for="routename">Nombre de la ruta *</label>
+        </div>
+        <div class="input-field col s6">
+            <select name="type" id="type">
+                @foreach (var type in Model.TypeList)
+                {
+                    <option value="@type.ID" @(type.ID == Model.type ? "selected='selected'" : "")>@type.Name</option>
+                }
+            </select>
+            <label for="type">Tipo de Transporte *</label>
+        </div>
+        <div class="input-field col s6">
+            <input placeholder="Por ejemplo: Metro Juarez" id="origin" name="origin" type="text" value="@Model.origin">
+            <label for="origin">Nombre del origen *</label>
+        </div>
+        <div class="input-field col s6">
+            <input placeholder="Por ejemplo: Zócalo" id="destination" name="destination" type="text" value="@Model.destination">
+            <label for="destination">Nombre del destino *</label>
+        </div>
+        <div class="input-field col s12">
+            <textarea name="description" rows="3" cols="20" id="description" class="materialize-textarea" placeholder="Información adicional de la ruta.">@Model.description</textarea>
+            <label for="description">Descripción de la ruta</label>
+        </div>
+        <div class="input-field col s6">
+            <input id="email" name="email" type="text" value="@Model.email" placeholder="Correo electrónico">
+            <label for="email">Su correo electrónico *</label>
+        </div>
+        <div class="col s12">
+            <p>
+                Por favor antes de enviar, verifique que todos los datos esten correctos y que las lineas estan dibujadas correctamente en el mapa.
+            </p>
+        </div>
+        <div class="col s12 right-align">
+            @if (!Model.Valid)
+            {
+                <b style="color:red;">
+                    Verifique todos los datos obligatorios.
+                </b>
+            }
+        </div>
+        <div class="col s12 right-align" style="margin-top:20px;">
+            <button type="submit" class="btn waves-effect waves-light" onclick="saveMapData();">
+                Enviar ruta@(Request.IsAuthenticated ? " - ADMIN" : "")
+            </button>
+        </div>
+    </div>
+    <div class="col s7">
+        <div class="col s5 input-field">
+            <input type="text" id="searchName" placeholder="Por ejemplo: Zócalo" />
+            <label for="email">Buscar lugar</label>
+        </div>
+        <div class="col s1">
+            <a href="javascript:searchPlace()" class="btn-floating tooltipped btn-large" data-tooltip="Buscar lugar"><i class="material-icons">&#xE8B6;</i></a>
+        </div>
+        <div class="col s6 right-align">
+            <a id="btnhand" href="javascript:setMode('hand')" class="btn-floating selected btn-large tooltipped" data-tooltip="Navegar mapa"><i class="material-icons">&#xE55B;</i></a>
+            <a id="btnred" href="javascript:setMode('red')" class="btn-floating red tooltipped" data-tooltip="Dibujar origen a destino"><i class="material-icons red">&#xE55F;</i></a>
+            <a id="btnblue" href="javascript:setMode('blue')" class="btn-floating blue tooltipped" data-tooltip="Dibujar destino a origen"><i class="material-icons blue">&#xE55F;</i></a>
+            <a id="btntext" href="javascript:setMode('text')" class="btn-floating tooltipped" data-tooltip="Editar textos"><i class="material-icons">&#xE254;</i></a>
+            <a id="btndelete" href="javascript:setMode('delete')" class="btn-floating tooltipped" data-tooltip="Borrar puntos"><i class="material-icons">&#xE14C;</i></a>
+        </div>
+        <div class="col s12">
+            <div id="map" style="height:400px;">
+            </div>
+        </div>
+        <div class="col s12">
+            <p>
+                Ayuda: Busca el origen en el mapa con el buscador o acerquete hasta que puedes ver las
+                calles. Desde el origen empiezas a dibujar la ruta hacia el destino (herramienta linea roja).
+                Si la ruta no regresa por las mismas calles, dibuja esa parte (herramienta linea azul). La linea azul no es mandatoria.
+                Para borrar un punto, solo haces click en el otra vez usando la herramienta para borrar.
+                Si quieres poner un nombre a una estación, editala con la herramienta de texto.
+            </p>
+        </div>
+    </div>
+
+    <input type="hidden" id="mapdata1" name="mapdata1" />
+    <input type="hidden" id="mapdata2" name="mapdata2" />
+    <input type="hidden" id="mapnames" name="mapnames" />
+
+
+
+
+</form>
+

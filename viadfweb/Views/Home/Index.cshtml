@@ -1,0 +1,299 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewData["DisableAds"] = true;
+}
+
+<style>
+    .pac-container {
+        background-color: #FFF;
+        z-index: 1010;
+        position: fixed;
+        display: inline-block;
+        float: left;
+    }
+</style>
+
+<h2 class="header center">Buscador del Transporte Público - Ciudad de México</h2>
+
+<div class="card hoverable">
+    <div class="card-content">
+        <div class="row center-align">
+            <span class="flow-text">¿Como llego de <strong><a id="fromLink" @*class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="seleccione inicio"*@ href="#" onclick="openModal(true)" style="border-bottom: 1px dashed; ">algun lugar</a></strong> a <strong><a id="toLink" @*class="tooltipped" data-position="bottom" data-delay="10" data-tooltip="seleccione destino"*@ href="#" onclick="openModal(false)" style="border-bottom: 1px dashed; ">otro</a></strong>?</span>
+        </div>
+        <div class="row center-align">
+            <button id="searchButton" disabled class="btn-large waves-effect waves-light light-blue darken-1" name="action" onclick="doSearch()">Buscar<i class="material-icons right">&#xE8B6;</i></button>
+        </div>
+        <div class="row center-align">
+            <input class="filled-in" type="checkbox" id="test5" checked disabled /><label for="test5">Metro</label>
+            <input class="filled-in" type="checkbox" id="test4" checked disabled /><label for="test4">Metrobus</label>
+            <input class="filled-in" type="checkbox" id="test3" checked disabled /><label for="test3">Microbus</label>
+            <input class="filled-in" type="checkbox" id="test2" checked disabled /><label for="test2">RTP</label>
+            <input class="filled-in" type="checkbox" id="test1" checked disabled /><label for="test1">Trolebus</label>
+            <input class="filled-in" type="checkbox" id="test0" checked disabled /><label for="test0">Tren ligero</label>
+        </div>
+        <div class="row center-align">
+            <a href="/Busqueda?de=19.43255865356213%2C-99.13337157141115&a=19.334422%2C-99.18811">Ver ejemplo: ¿Como llego del <strong>Zocalo</strong> a <strong>Ciudad Universitaria (UNAM)</strong>?</a>
+        </div>
+    </div>
+</div>
+
+<div class="row inapp-hide">
+    <div class="col s12 m4 l3">
+        <div class="icon-block">
+            <h2 class="center"><i class="material-icons">&#xE530;</i></h2>
+            <h5 class="center">Buscar rutas</h5>
+            <p class="light" style="text-align: justify;">En ViaDF se pueden buscar conexiones de toda la red del Metro, Metrob&#250;s, Tren Ligero, Troleb&#250;s, RTP, Autob&#250;s, Microb&#250;s, Pumab&#250;s y Tren Suburbano.</p>
+
+            <ul>
+                <li>
+                    <a href="/Directorio">Ver lista de rutas</a>
+                </li>
+                <li>
+                    <a href="/Directorio/Distrito-Federal">Ver rutas del Distrito Federal</a>
+                </li>
+                <li>
+                    <a href="/Directorio/Estado-de-Mexico">Ver rutas del Estado de México</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col s12 m4 l3">
+        <div class="icon-block">
+            <h2 class="center"><i class="material-icons">&#xE7EF;</i></h2>
+            <h5 class="center">Collaboración</h5>
+            <p class="light" style="text-align: justify;">Lamentablemente no existe una base de datos completa de las rutas del transporte público en el DF. Por eso en ViaDF los usuarios pueden agregar las rutas que conocen.</p>
+            <ul>
+                <li>
+                    <a href="/AgregarRuta">Agregar una ruta que conoces</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col s12 m4 l3">
+        <div class="icon-block">
+            <h2 class="center"><i class="material-icons">&#xE8B8;</i></h2>
+            <h5 class="center">Open data / REST API</h5>
+            <p class="light" style="text-align: justify;">
+                Decidí publicar la base de datos de ViaDF bajo la licencia Open Data Commons Attribution License para que la puedan usar en sus projectos. Ademas contamos con un servicio web REST para la busqueda de rutas.
+                <ul>
+                    <li>
+                        <a href="/WebService">Como usar el servicio web?</a>
+                    </li>
+                    <li>
+                        <a href="/OpenData">Donde puedo bajar los datos?</a>
+                    </li>
+                </ul>
+            </p>
+        </div>
+    </div>
+    <div class="col s12 m12 l3">
+        @Html.Action("LastSearches", "Search", null)
+    </div>
+</div>
+
+@*@Html.Partial("_MobileResponsiveAd2")*@
+
+@section Modals {
+
+    <div id="mapModal" class="modal modal-fixed-footer">
+        <div class="row">
+            <div class="col s10 offset-s1">
+                <div class="input-field">
+                    <a class="prefix" href="#" onclick="getCurrentPosition();"><i class="material-icons">&#xE55C;</i></a>
+                    <input id="mapInput" class="controls" type="text" placeholder="Buscar">
+                </div>
+            </div>
+        </div>
+        <div id="map" style="height:calc(100% - 150px);"></div>
+        <div class="modal-footer">
+            <a href="#!" onclick="closeModal(true)" class="modal-action waves-effect waves-green btn-flat">OK</a>
+            <a href="#!" onclick="closeModal(false)" class="modal-action waves-effect waves-green btn-flat">Cancelar</a>
+        </div>
+    </div>
+}
+
+@section JavaScript {
+
+    <script type="text/javascript">
+        $(function () {
+
+        });
+
+        var map, marker, geocoder, currentPosition, currentName;
+        var posFrom, posTo, isFrom;
+
+        function doSearch() {
+            $("#searchButton").prop("disabled", true);
+            $("#searchButton").html("buscando...");
+
+            window.location.href = '/Busqueda?de=' + posFrom.lat() + ',' + posFrom.lng() + "&a=" + posTo.lat() + ',' + posTo.lng() + "&origen=" + $("#fromLink").text() + "&destino=" + $("#toLink").text();
+        }
+
+        function openModal(from) {
+            isFrom = from;
+            $('#mapModal').openModal();
+            loadModalMap(isFrom ? posFrom : posTo);
+        }
+
+        function closeModal(isOk) {
+
+            $('#mapModal').closeModal();
+
+            // remove marker
+            if (marker) {
+                marker.setMap(null);
+                marker = null;
+            }
+            // clear input
+            $('#mapInput').val("");
+
+            if (currentName && currentName.indexOf(",") > 0) {
+                currentName = currentName.substring(0, currentName.indexOf(","));
+            }
+
+            if (isOk) {
+                // take value
+                if (isFrom) {
+                    posFrom = currentPosition;
+                    if (posFrom) {
+                        $("#fromLink").text(currentName);
+                    }
+                } else {
+                    posTo = currentPosition;
+                    if (posTo) {
+                        $("#toLink").text(currentName);
+                    }
+                }
+            }
+
+            if (posFrom && posTo) {
+                $("#searchButton").prop("disabled", false);
+            }
+        }
+
+        function loadModalMap(pos) {
+
+            currentPosition = pos;
+
+            var zoomLevel = currentPosition ? 17 : 10;
+            var position = currentPosition || new google.maps.LatLng(19.43255865356213, -99.13337157141115);
+
+            if (map) {
+                map.setCenter(position);
+                map.setZoom(zoomLevel);
+
+                if (pos) {
+                    setMarker(pos);
+                    setTextFromPosition(pos);
+                }
+            }
+            else {
+                var mapCanvas = document.getElementById('map');
+                var mapOptions = {
+                    center: position,
+                    zoom: zoomLevel,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    draggableCursor: 'pointer'
+                };
+
+                geocoder = new google.maps.Geocoder;
+
+                map = new google.maps.Map(mapCanvas, mapOptions);
+
+                google.maps.event.addListener(map, 'click', function (event) {
+
+                    currentPosition = event.latLng;
+
+                    map.setCenter(currentPosition);
+                    setMarker(currentPosition);
+                    setTextFromPosition(currentPosition);
+                });
+
+                var input = document.getElementById('mapInput');
+                var defaultBounds = new google.maps.LatLngBounds(new google.maps.LatLng(19.267073, -99.343872), new google.maps.LatLng(19.577906, -98.986816));
+
+                var options = {
+                    bounds: defaultBounds
+                };
+
+                var autocomplete = new google.maps.places.Autocomplete(input, options);
+
+                autocomplete.addListener('place_changed', function () {
+                    var place = autocomplete.getPlace();
+                    if (!place.geometry) {
+                        return;
+                    }
+
+                    currentPosition = place.geometry.location;
+                    currentName = place.formatted_address;
+
+                    if (place.geometry.viewport) {
+                        map.fitBounds(place.geometry.viewport);
+                    } else {
+                        map.setCenter(place.geometry.location);
+                        map.setZoom(17);
+                    }
+                    setMarker(place.geometry.location);
+
+                });
+            }
+
+            $("#mapInput").focus();
+        }
+
+        function setMarker(pos) {
+            if (!marker) {
+                marker = new google.maps.Marker({
+                    position: pos,
+                    map: map,
+                    draggable: true
+                });
+
+                google.maps.event.addListener(marker, 'dragend', function () {
+
+                    currentPosition = marker.getPosition();
+
+                    map.setCenter(currentPosition);
+
+                    setTextFromPosition(currentPosition);
+                });
+            } else {
+                marker.setPosition(pos);
+            }
+        }
+
+        function setTextFromPosition(latLng) {
+            geocoder.geocode({ 'location': latLng }, function (results, status) {
+                currentName = "Posición indicada"
+                if (status === google.maps.GeocoderStatus.OK) {
+                    if (results[0]) {
+                        currentName = results[0].formatted_address;
+                    }
+                }
+                $('#mapInput').val(currentName);
+            });
+        }
+
+        function getCurrentPosition() {
+
+            var options = {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
+            };
+
+            navigator.geolocation.getCurrentPosition(function (pos) {
+                var crd = pos.coords;
+                currentPosition = new google.maps.LatLng(crd.latitude, crd.longitude);
+
+                map.setCenter(currentPosition);
+                map.setZoom(17);
+                setMarker(currentPosition);
+                setTextFromPosition(currentPosition);
+
+            }, function (error) {
+                Materialize.toast('ERROR(' + error.code + '): ' + error.message, 2000);
+            }, options);
+        }
+    </script>
+}

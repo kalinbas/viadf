@@ -1,0 +1,32 @@
+﻿@model viadf.Models.DelegacionListModel
+@using viadflib
+
+<h2>Transporte público en @Utils.Capitalize(Model.Delegacion.Name)</h2>
+<p>
+    En esta lista puedes ver todas las colonias de @Utils.Capitalize(Model.Delegacion.Name). Si quieres saber que rutas del transporte público hay en cierta colonia, buscala en la lista y haz clic sobre ella.
+</p>
+
+@Html.Partial("_MobileResponsiveAd")
+
+@foreach (var item in Model.All)
+{
+    @Html.ActionLink(Utils.Capitalize(item.Name), "Delegacion", new { estadoId = item.EstadoID, name = Utils.Capitalize(item.SeoName) }, new { @class = "button " + (item.ID == Model.Delegacion.ID ? "selected" : "") });
+}
+<div style="clear: both"></div>
+
+<table>
+    <tr align="left">
+        <th>
+            Colonia
+        </th>
+    </tr>
+    @foreach (Colonia item in Model.Colonias)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(Utils.Capitalize(item.Name), "Colonia", new { estadoId = item.Delegacion.EstadoID, name = Utils.Capitalize(item.SeoName), delegacion = Utils.Capitalize(item.Delegacion.SeoName) })
+            </td>
+        </tr>
+    }
+</table>
+

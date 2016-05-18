@@ -1,0 +1,63 @@
+﻿@model viadflib.SearchResultModel
+@using viadflib
+
+<script type="text/javascript">
+                
+        var map, polyline;      
+        
+        function setUpMap(routeCoords) {
+            
+            if (polyline) {
+                polyline.setMap(null);
+            }
+
+            var bounds = new google.maps.LatLngBounds();
+            for (i = 0; i < routeCoords.length; i++) {             
+                bounds.extend(routeCoords[i]);
+            }
+            map.fitBounds( bounds );
+
+            polyline = new google.maps.Polyline({
+                path: routeCoords,
+                strokeColor: "#FF0000",
+                strokeOpacity: 0.6,
+                strokeWeight: 5
+            });
+            polyline.setMap(map);
+        }
+
+        function setOptionMap(index) {
+            switch (index) {
+                @foreach (var result in Model.Results) {
+                    <text>case </text>@(Model.Results.IndexOf(result))<text>:</text>
+                    @:setUpMap([
+                        foreach (var item in result.Items) {
+                            foreach (var step in item.Path)
+                            {
+                                @:new google.maps.LatLng(@step.Lat, @step.Lng)
+                                if (!(step == item.Path.Last() && item == result.Items.Last())) {
+                                    <text>,</text>
+                                }   
+                            }         
+                        }
+                    @:]);
+                    @:break;
+                }
+            }
+        }
+
+        $(function () {  
+
+              // setup map
+              var myOptions = {            
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                streetViewControl: false,
+                mapTypeControl: false,
+              };
+
+              map = new google.maps.Map(document.getElementById("map"), myOptions);          
+                
+              setOptionMap(0);
+        });
+
+    </script>

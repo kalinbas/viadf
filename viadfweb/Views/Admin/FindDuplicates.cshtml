@@ -1,0 +1,17 @@
+﻿@using viadflib
+@model List<List<viadflib.Route>>
+
+
+<table>
+    @foreach (var duplicates in Model)
+            {
+        <tr>
+            <td>
+                @foreach (var duplicate in duplicates)
+                {
+                    @Html.ActionLink(duplicate.Name + " ", "AcceptarRuta", new { id = duplicate.ID }, new { target = "_blank" })                     
+                }
+            </td>
+        </tr>
+    }
+</table>

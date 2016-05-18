@@ -1,0 +1,24 @@
+﻿@model viadf.Models.ColoniaRouteListModel
+
+@using viadflib
+
+
+@if (Model.Colonia.Delegacion.EstadoID == 1)
+{
+    <a href="/Directorio/Distrito-Federal">Distrito Federal</a>
+}
+else
+{
+    <a href="/Directorio/Estado-de-Mexico">Estado de México</a>
+}
+    > @Html.ActionLink(Utils.Capitalize(Model.Colonia.Delegacion.Name), "Delegacion", new { estadoId = Model.Colonia.Delegacion.EstadoID, name = Utils.Capitalize(Model.Colonia.Delegacion.SeoName) }) > @Utils.Capitalize(Model.Colonia.Name)
+
+    <h2>Transporte público en @Utils.Capitalize(Model.Colonia.Name)</h2>
+
+    <p>En esta lista puedes ver todas las rutas de transporte público que pasan por la colonia @Utils.Capitalize(Model.Colonia.Name) en la delegación @Utils.Capitalize(Model.Colonia.Delegacion.Name).</p>
+
+    @Html.Partial("_MobileResponsiveAd")
+
+    @Html.Partial("_RouteList", Model.Routes)
+    <br /><br />
+    <p>Si conoces una ruta que no está en esa lista, @Html.ActionLink("agregala para mejorar la busqueda de ViaDF", "CrearRuta").</p>

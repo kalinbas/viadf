@@ -1,0 +1,137 @@
+﻿@using viadflib
+@using viadf.Models
+@using System.Configuration
+
+@model CreateRouteModel
+
+@section Head {
+    <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+}
+
+@section JavaScript {
+    <script type="text/javascript">
+
+        var map;
+        var polyLine1;
+        var polyLine2;
+        var marker1;
+        var marker2;
+
+        $(function () {
+
+            var myOptions = {
+                zoom: 12,
+                center: new google.maps.LatLng(19.410636, -99.130588),
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                streetViewControl: false,
+                mapTypeControl: false
+            };
+
+            map = new google.maps.Map(document.getElementById('map'), myOptions);
+
+            @if (Model.Positions1.Length > 0) {
+
+                <text>
+            polyLine1 = new google.maps.Polyline({
+                path:
+                [
+                @foreach (var pos in Model.Positions1)
+                {
+                    @:new google.maps.LatLng(@pos),
+                }
+                ], strokeColor: "#ff0000"
+            });
+            </text>
+                @:setUpPolyLine(polyLine1);
+                                                                                                            }
+            @if (Model.Positions2.Length > 0)
+            {
+                <text>
+            polyLine2 = new google.maps.Polyline({
+                path:
+                [
+                @foreach (var pos in Model.Positions2)
+                        {
+                            @:new google.maps.LatLng(@pos),
+                        }
+                ], strokeColor: "#0000ff"
+            });
+            </text>
+                @:setUpPolyLine(polyLine2);
+                        }
+
+            marker1 = new google.maps.Marker({ position: new google.maps.LatLng(@Model.Positions1[0]), map: map, title: '@Model.origin' });                
+            marker2 = new google.maps.Marker({ position: new google.maps.LatLng(@(Model.Positions2.Length > 0 ? Model.Positions2[0] : Model.Positions1[Model.Positions1.Length - 1])), map: map, title: '@Model.destination' });
+            
+            if (polyLine1 || polyLine2) {
+                var bounds = new google.maps.LatLngBounds();
+                if (polyLine1) {
+                    polyLine1.getPath().forEach(function (element) {
+                        bounds.extend(element);
+                    })
+                }
+                if (polyLine2) {
+                    polyLine2.getPath().forEach(function (element) {
+                        bounds.extend(element);
+                    })
+                }
+                map.fitBounds(bounds);
+            }
+        });
+
+        function setUpPolyLine(polyline) {
+            polyline.setMap(map);
+        }
+
+    </script>
+}
+
+
+<h2>Validar ruta</h2>
+<p>
+    En esta página puedes acceptar una ruta de ViaDF.
+</p>
+
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Nombre</th>
+        <th>Descripcion</th>
+        <th>Tipo</th>
+        <th>Inicio</th>
+        <th>Destino</th>
+        <th>Rel</th>
+        <th>Status</th>
+    </tr>
+    <tr>
+        <td>@Model.id</td>
+        <td>@Model.routename</td>
+        <td>@Model.description</td>
+        <td>@Model.TypeList.First(x => x.ID == Model.type).Name</td>
+        <td>@Model.origin</td>
+        <td>@Model.destination</td>
+        <td>
+            @if (Model.parentId.HasValue)
+            {
+                @Html.ActionLink(Model.parentId + "", "AcceptarRuta", new { id = Model.parentId }, new { target = "_blank" })
+            }
+        </td>
+        <td>@((StatusEnum)Model.status)</td>
+    </tr>
+
+</table>
+
+<div class="row">   
+    <div class="col s12">
+        <div id="map" style="height:400px;"></div>
+    </div>
+</div>
+
+<form method="post">
+    <input type="hidden" id="id" name="id" value="@Model.id" />
+    @if (Model.status == (int)StatusEnum.New)
+    {
+        <button name="command" value="accept" type="submit">Accept</button>
+    }
+    <button name="command" value="delete" type="submit">Delete</button>
+</form>

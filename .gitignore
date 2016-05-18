@@ -234,3 +234,7 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+
+
+#Files for Webpage
+viadfweb/Content/files

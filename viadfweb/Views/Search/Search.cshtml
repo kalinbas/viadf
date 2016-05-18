@@ -1,0 +1,170 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using viadflib
+
+@model SearchResultModel
+
+@section JavaScript {
+    @Html.Partial("_SearchResultJS", Model)
+}
+
+<div class="row">
+    <div class="col s12 right-align">
+        <a href="/">Nueva busqueda</a>
+    </div>
+</div>
+
+
+<div class="card hoverable">
+    <div class="card-content">
+
+        @Html.Partial("_MobileResponsiveAd")
+
+        <div class="row center-align">
+            <span class="flow-text">¿Como llego de <strong>@Model.Results[0].Start.Name</strong> a <strong>@Model.Results[0].End.Name</strong>?</span>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <ul class="tabs">
+                    @for (int i = 0; i < Model.Results.Count; i++)
+            {
+                var result = Model.Results[i];
+                        <li class="tab col s4"><a onclick="setOptionMap(@(i))" href="#ruta@(i + 1)" class="truncate">Opción @(i + 1) (@Math.Round(@result.TotalTime, 0) min)</a></li>
+                    }
+                </ul>
+            </div>
+            <div class="col s12 m12 l8">
+                @for (int i = 0; i < Model.Results.Count; i++)
+                {
+                    var result = Model.Results[i];
+                    <div id="ruta@(i + 1)" class="col s12">
+                        <table cellspacing="0" class="resultTable highlight">
+                            <tr class="resultRowHeader">
+                                <th>
+
+                                </th>
+                                <th class="resultCellHeader" style="width:150px">
+                                    Como
+                                </th>
+                                <th class="resultCellHeader">
+                                    Lugar
+                                </th>
+                                <th class="resultCellHeader" style="width:65px">
+                                    Duración
+                                </th>
+                            </tr>
+                            @foreach (viadflib.SearchResultItem item in result.Items)
+                            {
+                                if (item.Route == null)
+                                {
+                                    <tr>
+                                        <td>
+                                            <i class="material-icons small">&#xE536;</i><!--directions_walk-->
+                                        </td>
+                                        @if (item.Start.Route != null && item.End.Route != null)
+                                        {
+                                            <td colspan="2" class="resultCellDown">
+                                                @("Cambiar de " + item.Start.Route.Type.Name + " a " + item.End.Route.Type.Name)
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="resultCellDown">
+                                                Caminando
+                                            </td>
+                                            if (item.Start.Route == null)
+                                            {
+                                                <td class="resultCellDown">
+                                                    <b><i>De </i></b>@item.Start.Name
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td class="resultCellDown">
+                                                    <b><i>A </i></b>@item.End.Name
+                                                </td>
+                                            }
+                                        }
+                                        <td class="resultCellDown">
+                                            @Math.Round(@item.Time, 0) min
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td rowspan="2">
+                                            @if (item.Type.Name == "Metro")
+                        {
+                                                <i class="material-icons small">&#xE533;</i><!--directions_subway-->
+                                            }
+                                            else
+                                            {
+                                                <i class="material-icons small">&#xE530;</i><!--directions_bus-->
+                                            }
+                                        </td>
+                                        <td rowspan="2" class="resultCellDown">
+                                            En
+                                            @Html.ActionLink(item.Type.Name + " " + item.Route.Name, "Route", "Home", new { type = Utils.Capitalize(Utils.FormatSEO(item.Type.Name)), name = Utils.Capitalize(Utils.FormatSEO(item.Route.Name)) }, null)
+                                            <br />
+                                            @("hacía " + item.InDirection)
+                                        </td>
+                                        <td>
+                                            <b><i>Subir en </i></b>
+                                            @if (string.IsNullOrWhiteSpace(item.Start.Name))
+                        {
+                                                @(item.StartName ?? "revisar en el mapa*")
+                                            }
+                                            else
+                                            {
+                                                @item.Start.Name @(item.Start.Route != null ? " (" + item.Start.Route.Name + ")" : "")
+                                            }
+                                        </td>
+                                        <td>
+                                            @Math.Round(@item.Time, 0) min
+                                        </td>
+                                    </tr>
+                                            <tr class="resultRowDown">
+                                                <td class="resultCellDown">
+                                                    <b><i>Bajar en </i></b>
+                                                    @if (string.IsNullOrWhiteSpace(item.End.Name))
+                        {
+                                                        @(item.EndName ?? "revisar en el mapa*")
+                                                    }
+                                                    else
+                                                    {
+                                                        @item.End.Name @(item.End.Route != null ? " (" + item.End.Route.Name + ")" : "")
+                                                    }
+                                                </td>
+                                                <td class="resultCellDown">
+                                                    &nbsp;
+                                                </td>
+                                            </tr>
+                                }
+                            }
+                            <tr class="resultRowTotal">
+                                <td></td>
+                                <td class="resultCellTotal">
+                                    <b>En Total</b>
+                                </td>
+                                <td class="resultCellTotal"></td>
+                                <td class="resultCellTotal">
+                                    <b>@Math.Round(@result.TotalTime, 0) min</b>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+                }
+            </div>
+            <div class="col s12 m12 l4">
+                <div id="map" class="map" style="height: 300px;margin-top: 16px;"></div>
+            </div>
+        </div>
+        <p style="font-size:smaller;">*Por la falta de una base de datos completa del transporte público en el D.F., ViaDF depende de sus usuarios para tener información actualizada de las rutas. Por eso puede ser, que en unos casos los resultados no son correctos. Por favor no dudes en contactarnos en ese caso.</p>
+        @Html.Partial("_MobileResponsiveAd2")
+    </div>
+</div>
+

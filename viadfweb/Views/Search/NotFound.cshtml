@@ -1,0 +1,13 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using viadf.Models
+
+@model CreateRouteModel
+  
+<h2>No se encontró ninguna ruta.</h2>
+<p>Lo sentimos, pero no se pudo encontrar una ruta con tus datos. Intentalo de nuevo con otra busqueda.</p>
+<br /><br />
+@Html.ActionLink("Nueva busqueda", "Index", "Home", null)
+<br /><br /><br /><br /><br />
