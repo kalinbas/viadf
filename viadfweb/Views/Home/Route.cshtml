@@ -79,12 +79,12 @@
 
 <div class="row">
     <div class="col s12 m12 l6">
-        <div id="map" style="height:300px;"></div>        
+        <div id="map" style="height:300px;"></div>
         <div class="right-align">
             <a class="btn btn-flat waves-effect waves-teal" href="/Admin/CrearRuta/@(Model.Route.ID)" rel="nofollow" target="_blank">Editar ruta</a>
             <a id="markButton" class="btn btn-flat waves-effect waves-teal" onclick="markRoute(@(Model.Route.ID));">Ya no existe</a>
         </div>
-    </div>    
+    </div>
     <div class="col s6 m6 l3">
         <table style="width:100%">
             <tr align="left">
@@ -98,7 +98,14 @@
                 {
                     <tr>
                         <td>
-                            @Html.ActionLink(item.Name, "RoutePiece", new { type = Utils.Capitalize(item.Route.Type.SeoName), route = Utils.Capitalize(item.Route.SeoName), name = Utils.Capitalize(item.SeoName) })
+                            @if (!string.IsNullOrWhiteSpace(item.SeoName))
+                            {
+                                @Html.ActionLink(item.Name, "RoutePiece", new { type = Utils.Capitalize(item.Route.Type.SeoName), route = Utils.Capitalize(item.Route.SeoName), name = Utils.Capitalize(item.SeoName) })
+                            }
+                            else
+                            {
+                                @item.Name
+                            }
                         </td>
                     </tr>
                 }
@@ -109,13 +116,13 @@
                 {
                     <tr>
                         <td>
-                            @Utils.Capitalize(item)
+                            @Utils.Capitalize(item ?? "")
                         </td>
                     </tr>
                 }
             }
         </table>
-    </div>    
+    </div>
     @if (!Model.Route.Type.HasNamedStationList)
     {
         <div class="col s6 m6 l3">
