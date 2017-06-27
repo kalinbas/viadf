@@ -1,16 +1,7 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["DisableAds"] = true;
-}
-
-@section Head {
-    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <script>
-        (adsbygoogle = window.adsbygoogle || []).push({
-            google_ad_client: "ca-pub-2461827238480440",
-            enable_page_level_ads: true
-        });
-    </script>
+    ViewBag.HeaderAdCode = "div-gpt-ad-1498571364610-3";
+    ViewBag.FooterAdCode = "div-gpt-ad-1498571364610-2";
 }
 
 
@@ -123,9 +114,6 @@
     </div>
 </div>
 
-
-
-@*@Html.Partial("_MobileResponsiveAd2")*@
 
 @section Modals {
 

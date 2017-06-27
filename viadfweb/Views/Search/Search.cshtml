@@ -1,5 +1,7 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.HeaderAdCode = "div-gpt-ad-1498571364610-9";
+    ViewBag.FooterAdCode = "div-gpt-ad-1498571364610-8";
 }
 
 @using viadflib
@@ -19,8 +21,6 @@
 
 <div class="card hoverable">
     <div class="card-content">
-
-		@Html.Partial("_MobileResponsiveAd")
 
         <div class="row center-align">
             <span class="flow-text">¿Cómo llego de <strong>@Model.Results[0].Start.Name</strong> a <strong>@Model.Results[0].End.Name</strong>?</span>
@@ -164,7 +164,6 @@
             </div>
         </div>
         <p style="font-size:smaller;">*Por falta de una base de datos completa del transporte público en la CDMX, ViaDF depende de sus usuarios para tener información actualizada de las rutas. Por eso puede ser, que en unos casos los resultados no son correctos. Por favor no dudes en contactarnos en ese caso.</p>
-        @Html.Partial("_MobileResponsiveAd2")
     </div>
 </div>
 

@@ -1,16 +1,11 @@
 ﻿@model viadf.Models.RoutePieceModel
 @using viadflib
 
-@section Head {
-	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-	<script>
-	  (adsbygoogle = window.adsbygoogle || []).push({
-		google_ad_client: "ca-pub-2461827238480440",
-		enable_page_level_ads: true
-	  });
-	</script>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.HeaderAdCode = "div-gpt-ad-1498571364610-9";
+    ViewBag.FooterAdCode = "div-gpt-ad-1498571364610-8";
 }
-
 
 @section JavaScript {
 
@@ -43,8 +38,6 @@
 @Model.RoutePiece.Name
 
 <h1>@Model.RoutePiece.Route.Type.Name @Model.RoutePiece.Name (@Model.RoutePiece.Route.Name)</h1>
-
-@Html.Partial("_MobileResponsiveAd")
 
 <div class="row">
     <div class="col s12 m12 l6">

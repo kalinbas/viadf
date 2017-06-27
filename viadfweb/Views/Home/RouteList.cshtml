@@ -1,5 +1,7 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.HeaderAdCode = "div-gpt-ad-1498571364610-9";
+    ViewBag.FooterAdCode = "div-gpt-ad-1498571364610-8";
 }
 
 @model viadf.Models.RouteListModel
@@ -27,8 +29,6 @@ else
         En este directorio encontrarás un listado de todas las rutas del transporte público de la Ciudad de México y del Estado de México. Selecciona un tipo de transporte para ver la lista de las rutas.
     </p>
 }
-
-@Html.Partial("_MobileResponsiveAd")
 
 <p>
     @foreach (var item in Model.AllTypes)

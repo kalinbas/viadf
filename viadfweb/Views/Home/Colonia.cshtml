@@ -2,6 +2,12 @@
 
 @using viadflib
 
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.HeaderAdCode = "div-gpt-ad-1498571364610-9";
+    ViewBag.FooterAdCode = "div-gpt-ad-1498571364610-8";
+}
+
 
 @if (Model.Colonia.Delegacion.EstadoID == 1)
 {
@@ -16,8 +22,6 @@ else
     <h1>Transporte público en @Utils.Capitalize(Model.Colonia.Name)</h1>
 
     <p>En esta lista puedes ver todas las rutas de transporte público que pasan por la colonia @Utils.Capitalize(Model.Colonia.Name) en la delegación @Utils.Capitalize(Model.Colonia.Delegacion.Name).</p>
-
-	@Html.Partial("_MobileResponsiveAd")
 
     @Html.Partial("_RouteList", Model.Routes)
     <br /><br />

@@ -20,6 +20,32 @@
     <link href="@Url.Content("~/Content/css/materialize.min.css")" type="text/css" rel="stylesheet" media="screen,projection" />
     <link href="@Url.Content("~/Content/css/style.css?v=2")" type="text/css" rel="stylesheet" media="screen,projection" />
 
+    @if (ViewBag.HeaderAdCode != null || ViewBag.FooterAdCode != null)
+    {
+        <script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>
+        <script>
+            var googletag = googletag || {};
+            googletag.cmd = googletag.cmd || [];
+        </script>
+
+        <script>
+            googletag.cmd.push(function () {
+                googletag.defineSlot('/57265256/via_api_footer', [[970, 250], [300, 250], [336, 280], [300, 50], [300, 100], [728, 90], [300, 600], [468, 60], [970, 90]], 'div-gpt-ad-1498571364610-0').addService(googletag.pubads());
+                googletag.defineSlot('/57265256/via_api_header', [[970, 250], [300, 250], [336, 280], [300, 50], [300, 100], [728, 90], [468, 60], [970, 90]], 'div-gpt-ad-1498571364610-1').addService(googletag.pubads());
+                googletag.defineSlot('/57265256/via_home_footer', [[970, 250], [300, 250], [336, 280], [300, 50], [300, 100], [728, 90], [300, 600], [468, 60], [970, 90]], 'div-gpt-ad-1498571364610-2').addService(googletag.pubads());
+                googletag.defineSlot('/57265256/via_home_header', [[970, 250], [300, 250], [336, 280], [300, 50], [300, 100], [728, 90], [468, 60], [970, 90]], 'div-gpt-ad-1498571364610-3').addService(googletag.pubads());
+                googletag.defineSlot('/57265256/via_open_footer', [[970, 250], [300, 250], [336, 280], [300, 50], [300, 100], [728, 90], [300, 600], [468, 60], [970, 90]], 'div-gpt-ad-1498571364610-4').addService(googletag.pubads());
+                googletag.defineSlot('/57265256/via_open_header', [[970, 250], [300, 250], [336, 280], [300, 50], [300, 100], [728, 90], [468, 60], [970, 90]], 'div-gpt-ad-1498571364610-5').addService(googletag.pubads());
+                googletag.defineSlot('/57265256/via_poligonos_footer', [[970, 250], [300, 250], [336, 280], [300, 50], [300, 100], [728, 90], [300, 600], [468, 60], [970, 90]], 'div-gpt-ad-1498571364610-6').addService(googletag.pubads());
+                googletag.defineSlot('/57265256/via_poligonos_header', [[970, 250], [300, 250], [336, 280], [300, 50], [300, 100], [728, 90], [468, 60], [970, 90]], 'div-gpt-ad-1498571364610-7').addService(googletag.pubads());
+                googletag.defineSlot('/57265256/via_rutas_footer', [[970, 250], [300, 250], [336, 280], [300, 50], [300, 100], [728, 90], [300, 600], [468, 60], [970, 90]], 'div-gpt-ad-1498571364610-8').addService(googletag.pubads());
+                googletag.defineSlot('/57265256/via_rutas_header', [[970, 250], [300, 250], [336, 280], [300, 50], [300, 100], [728, 90], [468, 60], [970, 90]], 'div-gpt-ad-1498571364610-9').addService(googletag.pubads());
+                googletag.pubads().collapseEmptyDivs();
+                googletag.enableServices();
+            });
+        </script>
+    }
+
     @RenderSection("Head", false)
     @Html.Partial("_GoogleAnalytics")
 </head>
@@ -60,57 +86,56 @@
 
     <div class="main section no-pad-bot" id="index-banner">
         <div class="container">
-
-            <div class="row hide-on-large-only inapp-hide center-align">
-                <a target="_blank" href="https://itunes.apple.com/mx/app/viadf/id1185840806?mt=8">
-                    <img style="height:60px" alt="Disponible en el App Store" src="/Content/img/app-store-badge.png" />
-                </a>
-                <a target="_blank" href="https://play.google.com/store/apps/details?id=mx.com.viadf.app">
-                    <img style="height:60px" alt="Descargar gratuito en Google Play" src="/Content/img/google-play-badge.png" />
-                </a>
-            </div>
             <div class="row">
+                <div class="col s12">
 
-                @if (!(bool)(ViewData["DisableAds"] ?? false))
-                {
-                    <div class="col s12 m12 l9">
-                        @RenderBody()
-                        <div class="row hide-on-med-and-down inapp-hide right-align">
-                            <a target="_blank" href="https://itunes.apple.com/mx/app/viadf/id1185840806?mt=8">
-                                <img style="height:60px" alt="Disponible en el App Store" src="/Content/img/app-store-badge.png" />
-                            </a>
-                            <a target="_blank" href="https://play.google.com/store/apps/details?id=mx.com.viadf.app">
-                                <img style="height:60px" alt="Descargar gratuito en Google Play" src="/Content/img/google-play-badge.png" />
-                            </a>
+                    <div class="row hide-on-large-only inapp-hide center-align">
+                        <a target="_blank" href="https://itunes.apple.com/mx/app/viadf/id1185840806?mt=8">
+                            <img style="height:60px" alt="Disponible en el App Store" src="/Content/img/app-store-badge.png" />
+                        </a>
+                        <a target="_blank" href="https://play.google.com/store/apps/details?id=mx.com.viadf.app">
+                            <img style="height:60px" alt="Descargar gratuito en Google Play" src="/Content/img/google-play-badge.png" />
+                        </a>
+                    </div>
+
+                    <style>
+                        .headerAd , .footerAd {
+                            overflow: hidden;
+                        }
+
+                        .headerAd > div, .footerAd > div {
+                            margin: 0 auto;
+                            display: block !important;
+                        }
+                    </style>
+
+                    @if (ViewBag.HeaderAdCode != null)
+                    {
+                        <div id='@ViewBag.HeaderAdCode' class="headerAd">
+                            <script>
+                                googletag.cmd.push(function () { googletag.display('@ViewBag.HeaderAdCode'); });
+                            </script>
                         </div>
-                    </div>
-                    <div class="col l3 hide-on-med-and-down" style="overflow:hidden;">
-                        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-                        <!-- Responsive Big -->
-                        <ins class="adsbygoogle"
-                             style="display:block"
-                             data-ad-client="ca-pub-2461827238480440"
-                             data-ad-slot="8069522056"
-                             data-ad-format="auto"></ins>
-                        <script>
-                            (adsbygoogle = window.adsbygoogle || []).push({});
-                        </script>
-                    </div>
-                }
-                else
-                {
-                    <div class="col s12">
-                        @RenderBody()
-                        <div class="row hide-on-med-and-down inapp-hide right-align">
-                            <a target="_blank" href="https://itunes.apple.com/mx/app/viadf/id1185840806?mt=8">
-                                <img style="height:60px" alt="Disponible en el App Store" src="/Content/img/app-store-badge.png" />
-                            </a>
-                            <a target="_blank" href="https://play.google.com/store/apps/details?id=mx.com.viadf.app">
-                                <img style="height:60px" alt="Descargar gratuito en Google Play" src="/Content/img/google-play-badge.png" />
-                            </a>
+                    }
+                    @RenderBody()
+                    @if (ViewBag.FooterAdCode != null)
+                    {
+                        <div id='@ViewBag.FooterAdCode' class="footerAd">
+                            <script>
+                                googletag.cmd.push(function () { googletag.display('@ViewBag.FooterAdCode'); });
+                            </script>
                         </div>
+                    }
+
+                    <div class="row hide-on-med-and-down inapp-hide right-align" style="margin-top:20px;">
+                        <a target="_blank" href="https://itunes.apple.com/mx/app/viadf/id1185840806?mt=8">
+                            <img style="height:60px" alt="Disponible en el App Store" src="/Content/img/app-store-badge.png" />
+                        </a>
+                        <a target="_blank" href="https://play.google.com/store/apps/details?id=mx.com.viadf.app">
+                            <img style="height:60px" alt="Descargar gratuito en Google Play" src="/Content/img/google-play-badge.png" />
+                        </a>
                     </div>
-                }
+                </div>
             </div>
         </div>
     </div>
@@ -160,4 +185,3 @@
 </body>
 
 </html>
-
