@@ -58,6 +58,10 @@
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web.Cors, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.3\lib\net45\System.Web.Cors.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -67,6 +71,10 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http.Cors, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Cors.5.2.3\lib\net45\System.Web.Http.Cors.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
@@ -113,6 +121,7 @@
     <Content Include="Content\css\style.css" />
     <Content Include="Content\font\material-design-icons\LICENSE.txt" />
     <Content Include="Content\font\material-design-icons\Material-Design-Icons.svg" />
+    <Content Include="Content\img\app-store-badge.png" />
     <Content Include="Content\img\app.jpg" />
     <Content Include="Content\img\b1.jpg" />
     <Content Include="Content\img\b10.jpg" />
@@ -131,6 +140,8 @@
     <Content Include="Content\img\Blu.png" />
     <Content Include="Content\img\Bsd.png" />
     <Content Include="Content\img\Bsu.png" />
+    <Content Include="Content\img\google-play-badge.png" />
+    <Content Include="Content\img\spinner.gif" />
     <Content Include="Content\img\fra.gif" />
     <Content Include="Content\img\ger.gif" />
     <Content Include="Content\img\hr.gif" />
@@ -175,6 +186,7 @@
     <Compile Include="Models\ColoniaRouteListModel.cs" />
     <Compile Include="Models\CreateRouteModel.cs" />
     <Compile Include="Models\DelegacionListModel.cs" />
+    <Compile Include="Models\GetCloseRoutesRealTimeResult.cs" />
     <Compile Include="Models\MapModel.cs" />
     <Compile Include="Models\MapResultModel.cs" />
     <Compile Include="Models\RouteListModel.cs" />
@@ -205,7 +217,7 @@
     <Content Include="Views\Shared\_SearchResultJS.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Home\OpenData.cshtml" />
-    <Content Include="Views\Home\WebService.cshtml" />
+    <Content Include="Views\Home\Api.cshtml" />
     <Content Include="Views\Error\Error404.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Account\LogOn.cshtml" />
@@ -235,6 +247,7 @@
     <Content Include="Views\Shared\_MobileResponsiveAd2.cshtml" />
     <Content Include="Views\Admin\AcceptarRuta.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Home\PoligonosTiempoRecorrido.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

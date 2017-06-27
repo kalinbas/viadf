@@ -22,7 +22,7 @@ namespace viadflib
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="viadf")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="DB_35815_viadf")]
 	public partial class DataContext : System.Data.Linq.DataContext
 	{
 		
@@ -33,15 +33,24 @@ namespace viadflib
     partial void InsertColonia(Colonia instance);
     partial void UpdateColonia(Colonia instance);
     partial void DeleteColonia(Colonia instance);
+    partial void InsertType(Type instance);
+    partial void UpdateType(Type instance);
+    partial void DeleteType(Type instance);
     partial void InsertDelegacion(Delegacion instance);
     partial void UpdateDelegacion(Delegacion instance);
     partial void DeleteDelegacion(Delegacion instance);
+    partial void InsertEstado(Estado instance);
+    partial void UpdateEstado(Estado instance);
+    partial void DeleteEstado(Estado instance);
     partial void InsertMail(Mail instance);
     partial void UpdateMail(Mail instance);
     partial void DeleteMail(Mail instance);
     partial void InsertPOI(POI instance);
     partial void UpdatePOI(POI instance);
     partial void DeletePOI(POI instance);
+    partial void InsertRoute(Route instance);
+    partial void UpdateRoute(Route instance);
+    partial void DeleteRoute(Route instance);
     partial void InsertRoutePiece(RoutePiece instance);
     partial void UpdateRoutePiece(RoutePiece instance);
     partial void DeleteRoutePiece(RoutePiece instance);
@@ -57,22 +66,22 @@ namespace viadflib
     partial void InsertStreetCrossing(StreetCrossing instance);
     partial void UpdateStreetCrossing(StreetCrossing instance);
     partial void DeleteStreetCrossing(StreetCrossing instance);
-    partial void InsertEstado(Estado instance);
-    partial void UpdateEstado(Estado instance);
-    partial void DeleteEstado(Estado instance);
-    partial void InsertType(Type instance);
-    partial void UpdateType(Type instance);
-    partial void DeleteType(Type instance);
     partial void InsertSystemException(SystemException instance);
     partial void UpdateSystemException(SystemException instance);
     partial void DeleteSystemException(SystemException instance);
-    partial void InsertRoute(Route instance);
-    partial void UpdateRoute(Route instance);
-    partial void DeleteRoute(Route instance);
+    partial void InsertServiceAPI(ServiceAPI instance);
+    partial void UpdateServiceAPI(ServiceAPI instance);
+    partial void DeleteServiceAPI(ServiceAPI instance);
+    partial void InsertServiceClient(ServiceClient instance);
+    partial void UpdateServiceClient(ServiceClient instance);
+    partial void DeleteServiceClient(ServiceClient instance);
+    partial void InsertServiceCall(ServiceCall instance);
+    partial void UpdateServiceCall(ServiceCall instance);
+    partial void DeleteServiceCall(ServiceCall instance);
     #endregion
 		
 		public DataContext() : 
-				base(global::viadflib.Properties.Settings.Default.viadfConnectionString, mappingSource)
+				base(global::viadflib.Properties.Settings.Default.DB_35815_viadfConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -109,11 +118,27 @@ namespace viadflib
 			}
 		}
 		
+		public System.Data.Linq.Table<Type> Types
+		{
+			get
+			{
+				return this.GetTable<Type>();
+			}
+		}
+		
 		public System.Data.Linq.Table<Delegacion> Delegacions
 		{
 			get
 			{
 				return this.GetTable<Delegacion>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Estado> Estados
+		{
+			get
+			{
+				return this.GetTable<Estado>();
 			}
 		}
 		
@@ -130,6 +155,14 @@ namespace viadflib
 			get
 			{
 				return this.GetTable<POI>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Route> Routes
+		{
+			get
+			{
+				return this.GetTable<Route>();
 			}
 		}
 		
@@ -173,22 +206,6 @@ namespace viadflib
 			}
 		}
 		
-		public System.Data.Linq.Table<Estado> Estados
-		{
-			get
-			{
-				return this.GetTable<Estado>();
-			}
-		}
-		
-		public System.Data.Linq.Table<Type> Types
-		{
-			get
-			{
-				return this.GetTable<Type>();
-			}
-		}
-		
 		public System.Data.Linq.Table<SystemException> SystemExceptions
 		{
 			get
@@ -197,11 +214,27 @@ namespace viadflib
 			}
 		}
 		
-		public System.Data.Linq.Table<Route> Routes
+		public System.Data.Linq.Table<ServiceAPI> ServiceAPIs
 		{
 			get
 			{
-				return this.GetTable<Route>();
+				return this.GetTable<ServiceAPI>();
+			}
+		}
+		
+		public System.Data.Linq.Table<ServiceClient> ServiceClients
+		{
+			get
+			{
+				return this.GetTable<ServiceClient>();
+			}
+		}
+		
+		public System.Data.Linq.Table<ServiceCall> ServiceCalls
+		{
+			get
+			{
+				return this.GetTable<ServiceCall>();
 			}
 		}
 	}
@@ -433,6 +466,312 @@ namespace viadflib
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Type")]
+	public partial class Type : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _Name;
+		
+		private double _AverageSpeed;
+		
+		private bool _HasNamedStationList;
+		
+		private bool _ShowInWeb;
+		
+		private int _PriceTypeID;
+		
+		private string _PriceDefinition;
+		
+		private double _Frequency;
+		
+		private bool _IsWalkingType;
+		
+		private string _SeoName;
+		
+		private EntitySet<Route> _Routes;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnAverageSpeedChanging(double value);
+    partial void OnAverageSpeedChanged();
+    partial void OnHasNamedStationListChanging(bool value);
+    partial void OnHasNamedStationListChanged();
+    partial void OnShowInWebChanging(bool value);
+    partial void OnShowInWebChanged();
+    partial void OnPriceTypeIDChanging(int value);
+    partial void OnPriceTypeIDChanged();
+    partial void OnPriceDefinitionChanging(string value);
+    partial void OnPriceDefinitionChanged();
+    partial void OnFrequencyChanging(double value);
+    partial void OnFrequencyChanged();
+    partial void OnIsWalkingTypeChanging(bool value);
+    partial void OnIsWalkingTypeChanged();
+    partial void OnSeoNameChanging(string value);
+    partial void OnSeoNameChanged();
+    #endregion
+		
+		public Type()
+		{
+			this._Routes = new EntitySet<Route>(new Action<Route>(this.attach_Routes), new Action<Route>(this.detach_Routes));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AverageSpeed", DbType="Float NOT NULL")]
+		public double AverageSpeed
+		{
+			get
+			{
+				return this._AverageSpeed;
+			}
+			set
+			{
+				if ((this._AverageSpeed != value))
+				{
+					this.OnAverageSpeedChanging(value);
+					this.SendPropertyChanging();
+					this._AverageSpeed = value;
+					this.SendPropertyChanged("AverageSpeed");
+					this.OnAverageSpeedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HasNamedStationList", DbType="Bit NOT NULL")]
+		public bool HasNamedStationList
+		{
+			get
+			{
+				return this._HasNamedStationList;
+			}
+			set
+			{
+				if ((this._HasNamedStationList != value))
+				{
+					this.OnHasNamedStationListChanging(value);
+					this.SendPropertyChanging();
+					this._HasNamedStationList = value;
+					this.SendPropertyChanged("HasNamedStationList");
+					this.OnHasNamedStationListChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ShowInWeb", DbType="Bit NOT NULL")]
+		public bool ShowInWeb
+		{
+			get
+			{
+				return this._ShowInWeb;
+			}
+			set
+			{
+				if ((this._ShowInWeb != value))
+				{
+					this.OnShowInWebChanging(value);
+					this.SendPropertyChanging();
+					this._ShowInWeb = value;
+					this.SendPropertyChanged("ShowInWeb");
+					this.OnShowInWebChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PriceTypeID", DbType="Int NOT NULL")]
+		public int PriceTypeID
+		{
+			get
+			{
+				return this._PriceTypeID;
+			}
+			set
+			{
+				if ((this._PriceTypeID != value))
+				{
+					this.OnPriceTypeIDChanging(value);
+					this.SendPropertyChanging();
+					this._PriceTypeID = value;
+					this.SendPropertyChanged("PriceTypeID");
+					this.OnPriceTypeIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PriceDefinition", DbType="VarChar(50)")]
+		public string PriceDefinition
+		{
+			get
+			{
+				return this._PriceDefinition;
+			}
+			set
+			{
+				if ((this._PriceDefinition != value))
+				{
+					this.OnPriceDefinitionChanging(value);
+					this.SendPropertyChanging();
+					this._PriceDefinition = value;
+					this.SendPropertyChanged("PriceDefinition");
+					this.OnPriceDefinitionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Frequency", DbType="Float NOT NULL")]
+		public double Frequency
+		{
+			get
+			{
+				return this._Frequency;
+			}
+			set
+			{
+				if ((this._Frequency != value))
+				{
+					this.OnFrequencyChanging(value);
+					this.SendPropertyChanging();
+					this._Frequency = value;
+					this.SendPropertyChanged("Frequency");
+					this.OnFrequencyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsWalkingType", DbType="Bit NOT NULL")]
+		public bool IsWalkingType
+		{
+			get
+			{
+				return this._IsWalkingType;
+			}
+			set
+			{
+				if ((this._IsWalkingType != value))
+				{
+					this.OnIsWalkingTypeChanging(value);
+					this.SendPropertyChanging();
+					this._IsWalkingType = value;
+					this.SendPropertyChanged("IsWalkingType");
+					this.OnIsWalkingTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SeoName", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string SeoName
+		{
+			get
+			{
+				return this._SeoName;
+			}
+			set
+			{
+				if ((this._SeoName != value))
+				{
+					this.OnSeoNameChanging(value);
+					this.SendPropertyChanging();
+					this._SeoName = value;
+					this.SendPropertyChanged("SeoName");
+					this.OnSeoNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Type_Route", Storage="_Routes", ThisKey="ID", OtherKey="TypeID")]
+		public EntitySet<Route> Routes
+		{
+			get
+			{
+				return this._Routes;
+			}
+			set
+			{
+				this._Routes.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Routes(Route entity)
+		{
+			this.SendPropertyChanging();
+			entity.Type = this;
+		}
+		
+		private void detach_Routes(Route entity)
+		{
+			this.SendPropertyChanging();
+			entity.Type = null;
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Delegacion")]
 	public partial class Delegacion : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -657,6 +996,168 @@ namespace viadflib
 		{
 			this.SendPropertyChanging();
 			entity.Delegacion = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Estado")]
+	public partial class Estado : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _Name;
+		
+		private int _SourceID;
+		
+		private string _SeoName;
+		
+		private EntitySet<Delegacion> _Delegacions;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnSourceIDChanging(int value);
+    partial void OnSourceIDChanged();
+    partial void OnSeoNameChanging(string value);
+    partial void OnSeoNameChanged();
+    #endregion
+		
+		public Estado()
+		{
+			this._Delegacions = new EntitySet<Delegacion>(new Action<Delegacion>(this.attach_Delegacions), new Action<Delegacion>(this.detach_Delegacions));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SourceID", DbType="Int NOT NULL")]
+		public int SourceID
+		{
+			get
+			{
+				return this._SourceID;
+			}
+			set
+			{
+				if ((this._SourceID != value))
+				{
+					this.OnSourceIDChanging(value);
+					this.SendPropertyChanging();
+					this._SourceID = value;
+					this.SendPropertyChanged("SourceID");
+					this.OnSourceIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SeoName", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
+		public string SeoName
+		{
+			get
+			{
+				return this._SeoName;
+			}
+			set
+			{
+				if ((this._SeoName != value))
+				{
+					this.OnSeoNameChanging(value);
+					this.SendPropertyChanging();
+					this._SeoName = value;
+					this.SendPropertyChanged("SeoName");
+					this.OnSeoNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Estado_Delegacion", Storage="_Delegacions", ThisKey="ID", OtherKey="EstadoID")]
+		public EntitySet<Delegacion> Delegacions
+		{
+			get
+			{
+				return this._Delegacions;
+			}
+			set
+			{
+				this._Delegacions.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Delegacions(Delegacion entity)
+		{
+			this.SendPropertyChanging();
+			entity.Estado = this;
+		}
+		
+		private void detach_Delegacions(Delegacion entity)
+		{
+			this.SendPropertyChanging();
+			entity.Estado = null;
 		}
 	}
 	
@@ -1017,6 +1518,497 @@ namespace viadflib
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Route")]
+	public partial class Route : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _Name;
+		
+		private int _Status;
+		
+		private System.Nullable<int> _SplitRoutePieceID;
+		
+		private string _FromName;
+		
+		private string _ToName;
+		
+		private int _TypeID;
+		
+		private string _Description;
+		
+		private string _Email;
+		
+		private System.Nullable<double> _AverageSpeed;
+		
+		private System.Nullable<int> _PriceTypeID;
+		
+		private string _PriceDefinition;
+		
+		private System.Nullable<double> _Frequency;
+		
+		private string _SeoName;
+		
+		private System.Nullable<int> _ParentRouteID;
+		
+		private string _OldSeoName;
+		
+		private EntitySet<RoutePiece> _RoutePieces;
+		
+		private EntityRef<Type> _Type;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnStatusChanging(int value);
+    partial void OnStatusChanged();
+    partial void OnSplitRoutePieceIDChanging(System.Nullable<int> value);
+    partial void OnSplitRoutePieceIDChanged();
+    partial void OnFromNameChanging(string value);
+    partial void OnFromNameChanged();
+    partial void OnToNameChanging(string value);
+    partial void OnToNameChanged();
+    partial void OnTypeIDChanging(int value);
+    partial void OnTypeIDChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
+    partial void OnEmailChanging(string value);
+    partial void OnEmailChanged();
+    partial void OnAverageSpeedChanging(System.Nullable<double> value);
+    partial void OnAverageSpeedChanged();
+    partial void OnPriceTypeIDChanging(System.Nullable<int> value);
+    partial void OnPriceTypeIDChanged();
+    partial void OnPriceDefinitionChanging(string value);
+    partial void OnPriceDefinitionChanged();
+    partial void OnFrequencyChanging(System.Nullable<double> value);
+    partial void OnFrequencyChanged();
+    partial void OnSeoNameChanging(string value);
+    partial void OnSeoNameChanged();
+    partial void OnParentRouteIDChanging(System.Nullable<int> value);
+    partial void OnParentRouteIDChanged();
+    partial void OnOldSeoNameChanging(string value);
+    partial void OnOldSeoNameChanged();
+    #endregion
+		
+		public Route()
+		{
+			this._RoutePieces = new EntitySet<RoutePiece>(new Action<RoutePiece>(this.attach_RoutePieces), new Action<RoutePiece>(this.detach_RoutePieces));
+			this._Type = default(EntityRef<Type>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Int NOT NULL")]
+		public int Status
+		{
+			get
+			{
+				return this._Status;
+			}
+			set
+			{
+				if ((this._Status != value))
+				{
+					this.OnStatusChanging(value);
+					this.SendPropertyChanging();
+					this._Status = value;
+					this.SendPropertyChanged("Status");
+					this.OnStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SplitRoutePieceID", DbType="Int")]
+		public System.Nullable<int> SplitRoutePieceID
+		{
+			get
+			{
+				return this._SplitRoutePieceID;
+			}
+			set
+			{
+				if ((this._SplitRoutePieceID != value))
+				{
+					this.OnSplitRoutePieceIDChanging(value);
+					this.SendPropertyChanging();
+					this._SplitRoutePieceID = value;
+					this.SendPropertyChanged("SplitRoutePieceID");
+					this.OnSplitRoutePieceIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FromName", DbType="VarChar(255)")]
+		public string FromName
+		{
+			get
+			{
+				return this._FromName;
+			}
+			set
+			{
+				if ((this._FromName != value))
+				{
+					this.OnFromNameChanging(value);
+					this.SendPropertyChanging();
+					this._FromName = value;
+					this.SendPropertyChanged("FromName");
+					this.OnFromNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ToName", DbType="VarChar(255)")]
+		public string ToName
+		{
+			get
+			{
+				return this._ToName;
+			}
+			set
+			{
+				if ((this._ToName != value))
+				{
+					this.OnToNameChanging(value);
+					this.SendPropertyChanging();
+					this._ToName = value;
+					this.SendPropertyChanged("ToName");
+					this.OnToNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TypeID", DbType="Int NOT NULL")]
+		public int TypeID
+		{
+			get
+			{
+				return this._TypeID;
+			}
+			set
+			{
+				if ((this._TypeID != value))
+				{
+					if (this._Type.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnTypeIDChanging(value);
+					this.SendPropertyChanging();
+					this._TypeID = value;
+					this.SendPropertyChanged("TypeID");
+					this.OnTypeIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="VarChar(MAX)")]
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				if ((this._Description != value))
+				{
+					this.OnDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Email", DbType="VarChar(255)")]
+		public string Email
+		{
+			get
+			{
+				return this._Email;
+			}
+			set
+			{
+				if ((this._Email != value))
+				{
+					this.OnEmailChanging(value);
+					this.SendPropertyChanging();
+					this._Email = value;
+					this.SendPropertyChanged("Email");
+					this.OnEmailChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AverageSpeed", DbType="Float")]
+		public System.Nullable<double> AverageSpeed
+		{
+			get
+			{
+				return this._AverageSpeed;
+			}
+			set
+			{
+				if ((this._AverageSpeed != value))
+				{
+					this.OnAverageSpeedChanging(value);
+					this.SendPropertyChanging();
+					this._AverageSpeed = value;
+					this.SendPropertyChanged("AverageSpeed");
+					this.OnAverageSpeedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PriceTypeID", DbType="Int")]
+		public System.Nullable<int> PriceTypeID
+		{
+			get
+			{
+				return this._PriceTypeID;
+			}
+			set
+			{
+				if ((this._PriceTypeID != value))
+				{
+					this.OnPriceTypeIDChanging(value);
+					this.SendPropertyChanging();
+					this._PriceTypeID = value;
+					this.SendPropertyChanged("PriceTypeID");
+					this.OnPriceTypeIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PriceDefinition", DbType="VarChar(50)")]
+		public string PriceDefinition
+		{
+			get
+			{
+				return this._PriceDefinition;
+			}
+			set
+			{
+				if ((this._PriceDefinition != value))
+				{
+					this.OnPriceDefinitionChanging(value);
+					this.SendPropertyChanging();
+					this._PriceDefinition = value;
+					this.SendPropertyChanged("PriceDefinition");
+					this.OnPriceDefinitionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Frequency", DbType="Float")]
+		public System.Nullable<double> Frequency
+		{
+			get
+			{
+				return this._Frequency;
+			}
+			set
+			{
+				if ((this._Frequency != value))
+				{
+					this.OnFrequencyChanging(value);
+					this.SendPropertyChanging();
+					this._Frequency = value;
+					this.SendPropertyChanged("Frequency");
+					this.OnFrequencyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SeoName", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
+		public string SeoName
+		{
+			get
+			{
+				return this._SeoName;
+			}
+			set
+			{
+				if ((this._SeoName != value))
+				{
+					this.OnSeoNameChanging(value);
+					this.SendPropertyChanging();
+					this._SeoName = value;
+					this.SendPropertyChanged("SeoName");
+					this.OnSeoNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ParentRouteID", DbType="Int")]
+		public System.Nullable<int> ParentRouteID
+		{
+			get
+			{
+				return this._ParentRouteID;
+			}
+			set
+			{
+				if ((this._ParentRouteID != value))
+				{
+					this.OnParentRouteIDChanging(value);
+					this.SendPropertyChanging();
+					this._ParentRouteID = value;
+					this.SendPropertyChanged("ParentRouteID");
+					this.OnParentRouteIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_OldSeoName", DbType="VarChar(255)")]
+		public string OldSeoName
+		{
+			get
+			{
+				return this._OldSeoName;
+			}
+			set
+			{
+				if ((this._OldSeoName != value))
+				{
+					this.OnOldSeoNameChanging(value);
+					this.SendPropertyChanging();
+					this._OldSeoName = value;
+					this.SendPropertyChanged("OldSeoName");
+					this.OnOldSeoNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Route_RoutePiece", Storage="_RoutePieces", ThisKey="ID", OtherKey="RouteID")]
+		public EntitySet<RoutePiece> RoutePieces
+		{
+			get
+			{
+				return this._RoutePieces;
+			}
+			set
+			{
+				this._RoutePieces.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Type_Route", Storage="_Type", ThisKey="TypeID", OtherKey="ID", IsForeignKey=true)]
+		public Type Type
+		{
+			get
+			{
+				return this._Type.Entity;
+			}
+			set
+			{
+				Type previousValue = this._Type.Entity;
+				if (((previousValue != value) 
+							|| (this._Type.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Type.Entity = null;
+						previousValue.Routes.Remove(this);
+					}
+					this._Type.Entity = value;
+					if ((value != null))
+					{
+						value.Routes.Add(this);
+						this._TypeID = value.ID;
+					}
+					else
+					{
+						this._TypeID = default(int);
+					}
+					this.SendPropertyChanged("Type");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_RoutePieces(RoutePiece entity)
+		{
+			this.SendPropertyChanging();
+			entity.Route = this;
+		}
+		
+		private void detach_RoutePieces(RoutePiece entity)
+		{
+			this.SendPropertyChanging();
+			entity.Route = null;
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.RoutePiece")]
 	public partial class RoutePiece : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -1037,9 +2029,9 @@ namespace viadflib
 		
 		private string _SeoName;
 		
-		private EntityRef<StreetCrossing> _StreetCrossing;
-		
 		private EntityRef<Route> _Route;
+		
+		private EntityRef<StreetCrossing> _StreetCrossing;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -1063,8 +2055,8 @@ namespace viadflib
 		
 		public RoutePiece()
 		{
-			this._StreetCrossing = default(EntityRef<StreetCrossing>);
 			this._Route = default(EntityRef<Route>);
+			this._StreetCrossing = default(EntityRef<StreetCrossing>);
 			OnCreated();
 		}
 		
@@ -1216,40 +2208,6 @@ namespace viadflib
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="StreetCrossing_RoutePiece", Storage="_StreetCrossing", ThisKey="StreetCrossingID", OtherKey="ID", IsForeignKey=true)]
-		public StreetCrossing StreetCrossing
-		{
-			get
-			{
-				return this._StreetCrossing.Entity;
-			}
-			set
-			{
-				StreetCrossing previousValue = this._StreetCrossing.Entity;
-				if (((previousValue != value) 
-							|| (this._StreetCrossing.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._StreetCrossing.Entity = null;
-						previousValue.RoutePieces.Remove(this);
-					}
-					this._StreetCrossing.Entity = value;
-					if ((value != null))
-					{
-						value.RoutePieces.Add(this);
-						this._StreetCrossingID = value.ID;
-					}
-					else
-					{
-						this._StreetCrossingID = default(Nullable<int>);
-					}
-					this.SendPropertyChanged("StreetCrossing");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Route_RoutePiece", Storage="_Route", ThisKey="RouteID", OtherKey="ID", IsForeignKey=true)]
 		public Route Route
 		{
@@ -1280,6 +2238,40 @@ namespace viadflib
 						this._RouteID = default(int);
 					}
 					this.SendPropertyChanged("Route");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="StreetCrossing_RoutePiece", Storage="_StreetCrossing", ThisKey="StreetCrossingID", OtherKey="ID", IsForeignKey=true)]
+		public StreetCrossing StreetCrossing
+		{
+			get
+			{
+				return this._StreetCrossing.Entity;
+			}
+			set
+			{
+				StreetCrossing previousValue = this._StreetCrossing.Entity;
+				if (((previousValue != value) 
+							|| (this._StreetCrossing.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._StreetCrossing.Entity = null;
+						previousValue.RoutePieces.Remove(this);
+					}
+					this._StreetCrossing.Entity = value;
+					if ((value != null))
+					{
+						value.RoutePieces.Add(this);
+						this._StreetCrossingID = value.ID;
+					}
+					else
+					{
+						this._StreetCrossingID = default(Nullable<int>);
+					}
+					this.SendPropertyChanged("StreetCrossing");
 				}
 			}
 		}
@@ -2292,474 +3284,6 @@ namespace viadflib
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Estado")]
-	public partial class Estado : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _ID;
-		
-		private string _Name;
-		
-		private int _SourceID;
-		
-		private string _SeoName;
-		
-		private EntitySet<Delegacion> _Delegacions;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIDChanging(int value);
-    partial void OnIDChanged();
-    partial void OnNameChanging(string value);
-    partial void OnNameChanged();
-    partial void OnSourceIDChanging(int value);
-    partial void OnSourceIDChanged();
-    partial void OnSeoNameChanging(string value);
-    partial void OnSeoNameChanged();
-    #endregion
-		
-		public Estado()
-		{
-			this._Delegacions = new EntitySet<Delegacion>(new Action<Delegacion>(this.attach_Delegacions), new Action<Delegacion>(this.detach_Delegacions));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int ID
-		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					this.OnIDChanging(value);
-					this.SendPropertyChanging();
-					this._ID = value;
-					this.SendPropertyChanged("ID");
-					this.OnIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
-		public string Name
-		{
-			get
-			{
-				return this._Name;
-			}
-			set
-			{
-				if ((this._Name != value))
-				{
-					this.OnNameChanging(value);
-					this.SendPropertyChanging();
-					this._Name = value;
-					this.SendPropertyChanged("Name");
-					this.OnNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SourceID", DbType="Int NOT NULL")]
-		public int SourceID
-		{
-			get
-			{
-				return this._SourceID;
-			}
-			set
-			{
-				if ((this._SourceID != value))
-				{
-					this.OnSourceIDChanging(value);
-					this.SendPropertyChanging();
-					this._SourceID = value;
-					this.SendPropertyChanged("SourceID");
-					this.OnSourceIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SeoName", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
-		public string SeoName
-		{
-			get
-			{
-				return this._SeoName;
-			}
-			set
-			{
-				if ((this._SeoName != value))
-				{
-					this.OnSeoNameChanging(value);
-					this.SendPropertyChanging();
-					this._SeoName = value;
-					this.SendPropertyChanged("SeoName");
-					this.OnSeoNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Estado_Delegacion", Storage="_Delegacions", ThisKey="ID", OtherKey="EstadoID")]
-		public EntitySet<Delegacion> Delegacions
-		{
-			get
-			{
-				return this._Delegacions;
-			}
-			set
-			{
-				this._Delegacions.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_Delegacions(Delegacion entity)
-		{
-			this.SendPropertyChanging();
-			entity.Estado = this;
-		}
-		
-		private void detach_Delegacions(Delegacion entity)
-		{
-			this.SendPropertyChanging();
-			entity.Estado = null;
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Type")]
-	public partial class Type : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _ID;
-		
-		private string _Name;
-		
-		private double _AverageSpeed;
-		
-		private bool _HasNamedStationList;
-		
-		private bool _ShowInWeb;
-		
-		private int _PriceTypeID;
-		
-		private string _PriceDefinition;
-		
-		private double _Frequency;
-		
-		private bool _IsWalkingType;
-		
-		private string _SeoName;
-		
-		private EntitySet<Route> _Routes;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIDChanging(int value);
-    partial void OnIDChanged();
-    partial void OnNameChanging(string value);
-    partial void OnNameChanged();
-    partial void OnAverageSpeedChanging(double value);
-    partial void OnAverageSpeedChanged();
-    partial void OnHasNamedStationListChanging(bool value);
-    partial void OnHasNamedStationListChanged();
-    partial void OnShowInWebChanging(bool value);
-    partial void OnShowInWebChanged();
-    partial void OnPriceTypeIDChanging(int value);
-    partial void OnPriceTypeIDChanged();
-    partial void OnPriceDefinitionChanging(string value);
-    partial void OnPriceDefinitionChanged();
-    partial void OnFrequencyChanging(double value);
-    partial void OnFrequencyChanged();
-    partial void OnIsWalkingTypeChanging(bool value);
-    partial void OnIsWalkingTypeChanged();
-    partial void OnSeoNameChanging(string value);
-    partial void OnSeoNameChanged();
-    #endregion
-		
-		public Type()
-		{
-			this._Routes = new EntitySet<Route>(new Action<Route>(this.attach_Routes), new Action<Route>(this.detach_Routes));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int ID
-		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					this.OnIDChanging(value);
-					this.SendPropertyChanging();
-					this._ID = value;
-					this.SendPropertyChanged("ID");
-					this.OnIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
-		public string Name
-		{
-			get
-			{
-				return this._Name;
-			}
-			set
-			{
-				if ((this._Name != value))
-				{
-					this.OnNameChanging(value);
-					this.SendPropertyChanging();
-					this._Name = value;
-					this.SendPropertyChanged("Name");
-					this.OnNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AverageSpeed", DbType="Float NOT NULL")]
-		public double AverageSpeed
-		{
-			get
-			{
-				return this._AverageSpeed;
-			}
-			set
-			{
-				if ((this._AverageSpeed != value))
-				{
-					this.OnAverageSpeedChanging(value);
-					this.SendPropertyChanging();
-					this._AverageSpeed = value;
-					this.SendPropertyChanged("AverageSpeed");
-					this.OnAverageSpeedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HasNamedStationList", DbType="Bit NOT NULL")]
-		public bool HasNamedStationList
-		{
-			get
-			{
-				return this._HasNamedStationList;
-			}
-			set
-			{
-				if ((this._HasNamedStationList != value))
-				{
-					this.OnHasNamedStationListChanging(value);
-					this.SendPropertyChanging();
-					this._HasNamedStationList = value;
-					this.SendPropertyChanged("HasNamedStationList");
-					this.OnHasNamedStationListChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ShowInWeb", DbType="Bit NOT NULL")]
-		public bool ShowInWeb
-		{
-			get
-			{
-				return this._ShowInWeb;
-			}
-			set
-			{
-				if ((this._ShowInWeb != value))
-				{
-					this.OnShowInWebChanging(value);
-					this.SendPropertyChanging();
-					this._ShowInWeb = value;
-					this.SendPropertyChanged("ShowInWeb");
-					this.OnShowInWebChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PriceTypeID", DbType="Int NOT NULL")]
-		public int PriceTypeID
-		{
-			get
-			{
-				return this._PriceTypeID;
-			}
-			set
-			{
-				if ((this._PriceTypeID != value))
-				{
-					this.OnPriceTypeIDChanging(value);
-					this.SendPropertyChanging();
-					this._PriceTypeID = value;
-					this.SendPropertyChanged("PriceTypeID");
-					this.OnPriceTypeIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PriceDefinition", DbType="VarChar(50)")]
-		public string PriceDefinition
-		{
-			get
-			{
-				return this._PriceDefinition;
-			}
-			set
-			{
-				if ((this._PriceDefinition != value))
-				{
-					this.OnPriceDefinitionChanging(value);
-					this.SendPropertyChanging();
-					this._PriceDefinition = value;
-					this.SendPropertyChanged("PriceDefinition");
-					this.OnPriceDefinitionChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Frequency", DbType="Float NOT NULL")]
-		public double Frequency
-		{
-			get
-			{
-				return this._Frequency;
-			}
-			set
-			{
-				if ((this._Frequency != value))
-				{
-					this.OnFrequencyChanging(value);
-					this.SendPropertyChanging();
-					this._Frequency = value;
-					this.SendPropertyChanged("Frequency");
-					this.OnFrequencyChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsWalkingType", DbType="Bit NOT NULL")]
-		public bool IsWalkingType
-		{
-			get
-			{
-				return this._IsWalkingType;
-			}
-			set
-			{
-				if ((this._IsWalkingType != value))
-				{
-					this.OnIsWalkingTypeChanging(value);
-					this.SendPropertyChanging();
-					this._IsWalkingType = value;
-					this.SendPropertyChanged("IsWalkingType");
-					this.OnIsWalkingTypeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SeoName", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
-		public string SeoName
-		{
-			get
-			{
-				return this._SeoName;
-			}
-			set
-			{
-				if ((this._SeoName != value))
-				{
-					this.OnSeoNameChanging(value);
-					this.SendPropertyChanging();
-					this._SeoName = value;
-					this.SendPropertyChanged("SeoName");
-					this.OnSeoNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Type_Route", Storage="_Routes", ThisKey="ID", OtherKey="TypeID")]
-		public EntitySet<Route> Routes
-		{
-			get
-			{
-				return this._Routes;
-			}
-			set
-			{
-				this._Routes.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_Routes(Route entity)
-		{
-			this.SendPropertyChanging();
-			entity.Type = this;
-		}
-		
-		private void detach_Routes(Route entity)
-		{
-			this.SendPropertyChanging();
-			entity.Type = null;
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.SystemException")]
 	public partial class SystemException : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -2837,7 +3361,7 @@ namespace viadflib
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(MAX) NOT NULL", CanBeNull=false)]
 		public string Name
 		{
 			get
@@ -2918,8 +3442,142 @@ namespace viadflib
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Route")]
-	public partial class Route : INotifyPropertyChanging, INotifyPropertyChanged
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ServiceAPI")]
+	public partial class ServiceAPI : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _Url;
+		
+		private int _CreditsPerCall;
+		
+		private string _Description;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnUrlChanging(string value);
+    partial void OnUrlChanged();
+    partial void OnCreditsPerCallChanging(int value);
+    partial void OnCreditsPerCallChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
+    #endregion
+		
+		public ServiceAPI()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Url", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
+		public string Url
+		{
+			get
+			{
+				return this._Url;
+			}
+			set
+			{
+				if ((this._Url != value))
+				{
+					this.OnUrlChanging(value);
+					this.SendPropertyChanging();
+					this._Url = value;
+					this.SendPropertyChanged("Url");
+					this.OnUrlChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreditsPerCall", DbType="Int NOT NULL")]
+		public int CreditsPerCall
+		{
+			get
+			{
+				return this._CreditsPerCall;
+			}
+			set
+			{
+				if ((this._CreditsPerCall != value))
+				{
+					this.OnCreditsPerCallChanging(value);
+					this.SendPropertyChanging();
+					this._CreditsPerCall = value;
+					this.SendPropertyChanged("CreditsPerCall");
+					this.OnCreditsPerCallChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="VarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				if ((this._Description != value))
+				{
+					this.OnDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ServiceClient")]
+	public partial class ServiceClient : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
@@ -2928,35 +3586,11 @@ namespace viadflib
 		
 		private string _Name;
 		
-		private int _Status;
-		
-		private System.Nullable<int> _SplitRoutePieceID;
-		
-		private string _FromName;
-		
-		private string _ToName;
-		
-		private int _TypeID;
-		
-		private string _Description;
+		private string _ApiKey;
 		
 		private string _Email;
 		
-		private System.Nullable<double> _AverageSpeed;
-		
-		private System.Nullable<int> _PriceTypeID;
-		
-		private string _PriceDefinition;
-		
-		private System.Nullable<double> _Frequency;
-		
-		private string _SeoName;
-		
-		private System.Nullable<int> _ParentRouteID;
-		
-		private EntitySet<RoutePiece> _RoutePieces;
-		
-		private EntityRef<Type> _Type;
+		private int _Credits;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -2966,42 +3600,20 @@ namespace viadflib
     partial void OnIDChanged();
     partial void OnNameChanging(string value);
     partial void OnNameChanged();
-    partial void OnStatusChanging(int value);
-    partial void OnStatusChanged();
-    partial void OnSplitRoutePieceIDChanging(System.Nullable<int> value);
-    partial void OnSplitRoutePieceIDChanged();
-    partial void OnFromNameChanging(string value);
-    partial void OnFromNameChanged();
-    partial void OnToNameChanging(string value);
-    partial void OnToNameChanged();
-    partial void OnTypeIDChanging(int value);
-    partial void OnTypeIDChanged();
-    partial void OnDescriptionChanging(string value);
-    partial void OnDescriptionChanged();
+    partial void OnApiKeyChanging(string value);
+    partial void OnApiKeyChanged();
     partial void OnEmailChanging(string value);
     partial void OnEmailChanged();
-    partial void OnAverageSpeedChanging(System.Nullable<double> value);
-    partial void OnAverageSpeedChanged();
-    partial void OnPriceTypeIDChanging(System.Nullable<int> value);
-    partial void OnPriceTypeIDChanged();
-    partial void OnPriceDefinitionChanging(string value);
-    partial void OnPriceDefinitionChanged();
-    partial void OnFrequencyChanging(System.Nullable<double> value);
-    partial void OnFrequencyChanged();
-    partial void OnSeoNameChanging(string value);
-    partial void OnSeoNameChanged();
-    partial void OnParentRouteIDChanging(System.Nullable<int> value);
-    partial void OnParentRouteIDChanged();
+    partial void OnCreditsChanging(int value);
+    partial void OnCreditsChanged();
     #endregion
 		
-		public Route()
+		public ServiceClient()
 		{
-			this._RoutePieces = new EntitySet<RoutePiece>(new Action<RoutePiece>(this.attach_RoutePieces), new Action<RoutePiece>(this.detach_RoutePieces));
-			this._Type = default(EntityRef<Type>);
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="Int NOT NULL", IsPrimaryKey=true)]
 		public int ID
 		{
 			get
@@ -3041,126 +3653,22 @@ namespace viadflib
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Int NOT NULL")]
-		public int Status
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ApiKey", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
+		public string ApiKey
 		{
 			get
 			{
-				return this._Status;
+				return this._ApiKey;
 			}
 			set
 			{
-				if ((this._Status != value))
+				if ((this._ApiKey != value))
 				{
-					this.OnStatusChanging(value);
+					this.OnApiKeyChanging(value);
 					this.SendPropertyChanging();
-					this._Status = value;
-					this.SendPropertyChanged("Status");
-					this.OnStatusChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SplitRoutePieceID", DbType="Int")]
-		public System.Nullable<int> SplitRoutePieceID
-		{
-			get
-			{
-				return this._SplitRoutePieceID;
-			}
-			set
-			{
-				if ((this._SplitRoutePieceID != value))
-				{
-					this.OnSplitRoutePieceIDChanging(value);
-					this.SendPropertyChanging();
-					this._SplitRoutePieceID = value;
-					this.SendPropertyChanged("SplitRoutePieceID");
-					this.OnSplitRoutePieceIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FromName", DbType="VarChar(255)")]
-		public string FromName
-		{
-			get
-			{
-				return this._FromName;
-			}
-			set
-			{
-				if ((this._FromName != value))
-				{
-					this.OnFromNameChanging(value);
-					this.SendPropertyChanging();
-					this._FromName = value;
-					this.SendPropertyChanged("FromName");
-					this.OnFromNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ToName", DbType="VarChar(255)")]
-		public string ToName
-		{
-			get
-			{
-				return this._ToName;
-			}
-			set
-			{
-				if ((this._ToName != value))
-				{
-					this.OnToNameChanging(value);
-					this.SendPropertyChanging();
-					this._ToName = value;
-					this.SendPropertyChanged("ToName");
-					this.OnToNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TypeID", DbType="Int NOT NULL")]
-		public int TypeID
-		{
-			get
-			{
-				return this._TypeID;
-			}
-			set
-			{
-				if ((this._TypeID != value))
-				{
-					if (this._Type.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnTypeIDChanging(value);
-					this.SendPropertyChanging();
-					this._TypeID = value;
-					this.SendPropertyChanged("TypeID");
-					this.OnTypeIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="VarChar(MAX)")]
-		public string Description
-		{
-			get
-			{
-				return this._Description;
-			}
-			set
-			{
-				if ((this._Description != value))
-				{
-					this.OnDescriptionChanging(value);
-					this.SendPropertyChanging();
-					this._Description = value;
-					this.SendPropertyChanged("Description");
-					this.OnDescriptionChanged();
+					this._ApiKey = value;
+					this.SendPropertyChanged("ApiKey");
+					this.OnApiKeyChanged();
 				}
 			}
 		}
@@ -3185,169 +3693,22 @@ namespace viadflib
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AverageSpeed", DbType="Float")]
-		public System.Nullable<double> AverageSpeed
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Credits", DbType="Int NOT NULL")]
+		public int Credits
 		{
 			get
 			{
-				return this._AverageSpeed;
+				return this._Credits;
 			}
 			set
 			{
-				if ((this._AverageSpeed != value))
+				if ((this._Credits != value))
 				{
-					this.OnAverageSpeedChanging(value);
+					this.OnCreditsChanging(value);
 					this.SendPropertyChanging();
-					this._AverageSpeed = value;
-					this.SendPropertyChanged("AverageSpeed");
-					this.OnAverageSpeedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PriceTypeID", DbType="Int")]
-		public System.Nullable<int> PriceTypeID
-		{
-			get
-			{
-				return this._PriceTypeID;
-			}
-			set
-			{
-				if ((this._PriceTypeID != value))
-				{
-					this.OnPriceTypeIDChanging(value);
-					this.SendPropertyChanging();
-					this._PriceTypeID = value;
-					this.SendPropertyChanged("PriceTypeID");
-					this.OnPriceTypeIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PriceDefinition", DbType="VarChar(50)")]
-		public string PriceDefinition
-		{
-			get
-			{
-				return this._PriceDefinition;
-			}
-			set
-			{
-				if ((this._PriceDefinition != value))
-				{
-					this.OnPriceDefinitionChanging(value);
-					this.SendPropertyChanging();
-					this._PriceDefinition = value;
-					this.SendPropertyChanged("PriceDefinition");
-					this.OnPriceDefinitionChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Frequency", DbType="Float")]
-		public System.Nullable<double> Frequency
-		{
-			get
-			{
-				return this._Frequency;
-			}
-			set
-			{
-				if ((this._Frequency != value))
-				{
-					this.OnFrequencyChanging(value);
-					this.SendPropertyChanging();
-					this._Frequency = value;
-					this.SendPropertyChanged("Frequency");
-					this.OnFrequencyChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SeoName", DbType="VarChar(255) NOT NULL", CanBeNull=false)]
-		public string SeoName
-		{
-			get
-			{
-				return this._SeoName;
-			}
-			set
-			{
-				if ((this._SeoName != value))
-				{
-					this.OnSeoNameChanging(value);
-					this.SendPropertyChanging();
-					this._SeoName = value;
-					this.SendPropertyChanged("SeoName");
-					this.OnSeoNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ParentRouteID", DbType="Int")]
-		public System.Nullable<int> ParentRouteID
-		{
-			get
-			{
-				return this._ParentRouteID;
-			}
-			set
-			{
-				if ((this._ParentRouteID != value))
-				{
-					this.OnParentRouteIDChanging(value);
-					this.SendPropertyChanging();
-					this._ParentRouteID = value;
-					this.SendPropertyChanged("ParentRouteID");
-					this.OnParentRouteIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Route_RoutePiece", Storage="_RoutePieces", ThisKey="ID", OtherKey="RouteID")]
-		public EntitySet<RoutePiece> RoutePieces
-		{
-			get
-			{
-				return this._RoutePieces;
-			}
-			set
-			{
-				this._RoutePieces.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Type_Route", Storage="_Type", ThisKey="TypeID", OtherKey="ID", IsForeignKey=true)]
-		public Type Type
-		{
-			get
-			{
-				return this._Type.Entity;
-			}
-			set
-			{
-				Type previousValue = this._Type.Entity;
-				if (((previousValue != value) 
-							|| (this._Type.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Type.Entity = null;
-						previousValue.Routes.Remove(this);
-					}
-					this._Type.Entity = value;
-					if ((value != null))
-					{
-						value.Routes.Add(this);
-						this._TypeID = value.ID;
-					}
-					else
-					{
-						this._TypeID = default(int);
-					}
-					this.SendPropertyChanged("Type");
+					this._Credits = value;
+					this.SendPropertyChanged("Credits");
+					this.OnCreditsChanged();
 				}
 			}
 		}
@@ -3371,17 +3732,187 @@ namespace viadflib
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
 		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ServiceCall")]
+	public partial class ServiceCall : INotifyPropertyChanging, INotifyPropertyChanged
+	{
 		
-		private void attach_RoutePieces(RoutePiece entity)
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private int _ServiceAPIID;
+		
+		private int _ServiceClientID;
+		
+		private System.DateTime _CreateDate;
+		
+		private string _IpAdress;
+		
+		private string _Parameters;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnServiceAPIIDChanging(int value);
+    partial void OnServiceAPIIDChanged();
+    partial void OnServiceClientIDChanging(int value);
+    partial void OnServiceClientIDChanged();
+    partial void OnCreateDateChanging(System.DateTime value);
+    partial void OnCreateDateChanged();
+    partial void OnIpAdressChanging(string value);
+    partial void OnIpAdressChanged();
+    partial void OnParametersChanging(string value);
+    partial void OnParametersChanged();
+    #endregion
+		
+		public ServiceCall()
 		{
-			this.SendPropertyChanging();
-			entity.Route = this;
+			OnCreated();
 		}
 		
-		private void detach_RoutePieces(RoutePiece entity)
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
 		{
-			this.SendPropertyChanging();
-			entity.Route = null;
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ServiceAPIID", DbType="Int NOT NULL")]
+		public int ServiceAPIID
+		{
+			get
+			{
+				return this._ServiceAPIID;
+			}
+			set
+			{
+				if ((this._ServiceAPIID != value))
+				{
+					this.OnServiceAPIIDChanging(value);
+					this.SendPropertyChanging();
+					this._ServiceAPIID = value;
+					this.SendPropertyChanged("ServiceAPIID");
+					this.OnServiceAPIIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ServiceClientID", DbType="Int NOT NULL")]
+		public int ServiceClientID
+		{
+			get
+			{
+				return this._ServiceClientID;
+			}
+			set
+			{
+				if ((this._ServiceClientID != value))
+				{
+					this.OnServiceClientIDChanging(value);
+					this.SendPropertyChanging();
+					this._ServiceClientID = value;
+					this.SendPropertyChanged("ServiceClientID");
+					this.OnServiceClientIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime NOT NULL")]
+		public System.DateTime CreateDate
+		{
+			get
+			{
+				return this._CreateDate;
+			}
+			set
+			{
+				if ((this._CreateDate != value))
+				{
+					this.OnCreateDateChanging(value);
+					this.SendPropertyChanging();
+					this._CreateDate = value;
+					this.SendPropertyChanged("CreateDate");
+					this.OnCreateDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IpAdress", DbType="VarChar(20) NOT NULL", CanBeNull=false)]
+		public string IpAdress
+		{
+			get
+			{
+				return this._IpAdress;
+			}
+			set
+			{
+				if ((this._IpAdress != value))
+				{
+					this.OnIpAdressChanging(value);
+					this.SendPropertyChanging();
+					this._IpAdress = value;
+					this.SendPropertyChanged("IpAdress");
+					this.OnIpAdressChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Parameters", DbType="VarChar(MAX)")]
+		public string Parameters
+		{
+			get
+			{
+				return this._Parameters;
+			}
+			set
+			{
+				if ((this._Parameters != value))
+				{
+					this.OnParametersChanging(value);
+					this.SendPropertyChanging();
+					this._Parameters = value;
+					this.SendPropertyChanged("Parameters");
+					this.OnParametersChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 	}
 }

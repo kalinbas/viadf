@@ -130,16 +130,31 @@
     </Compile>
     <Compile Include="Searcher.cs" />
     <Compile Include="SearchResult.cs" />
-    <Compile Include="TravelTime\ITravelTimeDataProvider.cs" />
+    <Compile Include="TravelTime\Clipper\Clipper.cs" />
+    <Compile Include="TravelTime\Data\ViaDfDataProvider.cs" />
+    <Compile Include="TravelTime\Data\WalkingDataProvider.cs" />
+    <Compile Include="TravelTime\ITravelTimeAlgorithm.cs" />
+    <Compile Include="TravelTime\KDTree\KdTree.cs" />
+    <Compile Include="TravelTime\KDTree\KdTreeNode.cs" />
+    <Compile Include="TravelTime\KDTree\Vector.cs" />
     <Compile Include="TravelTime\LatLng.cs" />
     <Compile Include="TravelTime\LatLngBounds.cs" />
-    <Compile Include="TravelTime\SimplePriorityQueue.cs" />
-    <Compile Include="TravelTime\TravelTimeAlgorithm.cs" />
-    <Compile Include="TravelTime\TravelTimeDataConnection.cs" />
-    <Compile Include="TravelTime\TravelTimeResult.cs" />
+    <Compile Include="TravelTime\PriorityQueue.cs" />
+    <Compile Include="TravelTime\PublicTransportTimeAlgorithm\IPublicTransportTimeDataProvider.cs" />
+    <Compile Include="TravelTime\PublicTransportTimeAlgorithm\PublicTransportConnection.cs" />
+    <Compile Include="TravelTime\PublicTransportTimeAlgorithm\PublicTransportResult.cs" />
+    <Compile Include="TravelTime\PublicTransportTimeAlgorithm\PublicTransportTimeAlgorithm.cs" />
+    <Compile Include="TravelTime\TravelTimeCircle.cs" />
+    <Compile Include="TravelTime\TravelTimeEngine.cs" />
+    <Compile Include="TravelTime\TravelTimeList.cs" />
+    <Compile Include="TravelTime\TravelTimePolygon.cs" />
+    <Compile Include="TravelTime\TravelTimeType.cs" />
+    <Compile Include="TravelTime\Utils\ArrayHelper.cs" />
+    <Compile Include="TravelTime\Utils\JsonHelper.cs" />
+    <Compile Include="TravelTime\Utils\PolygonHelper.cs" />
+    <Compile Include="TravelTime\Utils\Singleton.cs" />
     <Compile Include="TypeEnum.cs" />
     <Compile Include="Utils.cs" />
-    <Compile Include="ViaDfDataProvider.cs" />
     <Compile Include="ViaDFGraph.cs" />
   </ItemGroup>
   <ItemGroup>

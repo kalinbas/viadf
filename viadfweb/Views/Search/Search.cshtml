@@ -12,7 +12,7 @@
 
 <div class="row">
     <div class="col s12 right-align">
-        <a href="/">Nueva busqueda</a>
+        <a href="/">Nueva búsqueda</a>
     </div>
 </div>
 
@@ -20,10 +20,10 @@
 <div class="card hoverable">
     <div class="card-content">
 
-        @Html.Partial("_MobileResponsiveAd")
+		@Html.Partial("_MobileResponsiveAd")
 
         <div class="row center-align">
-            <span class="flow-text">¿Como llego de <strong>@Model.Results[0].Start.Name</strong> a <strong>@Model.Results[0].End.Name</strong>?</span>
+            <span class="flow-text">¿Cómo llego de <strong>@Model.Results[0].Start.Name</strong> a <strong>@Model.Results[0].End.Name</strong>?</span>
         </div>
         <div class="row">
             <div class="col s12">
@@ -107,7 +107,7 @@
                                         </td>
                                         <td rowspan="2" class="resultCellDown">
                                             En
-                                            @Html.ActionLink(item.Type.Name + " " + item.Route.Name, "Route", "Home", new { type = Utils.Capitalize(Utils.FormatSEO(item.Type.Name)), name = Utils.Capitalize(Utils.FormatSEO(item.Route.Name)) }, null)
+                                            @Html.ActionLink(item.Type.Name + " " + item.Route.Name, "Route", "Home", new { type = Utils.Capitalize(Utils.FormatSEO(item.Type.Name)), name = Utils.Capitalize(item.Route.SeoName) }, null)
                                             <br />
                                             @("hacía " + item.InDirection)
                                         </td>
@@ -163,7 +163,7 @@
                 <div id="map" class="map" style="height: 300px;margin-top: 16px;"></div>
             </div>
         </div>
-        <p style="font-size:smaller;">*Por la falta de una base de datos completa del transporte público en el D.F., ViaDF depende de sus usuarios para tener información actualizada de las rutas. Por eso puede ser, que en unos casos los resultados no son correctos. Por favor no dudes en contactarnos en ese caso.</p>
+        <p style="font-size:smaller;">*Por falta de una base de datos completa del transporte público en la CDMX, ViaDF depende de sus usuarios para tener información actualizada de las rutas. Por eso puede ser, que en unos casos los resultados no son correctos. Por favor no dudes en contactarnos en ese caso.</p>
         @Html.Partial("_MobileResponsiveAd2")
     </div>
 </div>

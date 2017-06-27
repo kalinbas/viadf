@@ -18,7 +18,7 @@ namespace viadf.Controllers
 
         [OutputCache(Duration = 3600, VaryByParam = "de;a;origen;destino")]
         public ActionResult Search(string de, string a, string origen, string destino)
-        {                
+        {   
             Response.Cache.SetCacheability(HttpCacheability.Private);
             Response.Cache.SetLastModified(DateTime.Now);
 

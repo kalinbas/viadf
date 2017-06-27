@@ -100,7 +100,8 @@ namespace viadf.Controllers
             if (id.HasValue)
             {
                 route = DataHandler.GetRoute(id.Value);
-            } else
+            }
+            else
             {
                 route = DataHandler.GetNextRouteToAccept();
             }
@@ -128,7 +129,7 @@ namespace viadf.Controllers
             {
                 DataHandler.DeleteRoute(model.id.Value);
             }
-           
+
             return RedirectToAction("AcceptarRuta");
         }
 
@@ -235,7 +236,16 @@ namespace viadf.Controllers
                     route.FromName = model.origin;
                     route.ToName = model.destination;
                     route.Name = model.routename;
-                    route.SeoName = Utils.FormatSEO(route.Name);
+
+                    if (route.TypeID == (int)TypeEnum.Microbus)
+                    {
+                        route.SeoName = Utils.FormatSEO(route.FromName + " a " + route.ToName);
+                    }
+                    else
+                    {
+                        route.SeoName = Utils.FormatSEO(route.Name);
+                    }
+
                     route.TypeID = model.type;
                     route.Email = model.email;
                     route.Description = model.description;

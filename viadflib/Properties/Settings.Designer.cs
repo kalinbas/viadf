@@ -33,5 +33,16 @@ namespace viadflib.Properties {
                 return ((string)(this["viadfConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=tcp:s07.winhost.com;Initial Catalog=DB_35815_viadf;Integrated Securit" +
+            "y=False;User ID=DB_35815_viadf_user;Password=2brantin")]
+        public string DB_35815_viadfConnectionString {
+            get {
+                return ((string)(this["DB_35815_viadfConnectionString"]));
+            }
+        }
     }
 }

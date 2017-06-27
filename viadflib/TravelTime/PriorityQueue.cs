@@ -1,16 +1,20 @@
-﻿using System;
+﻿
+using System;
+using System.Linq;
 using System.Diagnostics;
+using System.Collections;
 using System.Collections.Generic;
 
 
 namespace viadflib.TravelTime
 {
-    public class SimplePriorityQueue<T>
+
+    public class PriorityQueue<T>
     {
         int total_size;
         SortedDictionary<double, Queue<T>> storage;
 
-        public SimplePriorityQueue()
+        public PriorityQueue()
         {
             this.storage = new SortedDictionary<double, Queue<T>>();
             this.total_size = 0;
@@ -23,24 +27,26 @@ namespace viadflib.TravelTime
 
         public T Dequeue()
         {
-            if (IsEmpty())
-            {
-                throw new Exception("Please check that priorityQueue is not empty before dequeing");
-            }
-
-            foreach (Queue<T> q in storage.Values)
+            foreach (var keyValuePair in storage)
             {
                 // we use a sorted dictionary
-                if (q.Count > 0)
+                if (keyValuePair.Value.Count > 0)
                 {
                     total_size--;
-                    return q.Dequeue();
+
+                    T value = keyValuePair.Value.Dequeue();
+
+                    // if empty remove the queue from storage
+                    if (keyValuePair.Value.Count == 0)
+                    {
+                        storage.Remove(keyValuePair.Key);
+                    }
+
+                    return value;
                 }
             }
 
-            Debug.Assert(false, "not supposed to reach here. problem with changing total_size");
-
-            return default(T); // not supposed to reach here.
+            throw new Exception("Please check that priorityQueue is not empty before dequeing");
         }
 
         // same as above, except for peek.
@@ -56,23 +62,23 @@ namespace viadflib.TravelTime
                     return q.Peek();
             }
 
-            Debug.Assert(false, "not supposed to reach here. problem with changing total_size");
-
-            return default(T); // not supposed to reach here.
+            throw new Exception("Please check that priorityQueue is not empty before dequeing");
         }
 
-        public int Count {
+        public int Count
+        {
             get { return total_size; }
         }
 
-        public void Remove(T item, double prio)
+        public void Remove(T item, double prioKey)
         {
-            var queue = storage[prio];
+            var queue = storage[prioKey];
             int queueCount = queue.Count;
 
             if (queueCount == 1)
             {
                 total_size--;
+                storage.Remove(prioKey);
             }
             else
             {
@@ -89,7 +95,7 @@ namespace viadflib.TravelTime
                         total_size--;
                     }
                 }
-                storage[prio] = newQueue;
+                storage[prioKey] = newQueue;
             }
         }
 
@@ -97,16 +103,15 @@ namespace viadflib.TravelTime
         {
             if (!storage.ContainsKey(prio))
             {
-                storage.Add(prio, new Queue<T>());
-                Enqueue(item, prio);
-                // run again
-
+                var queue = new Queue<T>();
+                storage.Add(prio, queue);
+                queue.Enqueue(item);
             }
             else
             {
                 storage[prio].Enqueue(item);
-                total_size++;
             }
+            total_size++;
         }
     }
 }

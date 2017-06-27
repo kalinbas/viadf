@@ -2,6 +2,17 @@
 @using viadflib
 @using System.Linq
 
+@section Head {
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<script>
+	  (adsbygoogle = window.adsbygoogle || []).push({
+		google_ad_client: "ca-pub-2461827238480440",
+		enable_page_level_ads: true
+	  });
+	</script>
+}
+
+
 @section JavaScript {
 
     <script type="text/javascript">
@@ -75,15 +86,11 @@
 
 @Html.Partial("_MobileResponsiveAd")
 
-<h2>@Model.Route.FromName - @Model.Route.ToName (@Model.Route.Type.Name: @Model.Route.Name)</h2>
+<h1>@Model.Route.FromName - @Model.Route.ToName (@Model.Route.Type.Name: @Model.Route.Name)</h1>
 
 <div class="row">
     <div class="col s12 m12 l6">
-        <div id="map" style="height:300px;"></div>
-        <div class="right-align">
-            <a class="btn btn-flat waves-effect waves-teal" href="/Admin/CrearRuta/@(Model.Route.ID)" rel="nofollow" target="_blank">Editar ruta</a>
-            <a id="markButton" class="btn btn-flat waves-effect waves-teal" onclick="markRoute(@(Model.Route.ID));">Ya no existe</a>
-        </div>
+        <div id="map" style="height:300px;"></div>       
     </div>
     <div class="col s6 m6 l3">
         <table style="width:100%">

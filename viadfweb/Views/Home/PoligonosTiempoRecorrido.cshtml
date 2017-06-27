@@ -1,0 +1,223 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["DisableAds"] = true;
+}
+
+@section Head
+{
+    <style>
+        #map-canvas {
+            width: 100%;
+            height: 600px;
+        }
+
+        .select-wrapper {
+            display: inline-block;
+        }
+
+            .select-wrapper > input[type=text] {
+                border-bottom: 1px dashed;
+                color: #039be5;
+                font-size: 24px;
+                font-weight: 500;
+            }
+
+        .headerText {
+            font-size: 24px;
+            font-weight: 300;
+        }
+
+            .headerText > .select-wrapper:first-child {
+                width: 230px;
+            }
+
+            .headerText > .select-wrapper:last-child {
+                width: 30px;
+            }
+
+        .caret {
+            display: none;
+        }
+    </style>
+
+}
+
+@section JavaScript {
+    <script type="text/javascript">
+        var map;
+        var marker;
+        var infoWindow;
+        var overlays = [];
+        var loading = false;
+
+        function initialize() {
+
+            var startPosition = new google.maps.LatLng(19.43255, -99.13337);
+
+            var mapOptions = {
+                center: startPosition,
+                zoom: 14,
+                draggableCursor: 'pointer'
+            };
+            map = new google.maps.Map(document.getElementById("map-canvas"),
+                mapOptions);
+
+            marker = new google.maps.Marker({
+                position: startPosition,
+                map: map,
+                draggable: true
+            });
+
+            infoWindow = new google.maps.InfoWindow({ pixelOffset: new google.maps.Size(-2, -2) });
+
+            google.maps.event.addListener(marker, 'dragend', function () {
+                if (!isLockedUI()) {
+                    lockUI();
+                    recalculate();
+                }
+            });
+
+            google.maps.event.addListener(map, "click", function (event) {
+                if (!isLockedUI()) {
+                    marker.setPosition(event.latLng);
+                    lockUI();
+                    recalculate();
+                }
+            });
+
+            $("#time").change(function () {
+                if ($(this).val() > 0) {
+                    if (!isLockedUI()) {
+                        lockUI();
+                        recalculate();
+                    }
+                }
+            });
+
+            $("#type").change(function () {
+                if (!isLockedUI()) {
+                    lockUI();
+                    recalculate();
+                }
+            });
+
+            lockUI();
+            recalculate();
+        }
+
+        function isLockedUI() {
+            return loading;
+        }
+
+        function lockUI() {
+            marker.setDraggable(false);
+            $("#loading").show();
+            loading = true;
+        }
+
+        function unlockUI() {
+            marker.setDraggable(true);
+            $("#loading").hide();
+            loading = false;
+        }
+
+        function recalculate() {
+
+            var point = marker.getPosition();
+            map.panTo(point);
+
+            deleteOverlays();
+            var timeValue = $("#time").val();
+            var typeValue = $("#type").val();
+
+            $.getJSON("/service/traveltimepolygon?start=" + point.lat() + "," + point.lng() + "&time=" + timeValue + "&type=" + typeValue + "&key=0NSlW6dbj57EoyH3i0yQ3yI575kI8mb4", function (data) {
+
+                var bounds = new google.maps.LatLngBounds();
+
+                var paths = [];
+                $.each(data.Paths, function (index, path) {
+                    var coords = [];
+                    for (var i = 0; i < path.Coords.length; i++) {
+                        coords[i] = new google.maps.LatLng(path.Coords[i].Lat, path.Coords[i].Lng);
+                        bounds.extend(coords[i]);
+                    }
+                    paths.push(coords);
+                });
+
+                var polygonOverlay = createPolygon(paths);
+
+                map.fitBounds(bounds);
+                //map.setZoom(map.getBoundsZoomLevel(bounds));
+
+                overlays.push(polygonOverlay);
+
+                unlockUI();
+            });
+        }
+
+        function deleteOverlays() {
+            if (overlays) {
+                for (i in overlays) {
+                    overlays[i].setMap(null);
+                }
+                overlays.length = 0;
+            }
+        }
+
+        function createPolygon(paths) {
+            return new google.maps.Polygon({
+                paths: paths,
+                strokeColor: '#FF0000',
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: '#FF0000',
+                fillOpacity: 0.35,
+                map: map,
+                clickable: false
+            });
+        }
+
+
+        google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+}
+
+<h1 class="header center">Polígonos de tiempo de recorrido<sup>BETA</sup></h1>
+<p>
+    El cálculo de los polígonos está todavía en desarrollo y falta mucha optimización. Por eso la búsqueda está limitada a 45 minutos.
+</p>
+<div class="card hoverable">
+    <div id="loading" style="position:absolute;height:100%;width:100%;background-color:white;z-index:100;opacity:0.8;display:flex;align-items:center;justify-content:center;">
+        <img src="/Content/img/spinner.gif" />
+    </div>
+    <div class="card-content">
+        <div class="row center-align">
+            <span class="headerText">
+                ¿A dónde llego
+                <select id="type" name="type" style="border-bottom: 1px dashed;width:200px;">
+                    <option value="2">en transporte público</option>
+                    <option value="1">caminando</option>
+                </select>
+                en
+                <select id="time" name="time">
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="25">25</option>
+                    <option value="30" selected>30</option>
+                    <option value="35">35</option>
+                    <option value="40">40</option>
+                    <option value="45">45</option>
+                </select>
+                minutos?
+            </span>
+        </div>
+        <div class="google-map-canvas" id="map-canvas"></div>
+    </div>
+</div>
+<h2>Servicio web</h2>
+<p>Para más información del uso de polígonos de tiempo de recorrido en su aplicación por favor visite la página de <a href="/WebService"> servicios web</a>.</p>
+
+
+
+

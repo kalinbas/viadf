@@ -1,7 +1,18 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
-	ViewData["DisableAds"] = true;
+    ViewData["DisableAds"] = true;
 }
+
+@section Head {
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-2461827238480440",
+            enable_page_level_ads: true
+        });
+    </script>
+}
+
 
 <style>
     .pac-container {
@@ -13,55 +24,76 @@
     }
 </style>
 
-<h2 class="header center">Buscador del Transporte Público - Ciudad de México</h2>
+   
 
-<div class="card hoverable">
+
+<h1 class="header center">Buscador del Transporte Público - Ciudad de México</h1>
+
+<div class="inapp-show">
+    <p>
+        Creamos una nueva versión del app de ViaDF para Android con muchas mejoras. Por incompatibilidad no se puede actualizar automaticamente.
+        Les pedimos de instalar la nueva versión desde el Play Store.
+    </p>
+    <div class="row center-align">
+        <a target="_blank" href="market://details?id=mx.com.viadf.app">
+            <img style="width:200px" alt="Descargar gratuito en Google Play" src="http://viadf.com.mx/Content/img/google-play-badge.png" />
+        </a>
+    </div>
+</div>
+
+<div class="card hoverable inapp-hide">
     <div class="card-content">
         <div class="row center-align">
-            <span class="flow-text">¿Como llego de <strong><a id="fromLink" @*class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="seleccione inicio"*@ href="#" onclick="openModal(true)" style="border-bottom: 1px dashed; ">algun lugar</a></strong> a <strong><a id="toLink" @*class="tooltipped" data-position="bottom" data-delay="10" data-tooltip="seleccione destino"*@ href="#" onclick="openModal(false)" style="border-bottom: 1px dashed; ">otro</a></strong>?</span>
+            <span class="flow-text">¿Cómo llego de <strong><a id="fromLink" @*class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="seleccione inicio"*@ href="#" onclick="openModal(true)" style="border-bottom: 1px dashed; ">algún lugar</a></strong> a <strong><a id="toLink" @*class="tooltipped" data-position="bottom" data-delay="10" data-tooltip="seleccione destino"*@ href="#" onclick="openModal(false)" style="border-bottom: 1px dashed; ">otro</a></strong>?</span>
         </div>
         <div class="row center-align">
             <button id="searchButton" disabled class="btn-large waves-effect waves-light light-blue darken-1" name="action" onclick="doSearch()">Buscar<i class="material-icons right">&#xE8B6;</i></button>
         </div>
         <div class="row center-align">
             <input class="filled-in" type="checkbox" id="test5" checked disabled /><label for="test5">Metro</label>
-            <input class="filled-in" type="checkbox" id="test4" checked disabled /><label for="test4">Metrobus</label>
-            <input class="filled-in" type="checkbox" id="test3" checked disabled /><label for="test3">Microbus</label>
+            <input class="filled-in" type="checkbox" id="test4" checked disabled /><label for="test4">Metrobús</label>
+            <input class="filled-in" type="checkbox" id="test3" checked disabled /><label for="test3">Microbús</label>
             <input class="filled-in" type="checkbox" id="test2" checked disabled /><label for="test2">RTP</label>
-            <input class="filled-in" type="checkbox" id="test1" checked disabled /><label for="test1">Trolebus</label>
+            <input class="filled-in" type="checkbox" id="test1" checked disabled /><label for="test1">Trolebús</label>
             <input class="filled-in" type="checkbox" id="test0" checked disabled /><label for="test0">Tren ligero</label>
         </div>
         <div class="row center-align">
-            <a href="/Busqueda?de=19.43255865356213%2C-99.13337157141115&a=19.334422%2C-99.18811">Ver ejemplo: ¿Como llego del <strong>Zocalo</strong> a <strong>Ciudad Universitaria (UNAM)</strong>?</a>
+            <a href="/Busqueda?de=19.43255865356213%2C-99.13337157141115&a=19.334422%2C-99.18811">Ver ejemplo: ¿Cómo llego del <strong>Zócalo</strong> a <strong>Ciudad Universitaria (UNAM)</strong>?</a>
         </div>
     </div>
 </div>
 
-<div class="row inapp-hide">
+<div id="inapphidden" class="row inapp-hide">
+
     <div class="col s12 m4 l3">
         <div class="icon-block">
-            <h2 class="center"><i class="material-icons">&#xE530;</i></h2>
-            <h5 class="center">Buscar rutas</h5>
-            <p class="light" style="text-align: justify;">En ViaDF se pueden buscar conexiones de toda la red del Metro, Metrob&#250;s, Tren Ligero, Troleb&#250;s, RTP, Autob&#250;s, Microb&#250;s, Pumab&#250;s y Tren Suburbano.</p>
+            <div class="center"><i class="material-icons">&#xE530;</i></div>
+            <h2 class="center">Buscar rutas</h2>
+            <p class="light" style="text-align: justify;">
+                En ViaDF podrás encontrar la mejor forma de transportarte alrededor de la Ciudad de México, utilizando las principales conexiones como: Metro, Metrob&#250;s, Tren Ligero, Troleb&#250;s, RTP, Autob&#250;s, Microb&#250;s, Mexib&#250;s, Pumab&#250;s y Tren Suburbano.
+            </p>
 
             <ul>
                 <li>
                     <a href="/Directorio">Ver lista de rutas</a>
                 </li>
                 <li>
-                    <a href="/Directorio/Distrito-Federal">Ver rutas del Distrito Federal</a>
+                    <a href="/Directorio/Distrito-Federal">Ver rutas de la Ciudad de México</a>
                 </li>
                 <li>
                     <a href="/Directorio/Estado-de-Mexico">Ver rutas del Estado de México</a>
+                </li>
+                <li>
+                    <a href="/PoligonosTiempoRecorrido">Calcular polígonos de tiempo de recorrido</a>
                 </li>
             </ul>
         </div>
     </div>
     <div class="col s12 m4 l3">
         <div class="icon-block">
-            <h2 class="center"><i class="material-icons">&#xE7EF;</i></h2>
-            <h5 class="center">Collaboración</h5>
-            <p class="light" style="text-align: justify;">Lamentablemente no existe una base de datos completa de las rutas del transporte público en el DF. Por eso en ViaDF los usuarios pueden agregar las rutas que conocen.</p>
+            <div class="center"><i class="material-icons">&#xE7EF;</i></div>
+            <h2 class="center">Colaboración</h2>
+            <p class="light" style="text-align: justify;">Lamentablemente no existe una base de datos completa de las rutas del transporte público en la CDMX. Por eso en ViaDF invitamos a todos nuestros usuarios a agregar las rutas que conozcan.</p>
             <ul>
                 <li>
                     <a href="/AgregarRuta">Agregar una ruta que conoces</a>
@@ -71,16 +103,16 @@
     </div>
     <div class="col s12 m4 l3">
         <div class="icon-block">
-            <h2 class="center"><i class="material-icons">&#xE8B8;</i></h2>
-            <h5 class="center">Open data / REST API</h5>
+            <div class="center"><i class="material-icons">&#xE8B8;</i></div>
+            <h2 class="center">Open data / API</h2>
             <p class="light" style="text-align: justify;">
-                Decidí publicar la base de datos de ViaDF bajo la licencia Open Data Commons Attribution License para que la puedan usar en sus projectos. Ademas contamos con un servicio web REST para la busqueda de rutas.
+                Decidí publicar la base de datos de ViaDF bajo la licencia Open Data Commons Attribution License, para que usen los datos en sus proyectos. Además contamos con un servicio web REST para la búsqueda de rutas.
                 <ul>
                     <li>
-                        <a href="/WebService">Como usar el servicio web?</a>
+                        <a href="/Api">¿Cómo usar el servicio web?</a>
                     </li>
                     <li>
-                        <a href="/OpenData">Donde puedo bajar los datos?</a>
+                        <a href="/OpenData">¿Dónde puedo bajar los datos?</a>
                     </li>
                 </ul>
             </p>
@@ -90,6 +122,8 @@
         @Html.Action("LastSearches", "Search", null)
     </div>
 </div>
+
+
 
 @*@Html.Partial("_MobileResponsiveAd2")*@
 
@@ -116,7 +150,12 @@
 
     <script type="text/javascript">
         $(function () {
-
+            // check if we are inapp - tricky
+            var elem1 = document.getElementById("inapphidden");
+            var display = window.getComputedStyle(elem1, null).getPropertyValue("display");
+            if (display == "none") {
+                $(".inapp-show").show();
+            }
         });
 
         var map, marker, geocoder, currentPosition, currentName;

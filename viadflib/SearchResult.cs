@@ -204,6 +204,8 @@ namespace viadflib
         [DataMember]
         public string Name { get; set; }
 
+        public string SeoName { get; set; }
+
         /// <summary>
         /// Name where route starts
         /// </summary>
@@ -231,6 +233,7 @@ namespace viadflib
                 ResultRoute res = new ResultRoute();
                 res.ID = route.ID;
                 res.Name = route.Name;
+                res.SeoName = route.SeoName;
                 res.FromName = route.FromName;
                 res.ToName = route.ToName;
                 res.Type = ResultType.FromType(route.Type);

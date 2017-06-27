@@ -18,13 +18,13 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="@Url.Content("~/Content/css/materialize.min.css")" type="text/css" rel="stylesheet" media="screen,projection" />
-    <link href="@Url.Content("~/Content/css/style.css")" type="text/css" rel="stylesheet" media="screen,projection" />
+    <link href="@Url.Content("~/Content/css/style.css?v=2")" type="text/css" rel="stylesheet" media="screen,projection" />
 
     @RenderSection("Head", false)
     @Html.Partial("_GoogleAnalytics")
 </head>
 <body>
-	<a href="https://github.com/kalinbas/viadf" style="z-index:1000" class="hide-on-med-and-down" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+    <a href="https://github.com/kalinbas/viadf" style="z-index:1000" class="hide-on-med-and-down" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
     <div class="navbar-fixed">
         <nav class="light-blue lighten-1" style="background-image:url('http://viadf.com.mx/Content/img/b5.jpg');" role="navigation">
             <div class="nav-wrapper container">
@@ -33,7 +33,8 @@
                     <li><a href="/Directorio">Lista de rutas</a></li>
                     @*<li><a href="/AgregarRuta">Agregar ruta</a></li>*@
                     <li><a href="/OpenData">Datos abiertos</a></li>
-                    <li><a href="/WebService">Servicio Web</a></li>
+                    <li><a href="/Api">REST API</a></li>
+                    <li><a href="/PoligonosTiempoRecorrido">Polígonos</a></li>
                     @if (Request.IsAuthenticated)
                     {
                         <li><a href="/Account/LogOff">Logout</a></li>
@@ -45,7 +46,8 @@
                     <li><a href="/Directorio">Lista de rutas</a></li>
                     @*<li><a href="/AgregarRuta">Agregar ruta</a></li>*@
                     <li><a href="/OpenData">Datos abiertos</a></li>
-                    <li><a href="/WebService">Servicio Web</a></li>
+                    <li><a href="/Api">REST API</a></li>
+                    <li><a href="/PoligonosTiempoRecorrido">Polígonos</a></li>
                     @if (Request.IsAuthenticated)
                     {
                         <li><a href="/Account/LogOff">Logout</a></li>
@@ -57,12 +59,32 @@
     </div>
 
     <div class="main section no-pad-bot" id="index-banner">
-        <div class="container">            
+        <div class="container">
+
+            <div class="row hide-on-large-only inapp-hide center-align">
+                <a target="_blank" href="https://itunes.apple.com/mx/app/viadf/id1185840806?mt=8">
+                    <img style="height:60px" alt="Disponible en el App Store" src="/Content/img/app-store-badge.png" />
+                </a>
+                <a target="_blank" href="https://play.google.com/store/apps/details?id=mx.com.viadf.app">
+                    <img style="height:60px" alt="Descargar gratuito en Google Play" src="/Content/img/google-play-badge.png" />
+                </a>
+            </div>
             <div class="row">
 
                 @if (!(bool)(ViewData["DisableAds"] ?? false))
                 {
-                    <div class="col l3 hide-on-med-and-down" style="overflow:hidden;">  
+                    <div class="col s12 m12 l9">
+                        @RenderBody()
+                        <div class="row hide-on-med-and-down inapp-hide right-align">
+                            <a target="_blank" href="https://itunes.apple.com/mx/app/viadf/id1185840806?mt=8">
+                                <img style="height:60px" alt="Disponible en el App Store" src="/Content/img/app-store-badge.png" />
+                            </a>
+                            <a target="_blank" href="https://play.google.com/store/apps/details?id=mx.com.viadf.app">
+                                <img style="height:60px" alt="Descargar gratuito en Google Play" src="/Content/img/google-play-badge.png" />
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col l3 hide-on-med-and-down" style="overflow:hidden;">
                         <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
                         <!-- Responsive Big -->
                         <ins class="adsbygoogle"
@@ -74,31 +96,21 @@
                             (adsbygoogle = window.adsbygoogle || []).push({});
                         </script>
                     </div>
-                    <div class="col s12 m12 l9">
-                        @RenderBody()
-                        <div class="row hide-on-med-and-down inapp-hide right-align">
-                            <a target="_blank" href="https://play.google.com/store/apps/details?id=io.gonative.android.zkjxe">
-                                <img style="width:200px" alt="Descargar gratuito en Google Play" src="http://viadf.com.mx/Content/img/google-play-badge.png" />
-                            </a>
-                        </div>
-                    </div>
                 }
                 else
                 {
                     <div class="col s12">
                         @RenderBody()
-						<div class="row hide-on-med-and-down inapp-hide right-align">
-                            <a target="_blank" href="https://play.google.com/store/apps/details?id=io.gonative.android.zkjxe">
-                                <img style="width:200px" alt="Descargar gratuito en Google Play" src="http://viadf.com.mx/Content/img/google-play-badge.png" />
+                        <div class="row hide-on-med-and-down inapp-hide right-align">
+                            <a target="_blank" href="https://itunes.apple.com/mx/app/viadf/id1185840806?mt=8">
+                                <img style="height:60px" alt="Disponible en el App Store" src="/Content/img/app-store-badge.png" />
+                            </a>
+                            <a target="_blank" href="https://play.google.com/store/apps/details?id=mx.com.viadf.app">
+                                <img style="height:60px" alt="Descargar gratuito en Google Play" src="/Content/img/google-play-badge.png" />
                             </a>
                         </div>
                     </div>
                 }
-            </div>
-			<div class="row inapp-hide hide-on-large-only center-align">
-                <a target="_blank" href="https://play.google.com/store/apps/details?id=io.gonative.android.zkjxe">
-                    <img style="width:200px" alt="Descargar gratuito en Google Play" src="http://viadf.com.mx/Content/img/google-play-badge.png" />
-                </a>
             </div>
         </div>
     </div>
@@ -107,12 +119,12 @@
         <div class="container">
             <div class="row">
                 <div class="col m9 s12">
-                    <h5 class="white-text">Acerca de ViaDF</h5>
-                    <p class="grey-text text-lighten-4">ViaDF es un proyecto personal que he hecho en mi tiempo libre. Por eso estoy feliz por todo tipo de comentarios, sugerencias y ayuda. Agradezco mucho su interés en ViaDF.</p>
+                    <h2 class="white-text" style="margin-top: 0;">Acerca de ViaDF</h2>
+                    <p class="grey-text text-lighten-4">ViaDF es un proyecto personal que he hecho en mi tiempo libre. Por eso estoy feliz por todo tipo de comentarios, sugerencias y ayuda. Agradezco mucho su interés en ViaDF. Gracias también al proyecto <a style="color:white;" href="http://www.mapatoncd.mx/">Mapatón</a> por su esfuerzo y sus datos.</p>
 
                 </div>
                 <div class="col m3 s12 right-align">
-                    <h5 class="white-text">Contacto</h5>
+                    <h2 class="white-text" style="margin-top: 0;">Contacto</h2>
                     <a class="white-text" href="mailto:viadf.com.mx@gmail.com"><i class="fa fa-envelope-square fa-2x"></i></a>
                     <a class="white-text" href="https://www.facebook.com/viadf" target="_blank"><i class="fa fa-facebook-square fa-2x"></i></a>
                     <a class="white-text" href="https://www.twitter.com/viadf" target="_blank"><i class="fa fa-twitter-square fa-2x"></i></a>
@@ -126,7 +138,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col s12 m12 l8">
-                        Hecho con cariño en Mexico y Suiza - @DateTime.Today.Year
+                        Hecho con cariño en México y Suiza - @DateTime.Today.Year
                     </div>
                     <div class="col l4 right-align hide-on-med-and-down">
                         <a class="white-text" href="/Condiciones">Condiciones de Uso</a> | <a class="white-text" href="/Privacidad">Privacidad</a>
@@ -140,11 +152,12 @@
     <!--  Scripts-->
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="@Url.Content("~/Content/js/materialize.min.js")"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?libraries=places"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCejzkAd2b7c_kdwS0SHs4CWn3hNbB1bO4"></script>
 
     <script src="@Url.Content("~/Content/js/main.js?v=2")"></script>
 
     @RenderSection("JavaScript", false)
 </body>
+
 </html>
 

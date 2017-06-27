@@ -1,4 +1,9 @@
-﻿<h2>Admin</h2>
+﻿<h1>Admin</h1>
 
 @Html.ActionLink("List of routes", "Routes")
-@Html.ActionLink("Update index", "RebuildIndex", new { timeout = 60 })
+
+<p>Index all active routes</p>
+@Html.ActionLink("Update index", "RebuildIndex", new { timeout = 120 })
+
+<p>Refresh index - Hot swap</p>
+@Html.ActionLink("Refresh index", "RefreshIndex")

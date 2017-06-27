@@ -3,6 +3,8 @@ using System.Linq;
 using System.Web.Mvc;
 using viadflib;
 using viadf.Models;
+using viadflib.TravelTime;
+using viadflib.TravelTime.Utils;
 
 namespace viadf.Controllers
 {
@@ -20,7 +22,7 @@ namespace viadf.Controllers
         // GET: /Default/
 
         public ActionResult Index()
-        { 
+        {
             SetSEO("¿Cómo llegar en transporte público? - Ciudad de México", "Busca conexiones de toda la red del Metro, Metrobús, Tren Ligero, Trolebús, RTP, Autobús, Microbús, Pumabús y Tren Suburbano.", "buscador, buscar rutas, planeador, como llego, como llegar, como voy, transporte publico, mexico, distrito federal, metro, metrobus, trolebus, pesero, microbus, tren ligero,  RTP, autobus, suburbano, pumabus, por donde");
             return View();
         }
@@ -54,15 +56,21 @@ namespace viadf.Controllers
             return new PermanentRedirectResult(Url.Action("AgregarRuta"));
         }
 
+        public ActionResult PoligonosTiempoRecorrido()
+        {
+            SetSEO("Polígonos de tiempo de recorrido", "Crear polígonos de tiempo de recorrido en un simple mapa con los datos de ViaDF.", "polígonos de tiempo");
+            return View();
+        }
+
         public ActionResult RutaRegistrada()
         {
-            SetSEO("Ruta registrada", "", "");            
+            SetSEO("Ruta registrada", "", "");
             return View();
-        }        
+        }
 
         [OutputCache(Duration = 3600, VaryByParam = "type")]
         public ActionResult RouteList(string type)
-        {   
+        {
             RouteListModel model = new RouteListModel();
             using (var context = new viadflib.DataContext())
             {
@@ -82,16 +90,16 @@ namespace viadf.Controllers
                 else
                 {
                     model.Routes = new List<Route>();
-                }               
-            }            
+                }
+            }
 
             if (model.SelectedType != null)
             {
-                SetSEO("Lista de rutas del " + model.SelectedType.Name + " - ¿Cómo llegar en transporte público? - Ciudad de México", "Lista de todas las rutas del " + model.SelectedType.Name + "en la Ciudad de México, Distrito Federal  y en el Estado de México.", model.SelectedType.Name + ", como llegar, como llego, lista rutas, transporte público, méxico, distrito federal, estado de méxico");
+                SetSEO("Lista de rutas del " + model.SelectedType.Name + " de la Ciudad de México.", "Lista de todas las rutas del " + model.SelectedType.Name + "en la Ciudad de México y en el Estado de México.", model.SelectedType.Name + ", como llegar, como llego, lista rutas, transporte público, méxico, ciudad de méxico, cdmx, estado de méxico");
             }
             else
             {
-                SetSEO("Directorio del transporte público de la Ciudad de México.", "Directorio de las rutas y estaciones del transporte público en la Ciudad de México, Distrito Federal y en el Estado de México.", "directorio, como llegar, como llego, lista rutas, transporte público, méxico, distrito federal, estado de méxico");
+                SetSEO("Directorio del transporte público de la Ciudad de México.", "Directorio de las rutas y estaciones del transporte público en la Ciudad de México y en el Estado de México.", "directorio, como llegar, como llego, lista rutas, transporte público, méxico, ciudad de méxico, cdmx, estado de méxico");
             }
 
             return View(model);
@@ -113,10 +121,15 @@ namespace viadf.Controllers
             if (typeObj != null)
             {
                 // load route
-                var routeObj = new viadflib.DataContext().Routes.Where(x => x.Status > (int)StatusEnum.New && x.SeoName == name.ToLower() && x.TypeID == typeObj.ID).FirstOrDefault();
+                var routeObj = new viadflib.DataContext().Routes.Where(x => x.Status > (int)StatusEnum.New && (x.SeoName == name.ToLower() || x.OldSeoName == name.ToLower()) && x.TypeID == typeObj.ID).FirstOrDefault();
 
                 if (routeObj != null)
                 {
+                    if (routeObj.OldSeoName == name.ToLower() && routeObj.SeoName != name.ToLower())
+                    {
+                        return RedirectToActionPermanent("Route", new { type = Utils.Capitalize(typeObj.SeoName), name = Utils.Capitalize(routeObj.SeoName) });
+                    }
+
                     RouteModel model = new RouteModel();
 
                     model.Route = DataHandler.GetRoute(routeObj.ID);
@@ -136,7 +149,9 @@ namespace viadf.Controllers
                         model.RoutePieces1 = model.RoutePieces;
                     }
 
-                    SetSEO(model.Route.Type.Name + " (" + model.Route.Name + ") - ¿Cómo llegar en transporte público?", "", model.Route.Type.Name + "," + model.Route.Name);
+                    var routeName = model.Route.TypeID == (int)TypeEnum.Microbus ? model.Route.FromName + " a " + model.Route.ToName : "(" + model.Route.Name + ")";
+
+                    SetSEO(model.Route.Type.Name + " " + routeName + " - ¿Cómo llegar en transporte público?", "", model.Route.Type.Name + "," + model.Route.Name);
 
                     return View(model);
                 }
@@ -160,7 +175,7 @@ namespace viadf.Controllers
             if (typeObj != null)
             {
                 // load route
-                var routeObj = new viadflib.DataContext().Routes.Where(x => x.SeoName == route.ToLower() && x.TypeID == typeObj.ID).FirstOrDefault();
+                var routeObj = new viadflib.DataContext().Routes.Where(x => (x.SeoName == route.ToLower() || x.OldSeoName == route.ToLower()) && x.TypeID == typeObj.ID).FirstOrDefault();
 
                 if (routeObj != null)
                 {
@@ -168,19 +183,24 @@ namespace viadf.Controllers
 
                     if (routePieceObj != null)
                     {
-                         RoutePieceModel model = new RoutePieceModel();
-                         model.RoutePiece = DataHandler.GetRoutePiece(routePieceObj.ID);
-                         model.ConnectingRoutes = DataHandler.GetConnectionRoutes(model.RoutePiece, 0.5);
+                        if (routeObj.OldSeoName == name.ToLower() && routeObj.SeoName != name.ToLower())
+                        {
+                            return RedirectToActionPermanent("RoutePiece", new { type = Utils.Capitalize(typeObj.SeoName), route = Utils.Capitalize(routeObj.SeoName), name = Utils.Capitalize(routePieceObj.SeoName) });
+                        }
 
-                         string routeName = model.RoutePiece.Route.Type.Name + " " + model.RoutePiece.Name;
+                        RoutePieceModel model = new RoutePieceModel();
+                        model.RoutePiece = DataHandler.GetRoutePiece(routePieceObj.ID);
+                        model.ConnectingRoutes = DataHandler.GetConnectionRoutes(model.RoutePiece, 0.5);
 
-                         model.SmallSearchBoxModel = new SmallSearchBoxModel { Name = routeName, Coordinates = Utils.FormatCoordinates(model.RoutePiece.Lat, model.RoutePiece.Lng) };
+                        string routeName = model.RoutePiece.Route.Type.Name + " " + model.RoutePiece.Name;
 
-                         routeName += " (" + model.RoutePiece.Route.Name + ")";
-                         SetSEO(routeName + " - ¿Cómo llegar en transporte público?", "", model.RoutePiece.Route.Type.Name + "," + model.RoutePiece.Name + "," + model.RoutePiece.Route.Name);
+                        model.SmallSearchBoxModel = new SmallSearchBoxModel { Name = routeName, Coordinates = Utils.FormatCoordinates(model.RoutePiece.Lat, model.RoutePiece.Lng) };
 
-                         return View(model);
-                     }
+                        routeName += " (" + model.RoutePiece.Route.Name + ")";
+                        SetSEO(routeName + " - ¿Cómo llegar en transporte público?", "", model.RoutePiece.Route.Type.Name + "," + model.RoutePiece.Name + "," + model.RoutePiece.Route.Name);
+
+                        return View(model);
+                    }
                 }
             }
 
@@ -195,8 +215,8 @@ namespace viadf.Controllers
             {
                 RouteData.Values.Remove("id");
                 return new PermanentRedirectResult(Url.Action("Delegacion", new { estadoId = estadoId, name = name }));
-            }          
-            
+            }
+
             // if none loaded - redirect to main page of state
             if (name == null)
             {
@@ -262,7 +282,7 @@ namespace viadf.Controllers
                     return View(model);
                 }
             }
-           
+
             return HttpNotFound();
         }
 
@@ -280,7 +300,12 @@ namespace viadf.Controllers
 
         public ActionResult WebService()
         {
-            SetSEO("Servicio web", "", "");
+            return RedirectToActionPermanent("Api");
+        }
+
+        public ActionResult Api()
+        {
+            SetSEO("REST API - Servicios web", "", "");
             return View();
         }
 

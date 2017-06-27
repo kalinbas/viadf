@@ -94,10 +94,22 @@ namespace viadfweb
             );
 
             routes.MapRoute(
+              "PoligonosTiempoRecorrido",
+              "PoligonosTiempoRecorrido",
+              new { controller = "Home", action = "PoligonosTiempoRecorrido" }
+            );
+
+            routes.MapRoute(
               "WebService",
               "WebService",
               new { controller = "Home", action = "WebService" }
             );
+
+            routes.MapRoute(
+              "Api",
+              "Api",
+              new { controller = "Home", action = "Api" }
+            );            
 
             routes.MapRoute(
               "OpenData",

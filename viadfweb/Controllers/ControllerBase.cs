@@ -1,8 +1,9 @@
-﻿using System.Web.Mvc;
+﻿using System.Web.Http.Cors;
+using System.Web.Mvc;
 using viadflib;
 
 namespace viadf.Controllers
-{
+{    
     public class ControllerBase : Controller
     {
         protected override void OnException(ExceptionContext filterContext)

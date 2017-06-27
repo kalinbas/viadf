@@ -8,6 +8,11 @@ namespace viadflib
     {
         public static List<Route> GetConnectionRoutes(RoutePiece piece, double maxDistanceKm)
         {
+            return GetConnectionRoutes(piece.Lat, piece.Lng, maxDistanceKm, piece.RouteID);           
+        }
+
+        public static List<Route> GetConnectionRoutes(double lat, double lng, double maxDistanceKm, int excludeRouteId = 0)
+        {
             double maxDistanceDegrees = maxDistanceKm * ViaDFGraph.KM_IN_DEGREES;
 
             using (DataContext context = new DataContext())
@@ -16,7 +21,16 @@ namespace viadflib
                 dlo.LoadWith<Route>(x => x.Type);
                 context.LoadOptions = dlo;
 
-                List<Route> routes = context.RoutePieces.Where(x => x.RouteID != piece.RouteID && Math.Abs(x.Lat - piece.Lat) + Math.Abs(x.Lng - piece.Lng) < maxDistanceDegrees).Select(x => x.Route).Distinct().ToList();
+                List<Route> routes = context.RoutePieces.Where(x => x.RouteID != excludeRouteId &&  Math.Abs(x.Lat - lat) + Math.Abs(x.Lng - lng) < maxDistanceDegrees).OrderBy(x => Math.Abs(x.Lat - lat) + Math.Abs(x.Lng - lng)).Select(x => x.Route).Distinct().ToList();
+                return routes;
+            }
+        }
+
+        public static List<Route> GetRoutesInArea(double minLat, double minLng, double maxLat, double maxLng)
+        {          
+            using (DataContext context = new DataContext())
+            {
+                List<Route> routes = context.RoutePieces.Where(x => x.Lat >= minLat && x.Lat <= maxLat && x.Lng >= minLng && x.Lng <= maxLng ).Select(x => x.Route).Distinct().ToList();
                 return routes;
             }
         }
@@ -28,7 +42,7 @@ namespace viadflib
                 return context.Routes.FirstOrDefault(x => x.Status == (int)StatusEnum.New);
             }
         }
-       
+
 
         public static Route GetRoute(int id)
         {
@@ -55,7 +69,7 @@ namespace viadflib
             }
         }
 
-        
+
 
         public static List<RoutePiece> GetRoutePieces(int routeID)
         {
@@ -70,7 +84,47 @@ namespace viadflib
             }
         }
 
-        
+        public static string ChargeServiceCall(string method, string apiKey, string ipAdress, string parameters)
+        {
+            using (var context = new DataContext())
+            {
+                var serviceApi = context.ServiceAPIs.FirstOrDefault(x => x.Url == method);
+                var serviceClient = context.ServiceClients.FirstOrDefault(x => x.ApiKey == apiKey);
+
+                if (serviceApi == null)
+                {
+                    return "Invalid service method provided";
+                }
+                if (serviceClient == null)
+                {
+                    return "Invalid api key provided";
+                }
+                if (serviceApi.CreditsPerCall > 0 && serviceClient.Credits < serviceApi.CreditsPerCall)
+                {
+                    return "Insufficient credits";
+                }
+
+                if (serviceApi.CreditsPerCall > 0)
+                {
+                    serviceClient.Credits -= serviceApi.CreditsPerCall;
+                }
+
+                var call = new ServiceCall();
+                call.CreateDate = DateTime.Now;
+                call.IpAdress = ipAdress ?? "";
+                call.ServiceAPIID = serviceApi.ID;
+                call.ServiceClientID = serviceClient.ID;
+                call.Parameters = parameters;
+
+                context.ServiceCalls.InsertOnSubmit(call);
+
+                context.SubmitChanges();
+
+                return null;
+            }
+        }
+
+
 
         public static string GetNameAtPosition(double lat, double lng, double maxDistance = ViaDFGraph.M100_IN_DEGREES)
         {
@@ -154,7 +208,7 @@ namespace viadflib
                 mail.Subject = "MarkRoute";
                 mail.Name = id + "";
                 context.Mails.InsertOnSubmit(mail);
-                context.SubmitChanges();            
+                context.SubmitChanges();
             }
         }
 
@@ -340,7 +394,7 @@ namespace viadflib
                         pieces.RemoveAll(x => piecesToDelete.Contains(x));
                         context.RoutePieces.DeleteAllOnSubmit(piecesToDelete);
                         context.SubmitChanges();
-                    }                    
+                    }
                 }
             }
         }
@@ -380,7 +434,22 @@ namespace viadflib
                 }
             }
 
-            
+
+        }
+
+        public static void DeleteAllRoutesFromMail(string email)
+        {
+            List<int> ids = new List<int>();
+
+            using (var context = new DataContext())
+            {
+                ids = context.Routes.Where(x => x.Email == email).Select(x => x.ID).ToList();
+            }
+
+            foreach (var id in ids)
+            {
+                DeleteRoute(id);
+            }
         }
 
         public static void DeleteRoute(int id)
@@ -391,7 +460,7 @@ namespace viadflib
             {
                 var route = context.Routes.FirstOrDefault(x => x.ID == id);
                 if (route != null)
-                {                    
+                {
                     context.Routes.DeleteOnSubmit(route);
                     context.SubmitChanges();
                 }
@@ -406,7 +475,7 @@ namespace viadflib
             {
                 var route = context.Routes.FirstOrDefault(x => x.ID == id);
                 if (route != null)
-                {                  
+                {
                     if (route.Status == (int)StatusEnum.ActiveAndIndexed)
                     {
                         // remove from search index
@@ -441,7 +510,7 @@ namespace viadflib
                 var route = context.Routes.FirstOrDefault(x => x.ID == id);
                 if (route.ParentRouteID.HasValue)
                 {
-                    DeleteRoute(route.ParentRouteID.Value);                    
+                    DeleteRoute(route.ParentRouteID.Value);
                 }
                 ActivateRoute(id);
             }
@@ -540,19 +609,27 @@ namespace viadflib
 
         public static void WriteException(Exception ex, string ipAddress)
         {
-            using (var context = new DataContext())
+            try
             {
-                SystemException exception = new SystemException();
-                exception.CreateDate = DateTime.Now;
-                exception.IpAdress = ipAddress;
-                exception.Name = ex.Message ?? ""; ;
-                exception.StackTrace = ex.StackTrace ?? "";
-                context.SystemExceptions.InsertOnSubmit(exception);
-                context.SubmitChanges();
+                using (var context = new DataContext())
+                {
+                    SystemException exception = new SystemException();
+                    exception.CreateDate = DateTime.Now;
+                    exception.IpAdress = ipAddress;
+                    exception.Name = ex.Message ?? ""; ;
+                    exception.StackTrace = ex.StackTrace ?? "";
+                    context.SystemExceptions.InsertOnSubmit(exception);
+                    context.SubmitChanges();
+                }
+            }
+            catch
+            {
+                // WriteException should NEVER throw exception
             }
         }
 
-        public static List<List<Route>> FindDuplicates()
+
+        public static List<List<Route>> FindDuplicates(string email = null)
         {
             List<List<Route>> lists = new List<List<Route>>();
             using (var context = new DataContext())
@@ -563,7 +640,7 @@ namespace viadflib
 
                 List<Route> allRoutes = context.Routes.ToList();
 
-                foreach (Route route in allRoutes)
+                foreach (Route route in allRoutes.Where(x => x.Email == email || email == null))
                 {
                     if (!lists.Any(x => x.Any(y => y.ID == route.ID)))
                     {
@@ -571,9 +648,11 @@ namespace viadflib
                         duplicates.Add(route);
                         foreach (Route route2 in allRoutes)
                         {
-                            if (route.ID != route2.ID && route.TypeID == route2.TypeID) {
+                            if (route.ID != route2.ID && route.TypeID == route2.TypeID)
+                            {
                                 double similarity = CalculateSimilarity(route, route2);
-                                if (similarity > 0.95) {
+                                if (similarity > 0.9)
+                                {
                                     duplicates.Add(route2);
                                 }
                             }
@@ -582,7 +661,7 @@ namespace viadflib
                         {
                             lists.Add(duplicates);
                         }
-                    }                    
+                    }
                 }
             }
             return lists;

@@ -1,6 +1,17 @@
 ﻿@model viadf.Models.RoutePieceModel
 @using viadflib
 
+@section Head {
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<script>
+	  (adsbygoogle = window.adsbygoogle || []).push({
+		google_ad_client: "ca-pub-2461827238480440",
+		enable_page_level_ads: true
+	  });
+	</script>
+}
+
+
 @section JavaScript {
 
     <script type="text/javascript" src="@Url.Content("~/Content/search.js?v=2")"></script>
@@ -31,7 +42,7 @@
 @Html.ActionLink(Model.RoutePiece.Route.Name, "Route", new { type = Utils.Capitalize(Model.RoutePiece.Route.Type.SeoName), name = Utils.Capitalize(Model.RoutePiece.Route.SeoName) }) >
 @Model.RoutePiece.Name
 
-<h2>@Model.RoutePiece.Route.Type.Name @Model.RoutePiece.Name (@Model.RoutePiece.Route.Name)</h2>
+<h1>@Model.RoutePiece.Route.Type.Name @Model.RoutePiece.Name (@Model.RoutePiece.Route.Name)</h1>
 
 @Html.Partial("_MobileResponsiveAd")
 

@@ -2,6 +2,7 @@ body {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
+	word-wrap: break-word;
 }
 
 .main {
@@ -17,10 +18,20 @@ body {
     font-weight: bold;
 }
 
-h2 {
+h1 {
     font-size: 2rem;
 }
 
-h3 {
+h2 {
     font-size: 1.5rem;
+}
+
+h3 {
+    font-size: 1.2rem;
+    font-weight:bold;
+}
+
+/* activated by special javascript */
+.inapp-show {
+    display: none;
 }

@@ -47,6 +47,8 @@ namespace viadflib
                     context.SubmitChanges();
                 }
 
+                Console.Write(".");
+
                 if (DateTime.Now.Subtract(start).TotalSeconds > timeoutSeconds)
                 {
                     break;
