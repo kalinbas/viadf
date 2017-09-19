@@ -76,6 +76,7 @@ namespace viadf.Controllers
                     {
                         SearchResultModel model = new SearchResultModel();
                         model.Results = results;
+                        model.CloseBusinesses = DataHandler.GetCloseBusinesses(spTo.Lat, spTo.Lng, 0.25, 30);
 
                         SetSEO(results[0].Start.Name + " a " + results[0].End.Name + " - ¿Cómo llegar en transporte público?", "", "");
 

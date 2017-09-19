@@ -64,6 +64,13 @@ namespace viadfweb
             );
 
             routes.MapRoute(
+               "Negocio",
+               "negocio/{name}/{id}",
+               new { controller = "Home", action = "Business" },
+               new { id = @"\d+" }
+            );
+
+            routes.MapRoute(
                 "RoutePieceNew",
                 "Directorio/{type}/{route}/{name}",
                 new { controller = "Home", action = "RoutePiece" }
@@ -79,6 +86,12 @@ namespace viadfweb
                "Contacto",
                "Contacto",
                new { controller = "Home", action = "Contacto" }
+            );
+
+            routes.MapRoute(
+              "Map",
+              "Map",
+              new { controller = "Home", action = "Map" }
             );
 
             routes.MapRoute(
@@ -109,7 +122,7 @@ namespace viadfweb
               "Api",
               "Api",
               new { controller = "Home", action = "Api" }
-            );            
+            );
 
             routes.MapRoute(
               "OpenData",

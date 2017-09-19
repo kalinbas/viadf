@@ -26,12 +26,63 @@ namespace viadflib
             }
         }
 
+        public static List<Business> GetCloseBusinesses(RoutePiece piece, double maxDistanceKm, int max)
+        {
+            return GetCloseBusinesses(piece.Lat, piece.Lng, maxDistanceKm, max);
+        }
+
+        public static List<Business> GetCloseBusinesses(Business business, double maxDistanceKm, int max)
+        {
+            return GetCloseBusinesses(business.Lat, business.Lng, maxDistanceKm, max, business.ID);
+        }
+
+        public static List<Business> GetCloseBusinesses(double lat, double lng, double maxDistanceKm, int max, int excludeBusinessId = 0)
+        {
+            double maxDistanceDegrees = maxDistanceKm * ViaDFGraph.KM_IN_DEGREES;
+
+            using (DataContext context = new DataContext())
+            {
+                List<Business> businesses = context.Businesses.Where(x => x.ID != excludeBusinessId && Math.Abs(x.Lat - lat) + Math.Abs(x.Lng - lng) < maxDistanceDegrees).OrderBy(x => Math.Abs(x.Lat - lat) + Math.Abs(x.Lng - lng)).Take(max).ToList();
+                return businesses;
+            }
+        }
+
         public static List<Route> GetRoutesInArea(double minLat, double minLng, double maxLat, double maxLng)
         {          
             using (DataContext context = new DataContext())
             {
                 List<Route> routes = context.RoutePieces.Where(x => x.Lat >= minLat && x.Lat <= maxLat && x.Lng >= minLng && x.Lng <= maxLng ).Select(x => x.Route).Distinct().ToList();
                 return routes;
+            }
+        }
+
+        public static List<RoutePiece> GetRoutePiecesTouchingArea(double minLat, double minLng, double maxLat, double maxLng)
+        {
+            using (DataContext context = new DataContext())
+            {
+                var dlo = new System.Data.Linq.DataLoadOptions();
+                dlo.LoadWith<RoutePiece>(x => x.Route);
+                context.LoadOptions = dlo;
+                                
+                minLat -= ViaDFGraph.M100_IN_DEGREES * 2.5;
+                minLng -= ViaDFGraph.M100_IN_DEGREES * 2.5;
+                maxLat += ViaDFGraph.M100_IN_DEGREES * 2.5;
+                maxLng += ViaDFGraph.M100_IN_DEGREES * 2.5;
+
+                var pieces = context.RoutePieces.Where(x => x.Lat >= minLat && x.Lat <= maxLat && x.Lng >= minLng && x.Lng <= maxLng).ToList();
+                var piecesByRoute = pieces.GroupBy(x => x.RouteID).ToList();
+                var routeIds = piecesByRoute.Select(x => x.Key).ToList();
+
+                // add adjacent pieces
+                var idsToLoad = new List<int>();
+                piecesByRoute.ForEach(p =>
+                {
+                    idsToLoad.Add(p.Min(x => x.ID) - 1);
+                    idsToLoad.Add(p.Max(x => x.ID) + 1);
+                });
+                pieces.AddRange(context.RoutePieces.Where(x => idsToLoad.Contains(x.ID) && routeIds.Contains(x.RouteID)));
+                               
+                return pieces;
             }
         }
 
@@ -337,6 +388,22 @@ namespace viadflib
                 }
             }
             return result;
+        }
+
+        public static Colonia GetColoniaAtPosition(double lat, double lng)
+        {
+            var streetCrossing = GetCrossing(lat, lng);
+            if (streetCrossing != null)
+            {
+                using (var context = new DataContext())
+                {
+                    var dlo = new System.Data.Linq.DataLoadOptions();
+                    dlo.LoadWith<Colonia>(x => x.Delegacion);
+                    context.LoadOptions = dlo;
+                    return context.ExecuteQuery<Colonia>("SELECT TOP 1 Colonia.* FROM ((Colonia INNER JOIN Street ON Street.ColoniaID = Colonia.ID) INNER JOIN StreetCrossing ON StreetCrossing.StreetID = Street.ID) WHERE StreetCrossing.ID = {0}", streetCrossing.ID).FirstOrDefault();
+                }
+            }
+            return null;           
         }
 
         public static List<Colonia> GetRouteColonias(int id)

@@ -13,6 +13,8 @@ namespace viadflib
     {
         [DataMember]
         public List<SearchResult> Results { get; set; }
+
+        public List<Business> CloseBusinesses { get; set; }
     }
 
     /// <summary>

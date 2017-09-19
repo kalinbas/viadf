@@ -68,6 +68,19 @@ namespace viadf.Controllers
             return View();
         }
 
+        public ActionResult Map()
+        {
+            MapModel model = new MapModel();
+            using (var context = new viadflib.DataContext())
+            {
+                model.AllTypes = context.Types.Where(x => x.ShowInWeb).ToList();
+            }
+
+            SetSEO("Mapa interactivo del transporte público en la Ciudad de México.", "Mapa interactivo con todas las rutas del transporte público en la Ciudad de México y en el Estado de México.", "mapa interactivo, lista rutas, transporte público, méxico, ciudad de méxico, cdmx, estado de méxico");
+
+            return View(model);
+        }
+
         [OutputCache(Duration = 3600, VaryByParam = "type")]
         public ActionResult RouteList(string type)
         {
@@ -191,7 +204,7 @@ namespace viadf.Controllers
                         RoutePieceModel model = new RoutePieceModel();
                         model.RoutePiece = DataHandler.GetRoutePiece(routePieceObj.ID);
                         model.ConnectingRoutes = DataHandler.GetConnectionRoutes(model.RoutePiece, 0.5);
-
+                        model.CloseBusinesses = DataHandler.GetCloseBusinesses(model.RoutePiece, 0.25, 50);
                         string routeName = model.RoutePiece.Route.Type.Name + " " + model.RoutePiece.Name;
 
                         model.SmallSearchBoxModel = new SmallSearchBoxModel { Name = routeName, Coordinates = Utils.FormatCoordinates(model.RoutePiece.Lat, model.RoutePiece.Lng) };
@@ -202,6 +215,32 @@ namespace viadf.Controllers
                         return View(model);
                     }
                 }
+            }
+
+            return HttpNotFound();
+        }
+
+        [OutputCache(Duration = 3600, VaryByParam = "id;name")]
+        public ActionResult Business(int id, string name)
+        {
+            // load business
+            var business = new viadflib.DataContext().Businesses.FirstOrDefault(x => x.ID == id);
+
+            if (business != null && business.SeoName == name)
+            {
+                var model = new BusinessModel();
+
+                model.Business = business;
+                model.Business.Name = Utils.Capitalize(business.Name);
+                model.ConnectingRoutes = DataHandler.GetConnectionRoutes(business.Lat, business.Lng, 0.25);
+                model.CloseBusinesses = DataHandler.GetCloseBusinesses(business, 0.25, 50);
+                model.SmallSearchBoxModel = new SmallSearchBoxModel { Name = Utils.Capitalize(model.Business.Name), Coordinates = Utils.FormatCoordinates(business.Lat, business.Lng) };
+
+                model.Colonia = DataHandler.GetColoniaAtPosition(business.Lat, business.Lng);
+
+                SetSEO(model.Business.Name + " - ¿Cómo llegar en transporte público?", "Usa ViaDF para saber cómo llegar en transporte público a " + model.Business.Name + " (" + model.Business.Category + ")" + (model.Colonia == null ? "" : " en " + Utils.Capitalize(model.Colonia.Name) + ", " + Utils.Capitalize(model.Colonia.Delegacion.Name)), model.Business.Name);
+
+                return View(model);
             }
 
             return HttpNotFound();

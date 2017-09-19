@@ -80,63 +80,63 @@
         <elementListCompartment Id="d7939686-9e6c-49e5-bc7f-ac8b0c37ae00" absoluteBounds="3.765, 10.21, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(5.5 : 3.38544840494792); (6.25 : 3.38544840494792)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(5.5 : 3.38544840494792); (6.25 : 3.38544840494792)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/DataContext/Delegacion/Delegacion_Colonia" />
       <nodes>
         <classShapeMoniker Id="8c163ae2-048c-4ce8-8c06-f34354d80491" />
         <classShapeMoniker Id="91fc1ec8-82f1-4ec8-967c-cff8daac5517" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.75 : 3.41429768880208); (3.5 : 3.41429768880208)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.75 : 3.65309895833333); (3.5 : 3.65309895833333)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/DataContext/Estado/Estado_Delegacion" />
       <nodes>
         <classShapeMoniker Id="fa45310c-9240-4e3f-846d-95925c4f5674" />
         <classShapeMoniker Id="8c163ae2-048c-4ce8-8c06-f34354d80491" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(11 : 8.36620198567708); (11.75 : 8.36620198567708)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(11 : 8.36620198567708); (11.75 : 8.36620198567708)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/DataContext/Type/Type_Route" />
       <nodes>
         <classShapeMoniker Id="25887d94-d303-428b-b5ce-0d15f45a78ef" />
         <classShapeMoniker Id="2af20f79-70de-425b-ac34-ddb2e2a423b4" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(13.75 : 6.5); (14.125 : 6.125); (14.125 : 3.45274983723958); (14.5 : 3.45274983723958)]" fixedFrom="NotFixed" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(13.75 : 6.5); (14.125 : 6.125); (14.125 : 3.45274983723958); (14.5 : 3.45274983723958)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/DataContext/Route/Route_RoutePiece" />
       <nodes>
         <classShapeMoniker Id="2af20f79-70de-425b-ac34-ddb2e2a423b4" />
         <classShapeMoniker Id="9d18c12a-8131-4b8b-ba2d-6bf2d2fbef49" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(8.25 : 3.38544840494792); (9 : 3.38544840494792)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(8.25 : 3.38544840494792); (9 : 3.38544840494792)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/DataContext/Colonia/Colonia_Street" />
       <nodes>
         <classShapeMoniker Id="91fc1ec8-82f1-4ec8-967c-cff8daac5517" />
         <classShapeMoniker Id="523d430f-a13f-48fb-a0bf-5acb757f3e27" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(13.75 : 4.46896021294071); (14.0660744349011 : 4.78503464784183 : JumpStart); (14.1839255650989 : 4.90288577803958 : JumpEnd); (14.3125 : 5.0314602129407); (14.3125 : 6.26044840494792); (14.5 : 6.26044840494792)]" fixedFrom="NotFixed" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(13.75 : 4.46896021294071); (14.0660744349011 : 4.78503464784182 : JumpStart); (14.1839255650989 : 4.90288577803958 : JumpEnd); (14.3125 : 5.0314602129407); (14.3125 : 6.26044840494792); (14.5 : 6.26044840494792)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/DataContext/StreetCrossing/StreetCrossing_POI" />
       <nodes>
         <classShapeMoniker Id="db9e1ee8-3d1b-4d9b-a2f1-77fca4412001" />
         <classShapeMoniker Id="5532a23a-e958-4734-9762-f7cf60f9ce4c" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(13.75 : 2.85137491861979); (14.5 : 2.85137491861979)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(13.75 : 2.85137491861979); (14.5 : 2.85137491861979)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/DataContext/StreetCrossing/StreetCrossing_RoutePiece" />
       <nodes>
         <classShapeMoniker Id="db9e1ee8-3d1b-4d9b-a2f1-77fca4412001" />
         <classShapeMoniker Id="9d18c12a-8131-4b8b-ba2d-6bf2d2fbef49" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(11 : 3.38544840494792); (11.75 : 3.38544840494792)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(11 : 3.38544840494792); (11.75 : 3.38544840494792)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/DataContext/Street/Street_StreetCrossing" />
       <nodes>
         <classShapeMoniker Id="523d430f-a13f-48fb-a0bf-5acb757f3e27" />
         <classShapeMoniker Id="db9e1ee8-3d1b-4d9b-a2f1-77fca4412001" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(11 : 2.88022420247396); (11.75 : 2.88022420247396)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(11 : 2.88022420247396); (11.75 : 2.88022420247396)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/DataContext/Street/Street_StreetCrossing1" />
       <nodes>
         <classShapeMoniker Id="523d430f-a13f-48fb-a0bf-5acb757f3e27" />
@@ -159,6 +159,12 @@
       <DataClassMoniker Name="/DataContext/ServiceCall" />
       <nestedChildShapes>
         <elementListCompartment Id="3bcd2085-68ab-451c-940c-7603a1ddda1a" absoluteBounds="0.76499999999999968, 13.21, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="860ae55a-10e9-433e-8a1c-4d05c12ba40b" absoluteBounds="1.25, 0.5, 2, 2.5401025390625">
+      <DataClassMoniker Name="/DataContext/Business" />
+      <nestedChildShapes>
+        <elementListCompartment Id="40819e22-d246-442e-ad67-baba727b1841" absoluteBounds="1.2650000000000001, 0.96, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
   </nestedChildShapes>

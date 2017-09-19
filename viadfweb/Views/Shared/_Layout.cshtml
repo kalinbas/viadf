@@ -18,7 +18,23 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="@Url.Content("~/Content/css/materialize.min.css")" type="text/css" rel="stylesheet" media="screen,projection" />
-    <link href="@Url.Content("~/Content/css/style.css?v=2")" type="text/css" rel="stylesheet" media="screen,projection" />
+    <link href="@Url.Content("~/Content/css/style.css?v=3")" type="text/css" rel="stylesheet" media="screen,projection" />
+
+    <meta name="smartbanner:title" content="ViaDF">
+    <meta name="smartbanner:author" content="ViaDF">
+    <meta name="smartbanner:price" content="GRATUITO">
+    <meta name="smartbanner:price-suffix-apple" content=" - En App Store">
+    <meta name="smartbanner:price-suffix-google" content=" - En Google Play">
+    <meta name="smartbanner:icon-apple" content="http://viadf.mx/content/img/apple-touch-icon-114x114.png">
+    <meta name="smartbanner:icon-google" content="http://viadf.mx/content/img/apple-touch-icon-114x114.png">
+    <meta name="smartbanner:button" content="ABRIR">
+    <meta name="smartbanner:button-url-apple" content="https://itunes.apple.com/mx/app/viadf/id1185840806?mt=8">
+    <meta name="smartbanner:button-url-google" content="https://play.google.com/store/apps/details?id=mx.com.viadf.app&hl=es">
+    <meta name="smartbanner:enabled-platforms" content="android,ios">
+    <meta name="smartbanner:disable-positioning" content="true">
+
+    <link rel="stylesheet" href="/content/css/smartbanner.css">
+    <script src="/content/js/smartbanner.min.js"></script>
 
     @if (ViewBag.HeaderAdCode != null || ViewBag.FooterAdCode != null)
     {
@@ -46,13 +62,21 @@
         </script>
     }
 
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-2461827238480440",
+        enable_page_level_ads: true
+      });
+    </script>
+
     @RenderSection("Head", false)
     @Html.Partial("_GoogleAnalytics")
 </head>
 <body>
     <a href="https://github.com/kalinbas/viadf" style="z-index:1000" class="hide-on-med-and-down" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
     <div class="navbar-fixed">
-        <nav class="light-blue lighten-1" style="background-image:url('http://viadf.com.mx/Content/img/b5.jpg');" role="navigation">
+        <nav class="light-blue lighten-1" style="background-image:url('http://viadf.mx/Content/img/b5.jpg');" role="navigation">
             <div class="nav-wrapper container">
                 <a id="logo-container" href="/" class="brand-logo">ViaDF<i class="material-icons" style="display: inline;top: 4px;position: relative;left: 6px;">&#xE530;</i></a>
                 <ul class="right hide-on-med-and-down">
@@ -89,14 +113,14 @@
             <div class="row">
                 <div class="col s12">
 
-                    <div class="row hide-on-large-only inapp-hide center-align">
+                    @*<div class="row hide-on-large-only inapp-hide center-align">
                         <a target="_blank" href="https://itunes.apple.com/mx/app/viadf/id1185840806?mt=8">
                             <img style="height:60px" alt="Disponible en el App Store" src="/Content/img/app-store-badge.png" />
                         </a>
                         <a target="_blank" href="https://play.google.com/store/apps/details?id=mx.com.viadf.app">
                             <img style="height:60px" alt="Descargar gratuito en Google Play" src="/Content/img/google-play-badge.png" />
                         </a>
-                    </div>
+                    </div>*@
 
                     <style>
                         .headerAd , .footerAd {
@@ -126,8 +150,8 @@
                             </script>
                         </div>
                     }
-
-                    <div class="row hide-on-med-and-down inapp-hide right-align" style="margin-top:20px;">
+                    @*hide-on-med-and-down*@
+                    <div class="row inapp-hide right-align" style="margin-top:20px;">
                         <a target="_blank" href="https://itunes.apple.com/mx/app/viadf/id1185840806?mt=8">
                             <img style="height:60px" alt="Disponible en el App Store" src="/Content/img/app-store-badge.png" />
                         </a>
@@ -150,7 +174,7 @@
                 </div>
                 <div class="col m3 s12 right-align">
                     <h2 class="white-text" style="margin-top: 0;">Contacto</h2>
-                    <a class="white-text" href="mailto:viadf.com.mx@gmail.com"><i class="fa fa-envelope-square fa-2x"></i></a>
+                    <a class="white-text" href="mailto:info@viadf.mx"><i class="fa fa-envelope-square fa-2x"></i></a>
                     <a class="white-text" href="https://www.facebook.com/viadf" target="_blank"><i class="fa fa-facebook-square fa-2x"></i></a>
                     <a class="white-text" href="https://www.twitter.com/viadf" target="_blank"><i class="fa fa-twitter-square fa-2x"></i></a>
                     <a class="white-text" href="https://github.com/kalinbas/viadf"><i class="fa fa-github fa-2x"></i></a>

@@ -447,6 +447,37 @@ namespace viadf.Controllers
             }
         }
 
+        [OutputCache(Duration = 3600, VaryByParam = "minLatLng;maxLatLng")]
+        public ActionResult GetRoutesWithPiecesInArea(string minLatLng, string maxLatLng)
+        {
+            Response.AppendHeader("Access-Control-Allow-Origin", "*");
+            try
+            {
+                SearchPosition min = SearchPosition.CreateSearchPosition(minLatLng, null);
+                SearchPosition max = SearchPosition.CreateSearchPosition(maxLatLng, null);
+
+                if (min != null && max != null)
+                {
+                    var routePieces = DataHandler.GetRoutePiecesTouchingArea(min.Lat, min.Lng, max.Lat, max.Lng);
+
+                    var byRoute = routePieces.Where(x => x.Route.Email != "info@mapatoncd.mx").GroupBy(x => x.RouteID);
+
+                    var jsonRoutes = byRoute.Select(r => new { ID = r.First().Route.ID, TypeID = r.First().Route.TypeID, Name = r.First().Route.Name, FromName = r.First().Route.FromName, ToName = r.First().Route.ToName, Path = r.OrderBy(x => x.ID).Select(x => new { Lat = x.Lat, Lng = x.Lng, Name = x.Name }) });
+
+                    return Json(jsonRoutes, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { error = "Wrong parameters" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                DataHandler.WriteException(ex, Request.UserHostAddress);
+                return Json(new { error = "Internal server error" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
 
         private long[] CrawlNextMoovitTimes(double fromLat, double fromLng, double toLat, double toLng)
         {

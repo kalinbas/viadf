@@ -1,4 +1,4 @@
-﻿@model viadf.Models.RoutePieceModel
+﻿@model viadf.Models.BusinessModel
 @using viadflib
 
 @{
@@ -13,7 +13,7 @@
 
     <script type="text/javascript">
         $(function () {
-            var position = new google.maps.LatLng(@Model.RoutePiece.Lat,@Model.RoutePiece.Lng);
+            var position = new google.maps.LatLng(@Model.Business.Lat,@Model.Business.Lng);
             var myOptions = {
                 center: position,
                 zoom: 16,
@@ -26,18 +26,24 @@
             var routemarker = new google.maps.Marker({
                 position: position,
                 map: routemap,
-                title: '@Model.RoutePiece.Route.Type.Name @Model.RoutePiece.Name (@Model.RoutePiece.Route.Name)',
+                title: '@Model.Business.Name',
             });
         });
     </script>
 }
 
-@Html.ActionLink("Lista de Rutas", "RouteList", new { type = "" }) >
-@Html.ActionLink(Model.RoutePiece.Route.Type.Name, "RouteList", new { type = Utils.Capitalize(Model.RoutePiece.Route.Type.SeoName) }) >
-@Html.ActionLink(Model.RoutePiece.Route.Name, "Route", new { type = Utils.Capitalize(Model.RoutePiece.Route.Type.SeoName), name = Utils.Capitalize(Model.RoutePiece.Route.SeoName) }) >
-@Model.RoutePiece.Name
-
-<h1>@Model.RoutePiece.Route.Type.Name @Model.RoutePiece.Name (@Model.RoutePiece.Route.Name)</h1>
+<h1>@Model.Business.Name</h1>
+<h2>@Model.Business.Category</h2>
+@if (Model.Colonia != null)
+{
+    <h3>@Model.Colonia.Name (@Model.Colonia.Delegacion.Name)</h3>
+}
+@if (Model.Business.Web != null)
+{
+    <p>
+        <a href="@(Model.Business.Web.Trim().ToLowerInvariant().StartsWith("http") ? "" : "http://")@Model.Business.Web.Trim().ToLowerInvariant()" rel="nofollow" target="_blank">@Model.Business.Web.Trim().ToLowerInvariant()</a>
+    </p>
+}
 
 <div class="row">
     <div class="col s12 m12 l6">
@@ -45,14 +51,14 @@
         <br />
         @if (Model.CloseBusinesses.Count > 0) {
             <b>Negocios cercanos</b>
-            <p class="subtitle">Cerca de  @Model.RoutePiece.Route.Type.Name @Model.RoutePiece.Name (@Model.RoutePiece.Route.Name) hay los siguientes negocios.</p>
+            <p class="subtitle">Cerca de <b>@Model.Business.Name</b> hay los siguientes negocios.</p>
             @Html.Partial("_BusinessList", Model.CloseBusinesses)
             <br />
         }
     </div>
     <div class="col s12 m12 l6">
-        <b>Conexiones</b>
-        <p class="subtitle">De @Model.RoutePiece.Route.Type.Name @Model.RoutePiece.Name (@Model.RoutePiece.Route.Name) se puede cambiar a las siguientes lineas de transporte.</p>
+        <b>Rutas cercanas</b>
+        <p class="subtitle">Cerca de <b>@Model.Business.Name</b> hay las siguientes lineas de transporte.</p>
         @Html.Partial("_RouteList", Model.ConnectingRoutes)
     </div>
 </div>

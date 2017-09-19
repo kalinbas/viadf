@@ -26,19 +26,8 @@ namespace viadflib.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=localhost\\sqlexpress;Initial Catalog=viadf;Integrated Security=True;P" +
-            "ooling=False")]
-        public string viadfConnectionString {
-            get {
-                return ((string)(this["viadfConnectionString"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=tcp:s07.winhost.com;Initial Catalog=DB_35815_viadf;Integrated Securit" +
-            "y=False;User ID=DB_35815_viadf_user;Password=2brantin")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=tcp:s14.winhost.com;Initial Catalog=DB_116984_viadf;User ID=DB_116984" +
+            "_viadf_user;Password=2brantin;Integrated Security=False;")]
         public string DB_35815_viadfConnectionString {
             get {
                 return ((string)(this["DB_35815_viadfConnectionString"]));

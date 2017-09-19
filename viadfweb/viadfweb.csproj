@@ -118,6 +118,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\materialize.min.css" />
+    <Content Include="Content\css\smartbanner.css" />
     <Content Include="Content\css\style.css" />
     <Content Include="Content\font\material-design-icons\LICENSE.txt" />
     <Content Include="Content\font\material-design-icons\Material-Design-Icons.svg" />
@@ -159,6 +160,7 @@
     <Content Include="Content\img\zip-icon.png" />
     <Content Include="Content\js\main.js" />
     <Content Include="Content\js\materialize.min.js" />
+    <Content Include="Content\js\smartbanner.min.js" />
     <Content Include="Content\search.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -191,6 +193,7 @@
     <Compile Include="Models\MapResultModel.cs" />
     <Compile Include="Models\RouteListModel.cs" />
     <Compile Include="Models\RouteModel.cs" />
+    <Compile Include="Models\BusinessModel.cs" />
     <Compile Include="Models\RoutePieceModel.cs" />
     <Compile Include="Models\SmallSearchBoxModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -248,6 +251,9 @@
     <Content Include="Views\Admin\AcceptarRuta.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Home\PoligonosTiempoRecorrido.cshtml" />
+    <Content Include="Views\Home\Map.cshtml" />
+    <Content Include="Views\Home\Business.cshtml" />
+    <Content Include="Views\Shared\_BusinessList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

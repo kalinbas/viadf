@@ -23,7 +23,7 @@
     <div class="card-content">
 
         <div class="row center-align">
-            <span class="flow-text">¿Cómo llego de <strong>@Model.Results[0].Start.Name</strong> a <strong>@Model.Results[0].End.Name</strong>?</span>
+            <h1 class="flow-text">¿Cómo llego de <strong>@Model.Results[0].Start.Name</strong> a <strong>@Model.Results[0].End.Name</strong>?</h1>
         </div>
         <div class="row">
             <div class="col s12">
@@ -126,22 +126,22 @@
                                             @Math.Round(@item.Time, 0) min
                                         </td>
                                     </tr>
-                                            <tr class="resultRowDown">
-                                                <td class="resultCellDown">
-                                                    <b><i>Bajar en </i></b>
-                                                    @if (string.IsNullOrWhiteSpace(item.End.Name))
+                                    <tr class="resultRowDown">
+                                        <td class="resultCellDown">
+                                            <b><i>Bajar en </i></b>
+                                            @if (string.IsNullOrWhiteSpace(item.End.Name))
                         {
-                                                        @(item.EndName ?? "revisar en el mapa*")
-                                                    }
-                                                    else
-                                                    {
-                                                        @item.End.Name @(item.End.Route != null ? " (" + item.End.Route.Name + ")" : "")
-                                                    }
-                                                </td>
-                                                <td class="resultCellDown">
-                                                    &nbsp;
-                                                </td>
-                                            </tr>
+                                                @(item.EndName ?? "revisar en el mapa*")
+                                            }
+                                            else
+                                            {
+                                                @item.End.Name @(item.End.Route != null ? " (" + item.End.Route.Name + ")" : "")
+                                            }
+                                        </td>
+                                        <td class="resultCellDown">
+                                            &nbsp;
+                                        </td>
+                                    </tr>
                                 }
                             }
                             <tr class="resultRowTotal">
@@ -164,6 +164,31 @@
             </div>
         </div>
         <p style="font-size:smaller;">*Por falta de una base de datos completa del transporte público en la CDMX, ViaDF depende de sus usuarios para tener información actualizada de las rutas. Por eso puede ser, que en unos casos los resultados no son correctos. Por favor no dudes en contactarnos en ese caso.</p>
+
+        @if (Model.CloseBusinesses.Count > 0)
+        {
+            <div class="row center-align" style="text-align:center !important;">
+                <br />
+                <div class="row center-align">
+                    <h2 class="flow-text">Negocios cercanos de <strong>@Model.Results[0].End.Name</strong></h2>
+                </div>                              
+                <div class="col s12 l4">
+                    @Html.Partial("_BusinessList", Model.CloseBusinesses.Take(10))
+                </div>
+                @if (Model.CloseBusinesses.Count > 10)
+                {
+                    <div class="col s12 l4">
+                        @Html.Partial("_BusinessList", Model.CloseBusinesses.Skip(10).Take(10))
+                    </div>
+                }
+                @if (Model.CloseBusinesses.Count > 20)
+                {
+                    <div class="col s12 l4">
+                        @Html.Partial("_BusinessList", Model.CloseBusinesses.Skip(20).Take(10))
+                    </div>
+                }
+            </div>
+        }
     </div>
 </div>
 
