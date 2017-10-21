@@ -13,6 +13,7 @@ using System.Web.Http.Cors;
 using System.Net;
 using Newtonsoft.Json;
 using viadfweb.Models;
+using viadf.Models;
 
 namespace viadf.Controllers
 {
@@ -114,6 +115,330 @@ namespace viadf.Controllers
                 results.ForEach(x => { x.label = viadflib.Utils.Capitalize(x.label); });
                 return Json(results, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        [OutputCache(Duration = 3600, VaryByParam = "name")]
+        public ActionResult GetEstado(string name)
+        {
+            Response.AppendHeader("Access-Control-Allow-Origin", "*");
+
+            using (var context = new DataContext())
+            {
+                if (name != null)
+                {
+                    var estado = context.Estados.FirstOrDefault(x => x.SeoName == (name ?? "").ToLower());
+                    if (estado != null)
+                    {
+                        var delegaciones = context.Delegacions.Where(x => x.EstadoID == estado.ID).OrderBy(x => x.Name).ToList();
+                        return Json(MapEstado(estado, delegaciones), JsonRequestBehavior.AllowGet);
+                    }
+                }
+            }
+
+            return HttpNotFound();
+        }
+
+        [OutputCache(Duration = 3600, VaryByParam = "name")]
+        public ActionResult GetType(string name)
+        {
+            Response.AppendHeader("Access-Control-Allow-Origin", "*");
+
+            using (var context = new DataContext())
+            {
+                if (name != null)
+                {
+                    var selectedType = context.Types.FirstOrDefault(x => x.SeoName == (name ?? "").ToLower());
+                    if (selectedType != null)
+                    {
+                        var routes = context.Routes.Where(x => x.TypeID == selectedType.ID && x.Status > (int)StatusEnum.New).OrderBy(x => x.Name).ToList();
+                        var routesResult = routes.Select(r => new
+                        {
+                            name = r.Name,
+                            from = r.FromName,
+                            to = r.ToName,
+                            seoName = r.SeoName,
+                            link = "/directorio/" + r.Type.SeoName + "/" + r.SeoName
+                        }).ToList();
+
+                        return Json(new { name = selectedType.Name, routes = routesResult }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+            }
+            return HttpNotFound();
+        }
+
+        [OutputCache(Duration = 3600, VaryByParam = "estado;name")]
+        public ActionResult GetDelegacion(string estado, string name)
+        {
+            Response.AppendHeader("Access-Control-Allow-Origin", "*");
+
+            using (var context = new DataContext())
+            {
+                // load estado
+                var estadoObj = context.Estados.Where(x => x.SeoName == estado.ToLower()).FirstOrDefault();
+
+                if (estadoObj != null)
+                {
+                    // load delegacion
+                    var delegacionObj = context.Delegacions.Where(x => x.SeoName == name.ToLower() && x.EstadoID == estadoObj.ID).FirstOrDefault();
+
+                    if (delegacionObj != null)
+                    {
+                        var colonias = context.Colonias.Where(x => x.DelegacionID == delegacionObj.ID).OrderBy(x => x.Name).ToList();
+
+                        return Json(MapDelegacion(delegacionObj, colonias), JsonRequestBehavior.AllowGet);
+                    }
+                }
+            }
+
+            return HttpNotFound();
+        }
+
+        [OutputCache(Duration = 3600, VaryByParam = "estado;delegacion;name")]
+        public ActionResult GetColonia(string estado, string delegacion, string name)
+        {
+            Response.AppendHeader("Access-Control-Allow-Origin", "*");
+
+            using (var context = new DataContext())
+            {
+                // load estado
+                var estadoObj = context.Estados.Where(x => x.SeoName == estado.ToLower()).FirstOrDefault();
+
+                if (estadoObj != null)
+                {
+                    // load delegacion
+                    var delegacionObj = context.Delegacions.Where(x => x.SeoName == delegacion.ToLower() && x.EstadoID == estadoObj.ID).FirstOrDefault();
+
+                    if (delegacionObj != null)
+                    {
+                        var coloniaObj = context.Colonias.Where(x => x.SeoName == name.ToLower() && x.DelegacionID == delegacionObj.ID).FirstOrDefault();
+
+                        var routes = context.Routes.Where(x => x.RoutePieces.Count(y => y.StreetCrossing.Street.ColoniaID == coloniaObj.ID) > 0 && x.Status != (int)StatusEnum.New).ToList();
+
+                        if (coloniaObj != null)
+                        {
+                            return Json(MapColonia(coloniaObj, routes), JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                }
+            }
+
+            return HttpNotFound();
+        }
+
+        [OutputCache(Duration = 3600, VaryByParam = "type;name")]
+        public ActionResult GetRoute(string type, string name)
+        {
+            Response.AppendHeader("Access-Control-Allow-Origin", "*");
+
+            using (var context = new DataContext())
+            {
+                // load type
+                var typeObj = context.Types.Where(x => x.SeoName == type.ToLower()).FirstOrDefault();
+
+                if (typeObj != null)
+                {
+                    // load route
+                    var routeObj = context.Routes.Where(x => x.Status > (int)StatusEnum.New && (x.SeoName == name.ToLower() || x.OldSeoName == name.ToLower()) && x.TypeID == typeObj.ID).FirstOrDefault();
+
+                    if (routeObj != null)
+                    {
+                        var route = DataHandler.GetRoute(routeObj.ID);
+                        var routePieces = DataHandler.GetRoutePieces(routeObj.ID);
+                        return Json(MapRoute(route, routePieces), JsonRequestBehavior.AllowGet);
+                    }
+                }
+            }
+
+            return HttpNotFound();
+        }
+
+        [OutputCache(Duration = 3600, VaryByParam = "type;route;name")]
+        public ActionResult GetRoutePiece(string type, string route, string name)
+        {
+            Response.AppendHeader("Access-Control-Allow-Origin", "*");
+
+            using (var context = new DataContext())
+            {
+                // load type
+                var typeObj = context.Types.Where(x => x.SeoName == type.ToLower()).FirstOrDefault();
+
+                if (typeObj != null)
+                {
+                    // load route
+                    var routeObj = context.Routes.Where(x => x.Status > (int)StatusEnum.New && (x.SeoName == route.ToLower() || x.OldSeoName == route.ToLower()) && x.TypeID == typeObj.ID).FirstOrDefault();
+
+                    if (routeObj != null)
+                    {
+                        var routePieceObj = context.RoutePieces.Where(x => x.SeoName == name.ToLower() && x.RouteID == routeObj.ID).FirstOrDefault();
+
+                        if (routePieceObj != null)
+                        {
+                            return Json(MapRoutePiece(routePieceObj), JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                }
+            }
+
+            return HttpNotFound();
+        }
+
+        [OutputCache(Duration = 3600, VaryByParam = "name;id")]
+        public ActionResult GetBusiness(string name, int id)
+        {
+            Response.AppendHeader("Access-Control-Allow-Origin", "*");
+
+            using (var context = new DataContext())
+            {
+                var business = context.Businesses.FirstOrDefault(x => x.ID == id);
+
+                if (business != null && business.SeoName == name)
+                {
+                    return Json(MapBusiness(business), JsonRequestBehavior.AllowGet);
+                }
+            }
+
+            return HttpNotFound();
+        }
+
+        private dynamic MapRoute(Route route, List<RoutePiece> routePieces)
+        {
+            var routeName = route.TypeID == (int)TypeEnum.Microbus ? route.FromName + " a " + route.ToName : "(" + route.Name + ")";
+            var title = route.Type.Name + " " + routeName;
+
+            return new
+            {
+                name = Utils.Capitalize(route.Name),
+                typeName = Utils.Capitalize(route.Type.Name),
+                typeLink = "/directorio/" + route.Type.SeoName,
+                from = Utils.Capitalize(route.FromName),
+                to = Utils.Capitalize(route.ToName),
+                title = title,
+                streets = DataHandler.GetRouteStreets(route.ID).Select(s => Utils.Capitalize(s)).ToList(),
+                colonias = DataHandler.GetRouteColonias(route.ID).Select(c => MapColoniaForList(c)),
+                stations = route.Type.HasNamedStationList ? routePieces.Select(p => MapStationForList(p)).ToList() : null,
+                pieces1 = route.SplitRoutePieceID.HasValue ? routePieces.Where(x => x.ID <= route.SplitRoutePieceID).OrderBy(x => x.ID).Select(p => MapRoutePieceForList(p)).ToList() : routePieces.OrderBy(x => x.ID).Select(p => MapRoutePieceForList(p)).ToList(),
+                pieces2 = route.SplitRoutePieceID.HasValue ? routePieces.Where(x => x.ID > route.SplitRoutePieceID).OrderBy(x => x.ID).Select(p => MapRoutePieceForList(p)).ToList() : null
+            };
+        }
+
+        private dynamic MapRouteForList(Route route)
+        {
+            return new
+            {
+                name = Utils.Capitalize(route.Name),
+                typeName = Utils.Capitalize(route.Type.Name),
+                from = Utils.Capitalize(route.FromName),
+                to = Utils.Capitalize(route.ToName),
+                link = "/directorio/" + route.Type.SeoName + "/" + route.SeoName
+            };
+        }
+
+        private dynamic MapBusiness(Business business)
+        {
+            return new
+            {
+                name = Utils.Capitalize(business.Name),
+                web = business.Web,
+                lat = business.Lat,
+                lng = business.Lng,
+                category = business.Category,
+                connectingRoutes = DataHandler.GetConnectionRoutes(business.Lat, business.Lng, 0.25).Select(r => MapRouteForList(r)).ToList(),
+                closeBusinesses = DataHandler.GetCloseBusinesses(business.Lat, business.Lng, 0.25, 50).Select(b => MapBusinessForList(b)).ToList()
+            };
+        }
+
+        private dynamic MapBusinessForList(Business b)
+        {
+            return new
+            {
+                name = Utils.Capitalize(b.Name),
+                link = "/negocio/" + b.SeoName + "/" + b.ID
+            };
+        }
+
+        private dynamic MapRoutePieceForList(RoutePiece piece)
+        {
+            return new { lat = piece.Lat, lng = piece.Lng };
+        }
+
+        private dynamic MapRoutePiece(RoutePiece piece)
+        {
+            return new
+            {
+                lat = piece.Lat,
+                lng = piece.Lng,
+                name = piece.Name,
+                typeLink = "/directorio/" + piece.Route.Type.SeoName,
+                typeName = piece.Route.Type.Name,
+                routeLink = "/directorio/" + piece.Route.Type.SeoName + "/" + piece.Route.SeoName,
+                routeName = piece.Route.Name,
+                title = piece.Route.Type.Name + " " + piece.Name + " (" + piece.Route.Name + ")",
+                connectingRoutes = DataHandler.GetConnectionRoutes(piece, 0.5).Select(r => MapRouteForList(r)).ToList(),
+                closeBusinesses = DataHandler.GetCloseBusinesses(piece, 0.25, 50).Select(b => MapBusinessForList(b)).ToList()
+            };
+        }
+
+        private dynamic MapStationForList(RoutePiece piece)
+        {
+            return new
+            {
+                name = Utils.Capitalize(piece.Name),
+                link = "/directorio/" + piece.Route.Type.SeoName + "/" + piece.Route.SeoName + "/" + piece.SeoName
+            };
+        }
+
+        private dynamic MapEstado(Estado e, List<Delegacion> delegaciones)
+        {
+            return new
+            {
+                name = Utils.Capitalize(e.Name),
+                seoName = e.SeoName,
+                delegaciones = delegaciones.Select(d => MapDelegacionForList(d)).ToList()
+            };
+        }
+
+        private dynamic MapDelegacion(Delegacion d, List<Colonia> colonias)
+        {
+            return new
+            {
+                name = Utils.Capitalize(d.Name),
+                seoName = d.SeoName,
+                colonias = colonias.Select(c => MapColoniaForList(c)).ToList()
+            };
+        }
+
+        private dynamic MapDelegacionForList(Delegacion d)
+        {
+            return new
+            {
+                name = Utils.Capitalize(d.Name),
+                seoName = d.SeoName,
+                link = "/directorio/" + d.Estado.SeoName + "/" + d.SeoName
+            };
+        }
+
+        private dynamic MapColonia(Colonia c, List<Route> routes)
+        {
+            return new
+            {
+                name = Utils.Capitalize(c.Name),
+                estadoName = Utils.Capitalize(c.Delegacion.Estado.Name),
+                estadoLink = "/directorio/" + c.Delegacion.Estado.SeoName,
+                delegacionName = Utils.Capitalize(c.Delegacion.Name),               
+                delegacionLink = "/directorio/" + c.Delegacion.Estado.SeoName + "/" + c.Delegacion.SeoName,
+                routes = routes.Select(r => MapRouteForList(r)).ToList()
+            };
+        }
+
+        private dynamic MapColoniaForList(Colonia c)
+        {
+            return new
+            {
+                name = Utils.Capitalize(c.Name),
+                delegacionName = Utils.Capitalize(c.Delegacion.Name),
+                link = "/directorio/" + c.Delegacion.Estado.SeoName + "/" + c.Delegacion.SeoName + "/" + c.SeoName
+            };
         }
 
         [OutputCache(Duration = 3600, VaryByParam = "de;a;count;format;key")]
@@ -525,7 +850,7 @@ namespace viadf.Controllers
         private int CoordsToInt(double coord)
         {
             return (int)(coord * 1000000);
-        }   
+        }
 
         private string ToLocalTime(long localMs)
         {

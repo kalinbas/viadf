@@ -196,6 +196,7 @@
     <Compile Include="Models\BusinessModel.cs" />
     <Compile Include="Models\RoutePieceModel.cs" />
     <Compile Include="Models\SmallSearchBoxModel.cs" />
+    <Compile Include="Models\SearchBoxJSModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -254,6 +255,9 @@
     <Content Include="Views\Home\Map.cshtml" />
     <Content Include="Views\Home\Business.cshtml" />
     <Content Include="Views\Shared\_BusinessList.cshtml" />
+    <Content Include="Views\Shared\_SmallSearchBox.cshtml" />
+    <Content Include="Views\Shared\_SearchBoxJS.cshtml" />
+    <Content Include="Views\Shared\_SearchBoxModal.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

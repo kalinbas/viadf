@@ -1,0 +1,14 @@
+﻿@model viadf.Models.SmallSearchBoxModel
+
+@using viadflib
+
+<div class="card hoverable inapp-hide">
+    <div class="card-content">
+        <div class="row center-align">
+            <span class="flow-text">¿Cómo llego de <strong><a id="fromLink" href="#" onclick="openModal(true)" style="border-bottom: 1px dashed; ">algún lugar</a></strong> a <strong><a id="toLink" href="#" onclick="openModal(false)" style="border-bottom: 1px dashed; ">@Model.Name</a></strong>?</span>
+        </div>
+        <div class="row center-align">
+            <button id="searchButton" disabled class="btn-large waves-effect waves-light light-blue darken-1" name="action" onclick="doSearch()">Buscar<i class="material-icons right">&#xE8B6;</i></button>
+        </div>       
+    </div>
+</div>

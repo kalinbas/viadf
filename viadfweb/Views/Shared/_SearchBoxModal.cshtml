@@ -1,0 +1,25 @@
+﻿<style>
+    .pac-container {
+        background-color: #FFF;
+        z-index: 1010;
+        position: fixed;
+        display: inline-block;
+        float: left;
+    }
+</style>
+
+<div id="mapModal" class="modal modal-fixed-footer">
+    <div class="row">
+        <div class="col s10 offset-s1">
+            <div class="input-field">
+                <a class="prefix" href="#" onclick="getCurrentPosition();"><i class="material-icons">&#xE55C;</i></a>
+                <input id="mapInput" class="controls" type="text" placeholder="Buscar">
+            </div>
+        </div>
+    </div>
+    <div id="map" style="height:calc(100% - 150px);"></div>
+    <div class="modal-footer">
+        <a href="#!" onclick="closeModal(true)" class="modal-action waves-effect waves-green btn-flat">OK</a>
+        <a href="#!" onclick="closeModal(false)" class="modal-action waves-effect waves-green btn-flat">Cancelar</a>
+    </div>
+</div>

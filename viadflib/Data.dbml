@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="DB_35815_viadf" Class="DataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=tcp:s14.winhost.com;Initial Catalog=DB_116984_viadf;User ID=DB_116984_viadf_user;Password=2brantin;Integrated Security=False;" SettingsObjectName="viadflib.Properties.Settings" SettingsPropertyName="DB_35815_viadfConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" SettingsObjectName="viadflib.Properties.Settings" SettingsPropertyName="DB_35815_viadfConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Colonia" Member="Colonias">
     <Type Name="Colonia">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />

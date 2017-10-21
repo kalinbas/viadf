@@ -221,6 +221,12 @@ namespace viadflib
         public string ToName { get; set; }
 
         /// <summary>
+        /// Link to route
+        /// </summary>
+        [DataMember]
+        public string Link { get; set; }
+
+        /// <summary>
         /// Type of this route
         /// </summary>
         [DataMember]
@@ -238,6 +244,7 @@ namespace viadflib
                 res.SeoName = route.SeoName;
                 res.FromName = route.FromName;
                 res.ToName = route.ToName;
+                res.Link = "/directorio/" + route.Type.SeoName + "/" + route.SeoName;
                 res.Type = ResultType.FromType(route.Type);
                 res.SplitRoutePieceID = route.SplitRoutePieceID;
                 return res;

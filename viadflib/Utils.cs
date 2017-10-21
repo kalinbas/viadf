@@ -29,8 +29,8 @@ namespace viadflib
             name = name.Replace("á", "a").Replace("é", "e").Replace("í", "i").Replace("ó", "o").Replace("ú", "u");
             name = name.Replace("Á", "A").Replace("É", "E").Replace("Í", "i").Replace("Ó", "O").Replace("Ú", "U");
             name = name.Replace("ü", "u").Replace("ñ", "n");
-            name = name.Replace("'", "").Replace(">", "").Replace("<", "").Replace(" ", "-").Replace(",", "-").Replace(".", "-").Replace("/", "-");
-            name = name.Replace("--", "-").Replace("--", "-");
+            name = name.Replace("'", "").Replace(">", "").Replace("<", "").Replace(" ", "-").Replace(",", "-").Replace(".", "-").Replace("/", "-").Replace("?", "").Replace(":", "").Replace("=", "-").Replace("+", "-");
+            name = name.Replace("--", "-").Replace("--", "-").Replace("--", "-").Replace("--", "-").Replace("--", "-").Replace("--", "-").Replace("--", "-");
             return name.ToLower();
         }
 

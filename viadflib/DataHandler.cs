@@ -412,6 +412,7 @@ namespace viadflib
             {
                 var dlo = new System.Data.Linq.DataLoadOptions();
                 dlo.LoadWith<Colonia>(x => x.Delegacion);
+                dlo.LoadWith<Delegacion>(x => x.Estado);
                 context.LoadOptions = dlo;
 
                 return context.ExecuteQuery<Colonia>("SELECT DISTINCT Colonia.* FROM ((Colonia INNER JOIN Street ON Street.ColoniaID = Colonia.ID) INNER JOIN StreetCrossing ON StreetCrossing.StreetID = Street.ID) INNER JOIN RoutePiece ON RoutePiece.StreetCrossingID = StreetCrossing.ID WHERE RouteID = {0}", id).ToList().OrderBy(x => x.Delegacion.Name).ThenBy(x => x.Name).ToList();

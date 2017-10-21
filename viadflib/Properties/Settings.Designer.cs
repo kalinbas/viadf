@@ -26,8 +26,8 @@ namespace viadflib.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=tcp:s14.winhost.com;Initial Catalog=DB_116984_viadf;User ID=DB_116984" +
-            "_viadf_user;Password=2brantin;Integrated Security=False;")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=localhost;Initial Catalog=db;Integrated Security=False;User ID=user;P" +
+            "assword=password")]
         public string DB_35815_viadfConnectionString {
             get {
                 return ((string)(this["DB_35815_viadfConnectionString"]));

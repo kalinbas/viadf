@@ -1,0 +1,188 @@
+﻿@model viadf.Models.SearchBoxJSModel
+
+<script type="text/javascript">
+    var map, marker, geocoder, currentPosition, currentName;
+    var posFrom, posTo, isFrom;
+
+    @if(Model.FromCoordinates != null) {
+        <text>posFrom = new google.maps.LatLng(@(Model.FromCoordinates));</text>
+    }
+    @if(Model.ToCoordinates != null) {
+        <text>posTo = new google.maps.LatLng(@(Model.ToCoordinates));</text>
+    }
+
+    function doSearch() {
+        $("#searchButton").prop("disabled", true);
+        $("#searchButton").html("buscando...");
+
+        window.location.href = '/Busqueda?de=' + posFrom.lat() + ',' + posFrom.lng() + "&a=" + posTo.lat() + ',' + posTo.lng() + "&origen=" + $("#fromLink").text() + "&destino=" + $("#toLink").text();
+    }
+
+
+    function openModal(from) {
+        isFrom = from;
+        $('#mapModal').openModal();
+        loadModalMap(isFrom ? posFrom : posTo);
+    }
+
+    function closeModal(isOk) {
+
+        $('#mapModal').closeModal();
+
+        // remove marker
+        if (marker) {
+            marker.setMap(null);
+            marker = null;
+        }
+        // clear input
+        $('#mapInput').val("");
+
+        if (currentName && currentName.indexOf(",") > 0) {
+            currentName = currentName.substring(0, currentName.indexOf(","));
+        }
+
+        if (isOk) {
+            // take value
+            if (isFrom) {
+                posFrom = currentPosition;
+                if (posFrom) {
+                    $("#fromLink").text(currentName);
+                }
+            } else {
+                posTo = currentPosition;
+                if (posTo) {
+                    $("#toLink").text(currentName);
+                }
+            }
+        }
+
+        if (posFrom && posTo) {
+            $("#searchButton").prop("disabled", false);
+        }
+    }
+
+    function loadModalMap(pos) {
+
+        currentPosition = pos;
+
+        var zoomLevel = currentPosition ? 17 : 10;
+        var position = currentPosition || new google.maps.LatLng(19.43255865356213, -99.13337157141115);
+
+        if (map) {
+            map.setCenter(position);
+            map.setZoom(zoomLevel);            
+        }
+        else {
+            var mapCanvas = document.getElementById('map');
+            var mapOptions = {
+                center: position,
+                zoom: zoomLevel,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                draggableCursor: 'pointer'
+            };
+
+            geocoder = new google.maps.Geocoder;
+
+            map = new google.maps.Map(mapCanvas, mapOptions);
+
+            google.maps.event.addListener(map, 'click', function (event) {
+
+                currentPosition = event.latLng;
+
+                map.setCenter(currentPosition);
+                setMarker(currentPosition);
+                setTextFromPosition(currentPosition);
+            });
+
+            var input = document.getElementById('mapInput');
+            var defaultBounds = new google.maps.LatLngBounds(new google.maps.LatLng(19.267073, -99.343872), new google.maps.LatLng(19.577906, -98.986816));
+
+            var options = {
+                bounds: defaultBounds
+            };
+
+            var autocomplete = new google.maps.places.Autocomplete(input, options);
+
+            autocomplete.addListener('place_changed', function () {
+                var place = autocomplete.getPlace();
+                if (!place.geometry) {
+                    return;
+                }
+
+                currentPosition = place.geometry.location;
+                currentName = place.formatted_address;
+
+                if (place.geometry.viewport) {
+                    map.fitBounds(place.geometry.viewport);
+                } else {
+                    map.setCenter(place.geometry.location);
+                    map.setZoom(17);
+                }
+                setMarker(place.geometry.location);
+
+            });
+        }
+
+        if (pos) {
+            setMarker(pos);
+            setTextFromPosition(pos);
+        }
+
+        $("#mapInput").focus();
+    }
+
+    function setMarker(pos) {
+        if (!marker) {
+            marker = new google.maps.Marker({
+                position: pos,
+                map: map,
+                draggable: true
+            });
+
+            google.maps.event.addListener(marker, 'dragend', function () {
+
+                currentPosition = marker.getPosition();
+
+                map.setCenter(currentPosition);
+
+                setTextFromPosition(currentPosition);
+            });
+        } else {
+            marker.setPosition(pos);
+        }
+    }
+
+    function setTextFromPosition(latLng) {
+        geocoder.geocode({ 'location': latLng }, function (results, status) {
+            currentName = "Posición indicada"
+            if (status === google.maps.GeocoderStatus.OK) {
+                if (results[0]) {
+                    currentName = results[0].formatted_address;
+                }
+            }
+            $('#mapInput').val(currentName);
+        });
+    }
+
+    function getCurrentPosition() {
+
+        var options = {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0
+        };
+
+        navigator.geolocation.getCurrentPosition(function (pos) {
+            var crd = pos.coords;
+            currentPosition = new google.maps.LatLng(crd.latitude, crd.longitude);
+
+            map.setCenter(currentPosition);
+            map.setZoom(17);
+            setMarker(currentPosition);
+            setTextFromPosition(currentPosition);
+
+        }, function (error) {
+            Materialize.toast('ERROR(' + error.code + '): ' + error.message, 2000);
+        }, options);
+    }
+</script>
