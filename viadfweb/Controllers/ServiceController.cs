@@ -336,6 +336,8 @@ namespace viadf.Controllers
 
         private dynamic MapBusiness(Business business)
         {
+            var colonia = DataHandler.GetColoniaAtPosition(business.Lat, business.Lng);
+
             return new
             {
                 name = Utils.Capitalize(business.Name),
@@ -343,6 +345,8 @@ namespace viadf.Controllers
                 lat = business.Lat,
                 lng = business.Lng,
                 category = business.Category,
+                colonia = colonia != null ? Utils.Capitalize(colonia.Name) : null,
+                delegacion = colonia != null ? Utils.Capitalize(colonia.Delegacion.Name) : null,
                 connectingRoutes = DataHandler.GetConnectionRoutes(business.Lat, business.Lng, 0.25).Select(r => MapRouteForList(r)).ToList(),
                 closeBusinesses = DataHandler.GetCloseBusinesses(business.Lat, business.Lng, 0.25, 50).Select(b => MapBusinessForList(b)).ToList()
             };
