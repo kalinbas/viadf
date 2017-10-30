@@ -49,7 +49,7 @@ namespace viadflib.TravelTime
         public double DistanceInKmTo(LatLng other)
         {
             double distanceLat = Math.Abs(Lat - other.Lat) * _latKmLookup[(int)Lat];
-            double distanceLng = Math.Abs(Lng - other.Lng) * _lngKmLookup[(int)Lat];
+            double distanceLng = Math.Abs(Lng - other.Lng) * _lngKmLookup[(int)Lng];
 
             return Math.Sqrt(distanceLat * distanceLat + distanceLng * distanceLng);
         }
@@ -57,7 +57,7 @@ namespace viadflib.TravelTime
         public double DistanceInKmSquaredTo(LatLng other)
         {
             double distanceLat = Math.Abs(Lat - other.Lat) * _latKmLookup[(int)Lat];
-            double distanceLng = Math.Abs(Lng - other.Lng) * _lngKmLookup[(int)Lat];
+            double distanceLng = Math.Abs(Lng - other.Lng) * _lngKmLookup[(int)Lng];
 
             return distanceLat * distanceLat + distanceLng * distanceLng;
         }
