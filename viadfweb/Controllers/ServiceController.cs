@@ -149,6 +149,25 @@ namespace viadf.Controllers
                 {
                     var selectedType = context.Types.FirstOrDefault(x => x.SeoName == (name ?? "").ToLower());
                     if (selectedType != null)
+                    {      
+                        return Json(new { name = selectedType.Name }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+            }
+            return HttpNotFound();
+        }
+
+        [OutputCache(Duration = 3600, VaryByParam = "name")]
+        public ActionResult GetTypeWithRoutes(string name)
+        {
+            Response.AppendHeader("Access-Control-Allow-Origin", "*");
+
+            using (var context = new DataContext())
+            {
+                if (name != null)
+                {
+                    var selectedType = context.Types.FirstOrDefault(x => x.SeoName == (name ?? "").ToLower());
+                    if (selectedType != null)
                     {
                         var routes = context.Routes.Where(x => x.TypeID == selectedType.ID && x.Status > (int)StatusEnum.New).OrderBy(x => x.Name).ToList();
                         var routesResult = routes.Select(r => new
