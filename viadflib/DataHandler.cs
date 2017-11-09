@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Linq;
 using System.Linq;
 
 namespace viadflib
@@ -137,41 +138,49 @@ namespace viadflib
 
         public static string ChargeServiceCall(string method, string apiKey, string ipAdress, string parameters)
         {
-            using (var context = new DataContext())
+            try
             {
-                var serviceApi = context.ServiceAPIs.FirstOrDefault(x => x.Url == method);
-                var serviceClient = context.ServiceClients.FirstOrDefault(x => x.ApiKey == apiKey);
-
-                if (serviceApi == null)
+                using (var context = new DataContext())
                 {
-                    return "Invalid service method provided";
+                    var serviceApi = context.ServiceAPIs.FirstOrDefault(x => x.Url == method);
+                    var serviceClient = context.ServiceClients.FirstOrDefault(x => x.ApiKey == apiKey);
+
+                    if (serviceApi == null)
+                    {
+                        return "Invalid service method provided";
+                    }
+                    if (serviceClient == null)
+                    {
+                        return "Invalid api key provided";
+                    }
+                    if (serviceApi.CreditsPerCall > 0 && serviceClient.Credits < serviceApi.CreditsPerCall)
+                    {
+                        return "Insufficient credits";
+                    }
+
+                    if (serviceApi.CreditsPerCall > 0)
+                    {
+                        serviceClient.Credits -= serviceApi.CreditsPerCall;
+                    }
+
+                    var call = new ServiceCall();
+                    call.CreateDate = DateTime.Now;
+                    call.IpAdress = ipAdress ?? "";
+                    call.ServiceAPIID = serviceApi.ID;
+                    call.ServiceClientID = serviceClient.ID;
+                    call.Parameters = parameters;
+
+                    context.ServiceCalls.InsertOnSubmit(call);
+
+                    context.SubmitChanges();
+
+                    return null;
                 }
-                if (serviceClient == null)
-                {
-                    return "Invalid api key provided";
-                }
-                if (serviceApi.CreditsPerCall > 0 && serviceClient.Credits < serviceApi.CreditsPerCall)
-                {
-                    return "Insufficient credits";
-                }
-
-                if (serviceApi.CreditsPerCall > 0)
-                {
-                    serviceClient.Credits -= serviceApi.CreditsPerCall;
-                }
-
-                var call = new ServiceCall();
-                call.CreateDate = DateTime.Now;
-                call.IpAdress = ipAdress ?? "";
-                call.ServiceAPIID = serviceApi.ID;
-                call.ServiceClientID = serviceClient.ID;
-                call.Parameters = parameters;
-
-                context.ServiceCalls.InsertOnSubmit(call);
-
-                context.SubmitChanges();
-
-                return null;
+            }
+            catch (ChangeConflictException ex)
+            {
+                // ignore this special exception which happens on concurrent access                
+                return null;   
             }
         }
 
