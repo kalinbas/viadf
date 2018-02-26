@@ -231,11 +231,9 @@ namespace viadf.Controllers
                     if (delegacionObj != null)
                     {
                         var coloniaObj = context.Colonias.Where(x => x.SeoName == name.ToLower() && x.DelegacionID == delegacionObj.ID).FirstOrDefault();
-
-                        var routes = context.Routes.Where(x => x.RoutePieces.Count(y => y.StreetCrossing.Street.ColoniaID == coloniaObj.ID) > 0 && x.Status != (int)StatusEnum.New).ToList();
-
                         if (coloniaObj != null)
                         {
+                            var routes = context.Routes.Where(x => x.RoutePieces.Count(y => y.StreetCrossing.Street.ColoniaID == coloniaObj.ID) > 0 && x.Status != (int)StatusEnum.New).ToList();
                             return Json(MapColonia(coloniaObj, routes), JsonRequestBehavior.AllowGet);
                         }
                     }
@@ -303,17 +301,21 @@ namespace viadf.Controllers
         }
 
         [OutputCache(Duration = 3600, VaryByParam = "name;id")]
-        public ActionResult GetBusiness(string name, int id)
+        public ActionResult GetBusiness(string name, int? id)
         {
             Response.AppendHeader("Access-Control-Allow-Origin", "*");
 
-            using (var context = new DataContext())
+            if (id.HasValue)
             {
-                var business = context.Businesses.FirstOrDefault(x => x.ID == id);
 
-                if (business != null && business.SeoName == name)
+                using (var context = new DataContext())
                 {
-                    return Json(MapBusiness(business), JsonRequestBehavior.AllowGet);
+                    var business = context.Businesses.FirstOrDefault(x => x.ID == id.Value);
+
+                    if (business != null && business.SeoName == name)
+                    {
+                        return Json(MapBusiness(business), JsonRequestBehavior.AllowGet);
+                    }
                 }
             }
 
@@ -524,7 +526,7 @@ namespace viadf.Controllers
 
 
         [OutputCache(Duration = 3600, VaryByHeader = "start;time;type;key")]
-        public ActionResult TravelTimePolygon(string start, double time, TravelTimeType type, string key)
+        public ActionResult TravelTimePolygon(string start, double? time, TravelTimeType? type, string key)
         {
             Response.AppendHeader("Access-Control-Allow-Origin", "*");
             try
@@ -535,6 +537,7 @@ namespace viadf.Controllers
                 {
                     LatLng startLatLng = new LatLng(start);
 
+                    if (!time.HasValue) time = 15;
                     if (time < 0) time = 0;
                     if (time > 45) time = 45;
                     if (type != TravelTimeType.PublicTransport && type != TravelTimeType.Walking)
@@ -542,7 +545,7 @@ namespace viadf.Controllers
                         type = TravelTimeType.Walking;
                     }
 
-                    var result = Singleton<TravelTimeEngine>.Instance.GetPolygon(type, startLatLng, time);
+                    var result = Singleton<TravelTimeEngine>.Instance.GetPolygon(type.Value, startLatLng, time.Value);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 else
@@ -558,7 +561,7 @@ namespace viadf.Controllers
         }
 
         [OutputCache(Duration = 3600, VaryByHeader = "start;points;type;key")]
-        public ActionResult OrderByTravelTime(string start, string points, TravelTimeType type, string key)
+        public ActionResult OrderByTravelTime(string start, string points, TravelTimeType? type, string key)
         {
             Response.AppendHeader("Access-Control-Allow-Origin", "*");
             try
@@ -576,7 +579,7 @@ namespace viadf.Controllers
                         pointsLatLng = pointsLatLng.Take(100).ToList();
                     }
 
-                    var result = Singleton<TravelTimeEngine>.Instance.GetOrderPointList(type, startLatLng, pointsLatLng);
+                    var result = Singleton<TravelTimeEngine>.Instance.GetOrderPointList(type ?? TravelTimeType.Walking, startLatLng, pointsLatLng);
 
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
@@ -709,16 +712,21 @@ namespace viadf.Controllers
         }
 
         [OutputCache(Duration = 3600, VaryByHeader = "id;key")]
-        public ActionResult GetRoutePath(int id, string key)
+        public ActionResult GetRoutePath(int? id, string key)
         {
             Response.AppendHeader("Access-Control-Allow-Origin", "*");
             try
             {
+                if (!id.HasValue)
+                {
+                    return HttpNotFound();
+                }
+
                 var error = DataHandler.ChargeServiceCall("/Service/GetRoutePath", key, Request.UserHostAddress, id + "");
 
                 if (error == null)
                 {
-                    var pieces = DataHandler.GetRoutePieces(id);
+                    var pieces = DataHandler.GetRoutePieces(id.Value);
                     var route = pieces[0].Route;
                     var jsonRoute = new
                     {
